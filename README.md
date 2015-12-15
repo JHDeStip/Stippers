@@ -59,7 +59,7 @@ Currently the following browser permissions are available:
 
 When giving a permissions to a browse the first time, the website must be visited from that browser to set the cookie. Lateron the permissions for that browser can be changed from anywhere.
 Because permissions are cookie based a browser will lose it's permissions when cookies are removed.
-A browsers permissions can be revoked from any location, but the cookie will always be installed in the browser. The system will simple reject it.
+A browsers permissions can be revoked from any location, but the cookie will always be installed in the browser. The system will simply reject it.
 
 ## Requirements
 Because Stippers is written in plain PHP with a little bit of JavaScript you don't need any additional frameworks. The only requirements are PHP 5.6 or higher and a MySQL database.

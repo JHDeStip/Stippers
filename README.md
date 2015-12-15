@@ -14,7 +14,7 @@ This way we can keep track of how many organisations are using it.
 We've done our best to list everything Stippers has to offer you. Don't be mad if we forgot something though!
 
 ### Login
-All users can login to the website as long as they are a member. When a user is not a member of the current membership period his account still exists but he will be unable to login. The only exception to this is the admin account, with which you'll always be able to login. More on membership periods below!
+All users can login to the website as long as they are a member. When a user is not a member of the current membership period his account still exists but he will be unable to login. The only exception to this is the admin account, with which you'll always be able to login. The admin account is the initial account that's created during database setup and has user id 0. More on membership periods below!
 
 ### Membership periods, user registration and user management
 People that are in the system (users) can be a member of your organisation. Memberships are always on a per membership period basis.
@@ -33,8 +33,33 @@ Every user has a card number tied to it for each period he was/is a member. This
 
 Although there is currently not much information about the check-ins available through the GUI, all info is in the database. This enables you to really nice things. Think of things like giving a member a free beer if it's the fifth time he visits you this mongth. You don't have to manually keep track of this, just write your own some code that hooks into the checkin system and the system will notify you when this happens.
 
+The only exception is the admin account
+
 ### User profile
-When a member logs in he can view his profile and some statistics regarding his check-ins. Here can also update his data and change his password.
+When a member logs in he can view his profile and some statistics regarding his check-ins. Here can also update his data and change his password
+
+### Permissions
+For all pages on the website you can set permissions defining who can access it. When no permissions are set for a page this page will be unavailable for everyone, including the admin. When a specific permission is set for a page, all users or computers with that permission will be able to access that page (except when their membership expired of course).
+
+#### User permissions
+Currently the following user permissions are available:
+* member: by default all users have this permission.
+* admin: admins can do anything. By default only the admin account has this permission set. Members with the admin permissions can set permissions of other users. Not here that there is a difference between the admin users and users with admin permissions. While multiple users can have admin permissions, there can be only one admin account.
+* userManager: This permission allows a user to manage other users.
+* authorizedBrowserManager: This permission allows the user to manage browser tied permissions.
+
+#### Browser tied permissions
+Some pages should not be visible from anywhere, but only from selected browsers. Think of the check-in page. Nobody should be able to check-in at home. The pages to add or renew users are another example, because users should get their membership card and pay you. This can only happen in your club.
+
+This is where browser tied permissions come in to play. They allow you to give permissions to a specific browser. All users with the authorizedBrowserManager permission set can change permissions of browser.
+
+Currently the following browser permissions are available:
+* checkInBrowser: enables the browser to access the check-in page.
+* addRenewUserBrowser: enables the browser to access the pages to add or renew users.
+
+When giving a permissions to a browse the first time, the website must be visited from that browser to set the cookie. Lateron the permissions for that browser can be changed from anywhere.
+Because permissions are cookie based a browser will lose it's permissions when cookies are removed.
+A browsers permissions can be revoked from any location, but the cookie will always be installed in the browser. The system will simple reject it.
 
 ## Requirements
 Because Stippers is written in plain PHP with a little bit of JavaScript you don't need any additional frameworks. The only requirements are PHP 5.6 or higher and a MySQL database.

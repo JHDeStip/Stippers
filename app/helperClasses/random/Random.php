@@ -7,7 +7,7 @@
  */
 
 abstract class Random {
-    const PASSWORDCHARACTERS="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789(){}[]-_/\\\"'.,:;?!&$@";
+    const PASSWORDCHARACTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789(){}[]-_/\\\'".,:;?!&$@';
     const DEFAULTPASSWORDLENGTH = 12;
 
     public static function getGuid()
@@ -31,7 +31,7 @@ abstract class Random {
     }
 
     public static function getPassword($length = Random::DEFAULTPASSWORDLENGTH, $characters = Random::PASSWORDCHARACTERS){
-        $password = "";
+        $password = '';
         for ($i=0; $i<$length; $i++)
             $password .= substr($characters, rand(0, strlen($characters)-1), 1);
         return $password;

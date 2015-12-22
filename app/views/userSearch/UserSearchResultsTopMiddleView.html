@@ -1,0 +1,5 @@
+<form action="<?php echo htmlspecialchars($this->data['UserSearchResultsTopMiddleView']['user_search_results_formAction']); ?>" id="user_search_results_form" method="post" onsubmit="return validateUserSearchResultsForm(this);">
+<table>
+<tr>
+    <th></th><?php echo ($this->data['UserSearchResultsTopMiddleView']['showFirstName'] ? '<th>Voornaam</th>') ?>
+</tr>

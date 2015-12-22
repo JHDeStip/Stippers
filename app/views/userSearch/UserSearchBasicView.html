@@ -1,0 +1,12 @@
+<tr>
+    <td><label class="form_label" for="first_name">Voornaam:</label><input class="textbox" type="text" id="first_name" name="first_name" maxlength="30" value="<?php echo htmlentities($this->data['UserSearchBasicView']['firstName'], ENT_QUOTES, 'utf-8'); ?>"></td>
+    <td><input type="checkbox" class="checkbox" id="show_first_name" name="show_first_name" <?php echo $this->data['UserSearchBasicView']['showFirstNameChecked']; ?>></td>
+</tr>
+<tr>
+    <td><label class="form_label" for="last_name">Achternaam:</label><input class="textbox" type="text" id="last_name" name="last_name" maxlength="30" value="<?php echo htmlentities($this->data['UserSearchBasicView']['lastName'], ENT_QUOTES, 'utf-8'); ?>"></td>
+    <td><input type="checkbox" class="checkbox" id="show_last_name" name="show_last_name" <?php echo $this->data['UserSearchBasicView']['showLastNameChecked']; ?>></td>
+</tr>
+<tr>
+    <td><label class="form_label" for="email">E-mail:</label><input class="textbox" type="text" id="email" name="email" maxlength="50" value="<?php echo htmlentities($this->data['UserSearchBasicView']['email'], ENT_QUOTES, 'utf-8'); ?>"></td>
+    <td><input type="checkbox" class="checkbox" id="show_email" name="show_email" <?php echo $this->data['UserSearchBasicView']['showEmailChecked']; ?>></td>
+</tr>

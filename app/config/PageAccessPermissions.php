@@ -1,109 +1,109 @@
 <?php
 
 //Permissions for the add or renew user page
-$_PERMISSIONS["HOME"]["EVERYONE"] = false;
-$_PERMISSIONS["HOME"]["MEMBER"] = true;
-$_PERMISSIONS["HOME"]["ADMIN"] = true;
-$_PERMISSIONS["HOME"]["USERMANAGER"] = true;
-$_PERMISSIONS["HOME"]["AUTHORIZEDBROWSERMANAGER"] = true;
-$_PERMISSIONS["HOME"]["ADDRENEWUSERBROWSER"] = false;
-$_PERMISSIONS["HOME"]["CHECKINBROWSER"] = false;
+$_PERMISSIONS['home']['EVERYONE'] = false;
+$_PERMISSIONS['home']['MEMBER'] = true;
+$_PERMISSIONS['home']['ADMIN'] = true;
+$_PERMISSIONS['home']['USERMANAGER'] = true;
+$_PERMISSIONS['home']['AUTHORIZEDBROWSERMANAGER'] = true;
+$_PERMISSIONS['home']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['home']['CHECKINBROWSER'] = false;
 
 //Permissions for the add or renew user page
-$_PERMISSIONS["ADDORRENEWUSER"]["EVERYONE"] = false;
-$_PERMISSIONS["ADDORRENEWUSER"]["MEMBER"] = false;
-$_PERMISSIONS["ADDORRENEWUSER"]["ADMIN"] = false;
-$_PERMISSIONS["ADDORRENEWUSER"]["USERMANAGER"] = false;
-$_PERMISSIONS["ADDORRENEWUSER"]["AUTHORIZEDBROWSERMANAGER"] = false;
-$_PERMISSIONS["ADDORRENEWUSER"]["ADDRENEWUSERBROWSER"] = true;
-$_PERMISSIONS["ADDORRENEWUSER"]["CHECKINBROWSER"] = false;
+$_PERMISSIONS['addorrenewuser']['EVERYONE'] = false;
+$_PERMISSIONS['addorrenewuser']['MEMBER'] = false;
+$_PERMISSIONS['addorrenewuser']['ADMIN'] = false;
+$_PERMISSIONS['addorrenewuser']['USERMANAGER'] = false;
+$_PERMISSIONS['addorrenewuser']['AUTHORIZEDBROWSERMANAGER'] = false;
+$_PERMISSIONS['addorrenewuser']['ADDRENEWUSERBROWSER'] = true;
+$_PERMISSIONS['addorrenewuser']['CHECKINBROWSER'] = false;
 
 //Permissions for the add user page
-$_PERMISSIONS["ADDUSER"]["EVERYONE"] = false;
-$_PERMISSIONS["ADDUSER"]["MEMBER"] = false;
-$_PERMISSIONS["ADDUSER"]["ADMIN"] = false;
-$_PERMISSIONS["ADDUSER"]["USERMANAGER"] = false;
-$_PERMISSIONS["ADDUSER"]["AUTHORIZEDBROWSERMANAGER"] = false;
-$_PERMISSIONS["ADDUSER"]["ADDRENEWUSERBROWSER"] = true;
-$_PERMISSIONS["ADDUSER"]["CHECKINBROWSER"] = false;
+$_PERMISSIONS['adduser']['EVERYONE'] = false;
+$_PERMISSIONS['adduser']['MEMBER'] = false;
+$_PERMISSIONS['adduser']['ADMIN'] = false;
+$_PERMISSIONS['adduser']['USERMANAGER'] = false;
+$_PERMISSIONS['adduser']['AUTHORIZEDBROWSERMANAGER'] = false;
+$_PERMISSIONS['adduser']['ADDRENEWUSERBROWSER'] = true;
+$_PERMISSIONS['adduser']['CHECKINBROWSER'] = false;
 
 //Permissions for the renew user page
-$_PERMISSIONS["RENEWUSER"]["EVERYONE"] = false;
-$_PERMISSIONS["RENEWUSER"]["MEMBER"] = false;
-$_PERMISSIONS["RENEWUSER"]["ADMIN"] = false;
-$_PERMISSIONS["RENEWUSER"]["USERMANAGER"] = false;
-$_PERMISSIONS["RENEWUSER"]["AUTHORIZEDBROWSERMANAGER"] = false;
-$_PERMISSIONS["RENEWUSER"]["ADDRENEWUSERBROWSER"] = true;
-$_PERMISSIONS["RENEWUSER"]["CHECKINBROWSER"] = false;
+$_PERMISSIONS['renewuser']['EVERYONE'] = false;
+$_PERMISSIONS['renewuser']['MEMBER'] = false;
+$_PERMISSIONS['renewuser']['ADMIN'] = false;
+$_PERMISSIONS['renewuser']['USERMANAGER'] = false;
+$_PERMISSIONS['renewuser']['AUTHORIZEDBROWSERMANAGER'] = false;
+$_PERMISSIONS['renewuser']['ADDRENEWUSERBROWSER'] = true;
+$_PERMISSIONS['renewuser']['CHECKINBROWSER'] = false;
 
 //Permissions for the authorized browser manager page
-$_PERMISSIONS["AUTHORIZEDBROWSERMANAGER"]["EVERYONE"] = false;
-$_PERMISSIONS["AUTHORIZEDBROWSERMANAGER"]["MEMBER"] = false;
-$_PERMISSIONS["AUTHORIZEDBROWSERMANAGER"]["ADMIN"] = true;
-$_PERMISSIONS["AUTHORIZEDBROWSERMANAGER"]["USERMANAGER"] = false;
-$_PERMISSIONS["AUTHORIZEDBROWSERMANAGER"]["AUTHORIZEDBROWSERMANAGER"] = false;
-$_PERMISSIONS["AUTHORIZEDBROWSERMANAGER"]["ADDRENEWUSERBROWSER"] = false;
-$_PERMISSIONS["AUTHORIZEDBROWSERMANAGER"]["CHECKINBROWSER"] = false;
+$_PERMISSIONS['authorizedbrowsermanager']['EVERYONE'] = false;
+$_PERMISSIONS['authorizedbrowsermanager']['MEMBER'] = false;
+$_PERMISSIONS['authorizedbrowsermanager']['ADMIN'] = true;
+$_PERMISSIONS['authorizedbrowsermanager']['USERMANAGER'] = false;
+$_PERMISSIONS['authorizedbrowsermanager']['AUTHORIZEDBROWSERMANAGER'] = false;
+$_PERMISSIONS['authorizedbrowsermanager']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['authorizedbrowsermanager']['CHECKINBROWSER'] = false;
 
 //Permissions for the change password page
-$_PERMISSIONS["CHANGEPASSWORD"]["EVERYONE"] = false;
-$_PERMISSIONS["CHANGEPASSWORD"]["MEMBER"] = true;
-$_PERMISSIONS["CHANGEPASSWORD"]["ADMIN"] = true;
-$_PERMISSIONS["CHANGEPASSWORD"]["USERMANAGER"] = true;
-$_PERMISSIONS["CHANGEPASSWORD"]["AUTHORIZEDBROWSERMANAGER"] = true;
-$_PERMISSIONS["CHANGEPASSWORD"]["ADDRENEWUSERBROWSER"] = false;
-$_PERMISSIONS["CHANGEPASSWORD"]["CHECKINBROWSER"] = false;
+$_PERMISSIONS['changepassword']['EVERYONE'] = false;
+$_PERMISSIONS['changepassword']['MEMBER'] = true;
+$_PERMISSIONS['changepassword']['ADMIN'] = true;
+$_PERMISSIONS['changepassword']['USERMANAGER'] = true;
+$_PERMISSIONS['changepassword']['AUTHORIZEDBROWSERMANAGER'] = true;
+$_PERMISSIONS['changepassword']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['changepassword']['CHECKINBROWSER'] = false;
 
 //Permissions for the check in page
-$_PERMISSIONS["CHECKIN"]["EVERYONE"] = false;
-$_PERMISSIONS["CHECKIN"]["MEMBER"] = false;
-$_PERMISSIONS["CHECKIN"]["ADMIN"] = false;
-$_PERMISSIONS["CHECKIN"]["USERMANAGER"] = false;
-$_PERMISSIONS["CHECKIN"]["AUTHORIZEDBROWSERMANAGER"] = false;
-$_PERMISSIONS["CHECKIN"]["ADDRENEWUSERBROWSER"] = false;
-$_PERMISSIONS["CHECKIN"]["CHECKINBROWSER"] = true;
-
-//Permissions for the hint image manager page
-$_PERMISSIONS["HINTIMAGEMANAGER"]["EVERYONE"] = false;
-$_PERMISSIONS["HINTIMAGEMANAGER"]["MEMBER"] = false;
-$_PERMISSIONS["HINTIMAGEMANAGER"]["ADMIN"] = true;
-$_PERMISSIONS["HINTIMAGEMANAGER"]["USERMANAGER"] = false;
-$_PERMISSIONS["HINTIMAGEMANAGER"]["AUTHORIZEDBROWSERMANAGER"] = false;
-$_PERMISSIONS["HINTIMAGEMANAGER"]["ADDRENEWUSERBROWSER"] = false;
-$_PERMISSIONS["HINTIMAGEMANAGER"]["CHECKINBROWSER"] = false;
+$_PERMISSIONS['check-in']['EVERYONE'] = false;
+$_PERMISSIONS['check-in']['MEMBER'] = false;
+$_PERMISSIONS['check-in']['ADMIN'] = false;
+$_PERMISSIONS['check-in']['USERMANAGER'] = false;
+$_PERMISSIONS['check-in']['AUTHORIZEDBROWSERMANAGER'] = false;
+$_PERMISSIONS['check-in']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['check-in']['CHECKINBROWSER'] = true;
 
 //Permissions for the logout page
-$_PERMISSIONS["LOGOUT"]["EVERYONE"] = true;
-$_PERMISSIONS["LOGOUT"]["MEMBER"] = true;
-$_PERMISSIONS["LOGOUT"]["ADMIN"] = true;
-$_PERMISSIONS["LOGOUT"]["USERMANAGER"] = true;
-$_PERMISSIONS["LOGOUT"]["AUTHORIZEDBROWSERMANAGER"] = true;
-$_PERMISSIONS["LOGOUT"]["ADDRENEWUSERBROWSER"] = true;
-$_PERMISSIONS["LOGOUT"]["CHECKINBROWSER"] = true;
+$_PERMISSIONS['logout']['EVERYONE'] = true;
+$_PERMISSIONS['logout']['MEMBER'] = true;
+$_PERMISSIONS['logout']['ADMIN'] = true;
+$_PERMISSIONS['logout']['USERMANAGER'] = true;
+$_PERMISSIONS['logout']['AUTHORIZEDBROWSERMANAGER'] = true;
+$_PERMISSIONS['logout']['ADDRENEWUSERBROWSER'] = true;
+$_PERMISSIONS['logout']['CHECKINBROWSER'] = true;
 
 //Permissions for the profile page
-$_PERMISSIONS["PROFILE"]["EVERYONE"] = false;
-$_PERMISSIONS["PROFILE"]["MEMBER"] = true;
-$_PERMISSIONS["PROFILE"]["ADMIN"] = true;
-$_PERMISSIONS["PROFILE"]["USERMANAGER"] = true;
-$_PERMISSIONS["PROFILE"]["AUTHORIZEDBROWSERMANAGER"] = true;
-$_PERMISSIONS["PROFILE"]["ADDRENEWUSERBROWSER"] = false;
-$_PERMISSIONS["PROFILE"]["CHECKINBROWSER"] = false;
+$_PERMISSIONS['profile']['EVERYONE'] = false;
+$_PERMISSIONS['profile']['MEMBER'] = true;
+$_PERMISSIONS['profile']['ADMIN'] = true;
+$_PERMISSIONS['profile']['USERMANAGER'] = true;
+$_PERMISSIONS['profile']['AUTHORIZEDBROWSERMANAGER'] = true;
+$_PERMISSIONS['profile']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['profile']['CHECKINBROWSER'] = false;
 
 //Permissions for the reset password page
-$_PERMISSIONS["PROFILE"]["EVERYONE"] = true;
-$_PERMISSIONS["PROFILE"]["MEMBER"] = true;
-$_PERMISSIONS["PROFILE"]["ADMIN"] = true;
-$_PERMISSIONS["PROFILE"]["USERMANAGER"] = true;
-$_PERMISSIONS["PROFILE"]["AUTHORIZEDBROWSERMANAGER"] = true;
-$_PERMISSIONS["PROFILE"]["ADDRENEWUSERBROWSER"] = true;
-$_PERMISSIONS["PROFILE"]["CHECKINBROWSER"] = true;
+$_PERMISSIONS['resetpassword']['EVERYONE'] = true;
+$_PERMISSIONS['resetpassword']['MEMBER'] = true;
+$_PERMISSIONS['resetpassword']['ADMIN'] = true;
+$_PERMISSIONS['resetpassword']['USERMANAGER'] = true;
+$_PERMISSIONS['resetpassword']['AUTHORIZEDBROWSERMANAGER'] = true;
+$_PERMISSIONS['resetpassword']['ADDRENEWUSERBROWSER'] = true;
+$_PERMISSIONS['resetpassword']['CHECKINBROWSER'] = true;
 
 //Permissions for the user manager page
-$_PERMISSIONS["USERMANAGER"]["EVERYONE"] = false;
-$_PERMISSIONS["USERMANAGER"]["MEMBER"] = false;
-$_PERMISSIONS["USERMANAGER"]["ADMIN"] = true;
-$_PERMISSIONS["USERMANAGER"]["USERMANAGER"] = true;
-$_PERMISSIONS["USERMANAGER"]["AUTHORIZEDBROWSERMANAGER"] = false;
-$_PERMISSIONS["USERMANAGER"]["ADDRENEWUSERBROWSER"] = false;
-$_PERMISSIONS["USERMANAGER"]["CHECKINBROWSER"] = false;
+$_PERMISSIONS['manageuser']['EVERYONE'] = false;
+$_PERMISSIONS['manageuser']['MEMBER'] = false;
+$_PERMISSIONS['manageuser']['ADMIN'] = true;
+$_PERMISSIONS['manageuser']['USERMANAGER'] = true;
+$_PERMISSIONS['manageuser']['AUTHORIZEDBROWSERMANAGER'] = false;
+$_PERMISSIONS['manageuser']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['manageuser']['CHECKINBROWSER'] = false;
+
+//Permissions for the page not found page
+$_PERMISSIONS['pagenotfound']['EVERYONE'] = true;
+$_PERMISSIONS['pagenotfound']['MEMBER'] = true;
+$_PERMISSIONS['pagenotfound']['ADMIN'] = true;
+$_PERMISSIONS['pagenotfound']['USERMANAGER'] = true;
+$_PERMISSIONS['pagenotfound']['AUTHORIZEDBROWSERMANAGER'] = true;
+$_PERMISSIONS['pagenotfound']['ADDRENEWUSERBROWSER'] = true;
+$_PERMISSIONS['pagenotfound']['CHECKINBROWSER'] = true;

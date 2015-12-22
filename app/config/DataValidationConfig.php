@@ -1,9 +1,13 @@
 <?php
 
-/*
-* The settings in this file are used to validate user input.
-* They define the minimum and maximum lengts of data the user can enter throughout the application.
-*/
+/**
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * The settings in this file are used to validate user input.
+ */
 
 abstract class DataValidationConfig {
     const PASSWORDMINLENGTH = 8;

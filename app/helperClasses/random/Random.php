@@ -1,17 +1,24 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: Stan
- * Date: 3/12/2014
- * Time: 12:36
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * Class to generate random numbers, GUIDs, passwords etc.
  */
 
-abstract class Random {
-    const PASSWORDCHARACTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789(){}[]-_/\\\'".,:;?!&$@';
-    const DEFAULTPASSWORDLENGTH = 12;
+require_once __DIR__.'/../../config/SecurityConfig.php';
 
-    public static function getGuid()
-    {
+abstract class Random {
+
+    /**
+     * Returns a GUID
+     * 
+     * @return string GUID
+     */
+    public static function getGuid() {
         $randomString = openssl_random_pseudo_bytes(16);
         $time_low = bin2hex(substr($randomString, 0, 4));
         $time_mid = bin2hex(substr($randomString, 4, 2));
@@ -30,7 +37,14 @@ abstract class Random {
         return sprintf('%08s-%04s-%04x-%04x-%012s', $time_low, $time_mid, $time_hi_and_version, $clock_seq_hi_and_reserved, $node);
     }
 
-    public static function getPassword($length = Random::DEFAULTPASSWORDLENGTH, $characters = Random::PASSWORDCHARACTERS){
+    /**
+     * Generates a new random password.
+     * 
+     * @param int $length length of the new password
+     * @param string $characters characters that can appear in the generated password
+     * @return string generated password
+     */
+    public static function getPassword($length = SecurityConfig::DEFAULTPASSWORDLENGTH, $characters = SecurityConfig::PASSWORDCHARACTERS){
         $password = '';
         for ($i=0; $i<$length; $i++)
             $password .= substr($characters, rand(0, strlen($characters)-1), 1);

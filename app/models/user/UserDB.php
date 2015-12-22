@@ -1,18 +1,30 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: Stan
- * Date: 27/07/14
- * Time: 14:23
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * Class to do database operations regarding user models.
  */
 
+require_once __DIR__.'/../../config/GlobalConfig.php';
 require_once __DIR__.'/../../helperClasses/database/Database.php';
 require_once __DIR__.'/../../helperClasses/database/DatabaseException.php';
 require_once 'User.php';
 require_once 'UserDBException.php';
 
-abstract class UserDB
-{
+abstract class UserDB {
+    
+    /**
+     * Gets all basic users. A basic user is a user that has only
+     * basic properties such as permissions set.
+     * 
+     * @return array array of users
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while getting the users
+     */
     public static function getAllBasicUsers() {
         try {
             $conn = Database::getConnection();
@@ -54,13 +66,22 @@ abstract class UserDB
         }
     }
 
+    /**
+     * Gets a full user by it's ID. A full user is a user with all
+     * properties set.
+     * 
+     * @param int $userId ID of the user to get
+     * @return User user to get
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while getting the user
+     */
     public static function getFullUserById($userId) {
         try {
             $conn = Database::getConnection();
             $commString = 'SELECT email, first_name, last_name, password_hash, balance, phone, DATE_FORMAT(date_of_birth, "%d/%m/%Y") date_of_birth, street, house_number, city, postal_code, country, bartender_info, is_admin, is_hint_manager, is_user_manager, is_authorized_browser_manager, DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") creation_time ' .
                 'FROM stippers_users WHERE user_id = ?';
             $stmt = $conn->prepare($commString);
-            $timezone = Database::TIMEZONE;
+            $timezone = GlobalConfig::TIMEZONE;
             $stmt->bind_param('si', $timezone, $userId);
 
             if (!$stmt->execute())
@@ -106,6 +127,15 @@ abstract class UserDB
         }
     }
 
+    /**
+     * Gets a basic user by it's ID. A basic user is a user that has only
+     * basic properties such as permissions set.
+     * 
+     * @param int $userId ID of the user to get
+     * @return User user to get
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while getting the user
+     */
     public static function getBasicUserById($userId) {
         try {
             $conn = Database::getConnection();
@@ -147,6 +177,14 @@ abstract class UserDB
         }
     }
 
+    /**
+     * Gets a user's password salt by it's email.
+     * 
+     * @param string $email email of the user to get the salt for
+     * @return string salt of the user
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while getting the salt
+     */
     public static function getPasswordSaltByEmail($email) {
         try {
             $conn = Database::getConnection();
@@ -176,6 +214,14 @@ abstract class UserDB
         }
     }
 
+    /**
+     * Gets a user's password salt by it's ID.
+     * 
+     * @param int $userId ID of the user to get the salt for
+     * @return string salt of the user
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while getting the salt
+     */
     public static function getPasswordSaltByUserId($userId) {
         try {
             $conn = Database::getConnection();
@@ -205,13 +251,27 @@ abstract class UserDB
         }
     }
 
+    /**
+     * Get all users that match the specified search criteria.
+     * Only specified properties are included
+     * 
+     * @param array $select properties to include
+     * @param array $search values to match
+     * @param array $options extra options
+     * @return array array with users matching the criteria
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while getting the users
+     */
     public static function getSearchUsers($select, $search, $options) {
         try {
+            //We have 4 query parts: select, order by, group by and search.
             $selectPart = 'user_id';
             $orderPart = ' ORDER BY null';
             $groupByPart = ' GROUP BY user_id';
             $params['types'] = '';
+            $searchPart = 'email LIKE ? AND first_name LIKE ? AND last_name LIKE ? AND balance LIKE ? AND phone LIKE ? AND date_of_birth LIKE ? AND street LIKE ? AND house_number LIKE ? AND city LIKE ? AND postal_code LIKE ? AND country LIKE ? AND card LIKE ? AND stippers_user_card_year.membership_year LIKE ? ';
 
+            //Add small parst to the parts for the specified options properties and properties to include
             if ($options['orderByBirthday']) {
                 $selectPart .= ', DATE_FORMAT(date_of_birth, "%m/%d") birthday';
                 $orderPart .= ', birthday ASC';
@@ -296,7 +356,7 @@ abstract class UserDB
             if ($select['creationTime']) {
                 $selectPart .= ', DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") creation_time';
                 $params['types'] .= 's';
-                $timezone = Database::TIMEZONE;
+                $timezone = GlobalConfig::TIMEZONE;
                 $params['timezone'] = &$timezone;
                 $groupByPart .= ', creation_time';
             }
@@ -308,7 +368,7 @@ abstract class UserDB
                 $selectPart .= ', card';
                 $groupByPart .= ', card';
             }
-            $searchPart = 'email LIKE ? AND first_name LIKE ? AND last_name LIKE ? AND balance LIKE ? AND phone LIKE ? AND date_of_birth LIKE ? AND street LIKE ? AND house_number LIKE ? AND city LIKE ? AND postal_code LIKE ? AND country LIKE ? AND card LIKE ? AND stippers_user_card_year.membership_year LIKE ? ';
+            //Create the parameter list to pass to the query statement
             $params['types'] .= 'sssssssssssss';
             $likeStringEmail = '%' . $search['email'] . '%';
             $params['email'] = &$likeStringEmail;
@@ -368,9 +428,12 @@ abstract class UserDB
                 $searchPart .= ' AND stippers_user_card_year.membership_year >= ANY (SELECT membership_year FROM stippers_user_card_year WHERE user_id = user)';
             }
 
+            //Here we're going to execute the query.
             $conn = Database::getConnection();
+            //We paste the parts together.
             $commString = 'SELECT ' . $selectPart . ' FROM stippers_users INNER JOIN stippers_user_card_year ON stippers_user_card_year.user = user_id LEFT JOIN stippers_check_ins ON stippers_check_ins.user = user_id AND YEAR(stippers_check_ins.time) = stippers_user_card_year.membership_year WHERE ' . $searchPart . $groupByPart . $orderPart;
             $stmt = $conn->prepare($commString);
+            //Because we want to bind an array with parameters we use call_user_func_array
             call_user_func_array(array($stmt, 'bind_param'), $params);
             
             if (!$stmt->execute())
@@ -441,6 +504,15 @@ abstract class UserDB
         }
     }
 
+    /**
+     * Checks if a given password hash is correct for a given user.
+     * 
+     * @param int $userId userId to check  password hash for
+     * @param string $passwordHash password hash to check
+     * @return boolean if the given hash is correct
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while checking the hash
+     */
     public static function isPasswordHashCorrectByUserIdPasswordHash($userId, $passwordHash) {
         try {
             $conn = Database::getConnection();
@@ -473,6 +545,12 @@ abstract class UserDB
         }
     }
 
+    /**
+     * Gets the card number for a given user id for the year we are in.
+     * 
+     * @param int $userId id of the user to get card number for
+     * @return int card number
+     */
     public static function getCardNumberByUserId($userId) {
         $conn = Database::getConnection();
 
@@ -493,6 +571,15 @@ abstract class UserDB
             return null;
     }
 
+    /**
+     * Gets a basic user by it's card number. A basic user is a user
+     * that has only basic properties such as permissions set.
+     * 
+     * @param int $cardNumber card number of the user to get
+     * @return User user for given card number
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while getting the user
+     */
     public static function getBasicUserByCardNumber($cardNumber) {
         try {
             $conn = Database::getConnection();
@@ -528,6 +615,17 @@ abstract class UserDB
         }
     }
 
+    /**
+     * Gets a basic user by it's email address and password.
+     * A basic user is a user that has only basic properties
+     * such as permissions set.
+     * 
+     * @param string $email email address of the user to get
+     * @param string $passwordHash password hash of the user to get
+     * @return User user for the given email and password hash
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while getting the user
+     */
     public static function getBasicUserByEmailPasswordHash($email, $passwordHash) {
         try {
             $conn = Database::getConnection();
@@ -568,6 +666,16 @@ abstract class UserDB
         }
     }
 
+    /**
+     * Gets a full user by it's email address and password.
+     * A full user is a user with all properties set.
+     * 
+     * @param string $email email address of the user to get
+     * @param string $passwordHash password hash of the user to get
+     * @return User user for the given email and password hash
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while getting the user
+     */
     public static function getUserByEmailPassword($email, $passwordHash) {
         $user = null;
 
@@ -576,7 +684,7 @@ abstract class UserDB
             'FROM stippers_users WHERE email = ? AND password_hash = ?';
 
         $stmt = $conn->prepare($commString);
-        $timezone = Database::TIMEZONE;
+        $timezone = GlobalConfig::TIMEZONE;
         $stmt->bind_param('sss', $timezone, $email, $passwordHash);
 
         $stmt->execute();
@@ -611,6 +719,15 @@ abstract class UserDB
         return $user;
     }
 
+    /**
+     * Adds a user.
+     * 
+     * @param User $user user to add
+     * @param string $passwordSalt password salt for the user
+     * @param int $cardId card number for the user
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while adding the user
+     */
     public static function addUser($user, $passwordSalt, $cardId) {
         try {
             $conn = Database::getConnection();
@@ -670,6 +787,16 @@ abstract class UserDB
         }
     }
 
+    /**
+     * Updates a user and updates it's card number.
+     * 
+     * @param User $oldUser old user to check of someone else already updated the user
+     * @param User $newUser user with updated data
+     * @param int $oldCardNumber old card number
+     * @param int $newCardNumber new card number
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while updating the user
+     */
     public static function updateUserWithCard($oldUser, $newUser, $oldCardNumber, $newCardNumber) {
         try {
             $conn = Database::getConnection();
@@ -678,7 +805,7 @@ abstract class UserDB
             $commString = 'UPDATE stippers_users SET email = ?, first_name = ?, last_name = ?, phone = ?, date_of_birth = STR_TO_DATE(?, "%d/%m/%Y"), street = ?, house_number = ?, city = ?, postal_code = ?, country = ?, is_admin = ?, is_hint_manager = ?, is_user_manager = ?, is_authorized_browser_manager = ? ' .
                 'WHERE user_id = ? AND email = ? AND first_name = ? AND last_name = ? AND password_hash = ? AND phone = ? AND date_of_birth = STR_TO_DATE(?, "%d/%m/%Y") AND street = ? AND house_number = ? AND city = ? AND postal_code = ? AND country = ? AND DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") = ? AND is_admin = ? AND is_hint_manager = ? AND is_user_manager = ? AND is_authorized_browser_manager = ?';
             $stmt = $conn->prepare($commString);
-            $timezone = Database::TIMEZONE;
+            $timezone = GlobalConfig::TIMEZONE;
             $stmt->bind_param('ssssssssssiiiiissssssssssssssiiii', $newUser->email, $newUser->firstName, $newUser->lastName, $newUser->phone, $newUser->dateOfBirth, $newUser->street, $newUser->houseNumber, $newUser->city, $newUser->postalCode, $newUser->country, $newUser->isAdmin, $newUser->is_hint_manager, $newUser->is_user_manager, $newUser->is_authorized_browser_manager, $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isAuthorizedBrowserManager);
             
             if (!$stmt->execute())
@@ -716,13 +843,21 @@ abstract class UserDB
         }
     }
 
+    /**
+     * Updates a user.
+     * 
+     * @param User $oldUser old user to check of someone else already updated the user
+     * @param User $newUser user with updated data
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while updating the user
+     */
     public static function updateUser($oldUser, $newUser) {
         try {
             $conn = Database::getConnection();
             $commString = 'UPDATE stippers_users SET email = ?, first_name = ?, last_name = ?, phone = ?, date_of_birth = STR_TO_DATE(?, "%d/%m/%Y"), street = ?, house_number = ?, city = ?, postal_code = ?, country = ?, is_admin = ?, is_hint_manager = ?, is_user_manager = ?, is_authorized_browser_manager = ? ' .
                 'WHERE user_id = ? AND email = ? AND first_name = ? AND last_name = ? AND password_hash = ? AND balance = ? AND phone = ? AND date_of_birth = STR_TO_DATE(?, "%d/%m/%Y") AND street = ? AND house_number = ? AND city = ? AND postal_code = ? AND country = ? AND DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") = ? AND is_admin = ? AND is_hint_manager = ? AND is_user_manager = ? AND is_authorized_browser_manager = ?';
             $stmt = $conn->prepare($commString);
-            $timezone = Database::TIMEZONE;
+            $timezone = GlobalConfig::TIMEZONE;
             $stmt->bind_param('ssssssssssiiiiissssssssssssssiiii', $newUser->email, $newUser->firstName, $newUser->lastName, $newUser->phone, $newUser->dateOfBirth, $newUser->street, $newUser->houseNumber, $newUser->city, $newUser->postalCode, $newUser->country, $newUser->isAdmin, $newUser->isHintManager, $newUser->isUserManager, $newUser->isAuthorizedBrowserManager, $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->balance, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isAuthorizedBrowserManager);
             
             if (!$stmt->execute()) {
@@ -745,13 +880,21 @@ abstract class UserDB
         }
     }
 
+    /**
+     * Updates a user's password.
+     * 
+     * @param User $oldUser old user to check of someone else already updated the user
+     * @param string $newPasswordHash new password hash
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while updating the password
+     */
     public static function updatePassword($oldUser, $newPasswordHash) {
         try {
             $conn = Database::getConnection();
             $commString = 'UPDATE stippers_users SET password_hash = ? ' .
                 'WHERE user_id = ? AND email = ? AND first_name = ? AND last_name = ? AND password_hash = ? AND balance = ? AND phone = ? AND date_of_birth = STR_TO_DATE(?, "%d/%m/%Y") AND street = ? AND house_number = ? AND city = ? AND postal_code = ? AND country = ? AND DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") = ? AND is_admin = ? AND is_hint_manager = ? AND is_user_manager = ? AND is_authorized_browser_manager = ?';
             $stmt = $conn->prepare($commString);
-            $timezone = Database::TIMEZONE;
+            $timezone = GlobalConfig::TIMEZONE;
             $stmt->bind_param('sissssssssssssssiiii', $newPasswordHash, $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->balance, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isAuthorizedComputerManager);
             
             if (!$stmt->execute())
@@ -769,7 +912,15 @@ abstract class UserDB
             }
         }
     }
-
+    
+    /**
+     * Sets a new password for the user who's email address is given.
+     * 
+     * @param string $email email of the user to set new password for
+     * @param string $newPasswordHash new password hash
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while updating the password
+     */
     public static function resetPassword($email, $newPasswordHash) {
         try {
             $conn = Database::getConnection();
@@ -792,6 +943,15 @@ abstract class UserDB
         }
     }
 
+    /**
+     * Renews a user's membership.
+     * 
+     * @param User $oldUser old user to check of someone else already updated the user
+     * @param User $newUser user with updated data
+     * @param type $cardNumber new card number
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while renewing the user's membership
+     */
     public static function renewMembership($oldUser, $newUser, $cardNumber) {
         try {
             $conn = Database::getConnection();
@@ -799,7 +959,7 @@ abstract class UserDB
             $commString = 'UPDATE stippers_users SET email = ?, first_name = ?, last_name = ?, phone = ?, date_of_birth = STR_TO_DATE(?, "%d/%m/%Y"), street = ?, house_number = ?, city = ?, postal_code = ?, country = ?' .
                 'WHERE user_id = ? AND email = ? AND first_name = ? AND last_name = ? AND password_hash = ? AND balance = ? AND phone = ? AND date_of_birth = STR_TO_DATE(?, "%d/%m/%Y") AND street = ? AND house_number = ? AND city = ? AND postal_code = ? AND country = ? AND DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") = ? AND is_admin = ? AND is_hint_manager = ? AND is_user_manager = ? AND is_authorized_browser_manager = ?';
             $stmt = $conn->prepare($commString);
-            $timezone = Database::TIMEZONE;
+            $timezone = GlobalConfig::TIMEZONE;
             $stmt->bind_param('ssssssssssissssssssssssssiiii', $newUser->email, $newUser->firstName, $newUser->lastName, $newUser->phone, $newUser->dateOfBirth, $newUser->street, $newUser->houseNumber, $newUser->city, $newUser->postalCode, $newUser->country, $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->balance, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $oldUser->bartenderInfo, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isAuthorizedBrowserManager);
             
             if (!$stmt->execute()) {
@@ -844,6 +1004,14 @@ abstract class UserDB
         }
     }
 
+    /**
+     * Checks if a user who's ID is given is a member this year.
+     * 
+     * @param int $userId ID of the user to check membership for
+     * @return boolean if the user is a member this year.
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while checking the user's membership
+     */
     public static function isUserMemberThisYearByUserId($userId) {
         try {
             $conn = Database::getConnection();
@@ -923,6 +1091,14 @@ abstract class UserDB
         }
     }
     */
+    
+    /**
+     * Get the IDs of all uers that are a member this year.
+     * 
+     * @return array IDs of users
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while getting the user IDs
+     */
     public static function getUserIdsThisYear() {
         try {
             $conn = Database::getConnection();

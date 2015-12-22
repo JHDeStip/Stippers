@@ -1,9 +1,12 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: Stan
- * Date: 27/11/2014
- * Time: 21:05
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * Authorized Computer Database exception class.
  */
 
 class AuthorizedBrowserDBException extends Exception{

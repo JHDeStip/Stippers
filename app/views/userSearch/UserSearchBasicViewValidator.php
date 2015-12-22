@@ -1,9 +1,12 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: Stan
- * Date: 6/02/2015
- * Time: 0:50
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * Validator for the User Search Basic view.
  */
 
 require_once __DIR__.'/../IValidator.php';

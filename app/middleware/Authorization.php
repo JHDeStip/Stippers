@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * Middleware to do authentication and authorization.
+ */
+
 require_once "IMiddleware.php";
 
 require_once __DIR__."/../controllers/authorization/LoginController.php";
@@ -19,14 +28,19 @@ abstract class Authorization implements IMiddleware {
     
     public static function run(array $requestData) {
         
+        //Make sure we have a session
         if (session_status() == PHP_SESSION_NONE)
             session_start();
         
+        //If we have login in our post this means we are on the login page in and we must call the login controller.
+        //The login controller will load
         if (isset($_POST['login']))
             LoginController::post();
-                
+        
+        //We can now check the page access permissions.
         require_once __DIR__.'/../config/PageAccessPermissions.php';
         
+        //Default to inaccessible for everyone
         $everyone = false;
         $member = false;
         $admin = false;
@@ -36,6 +50,8 @@ abstract class Authorization implements IMiddleware {
         $addRenewUserBrowser = false;
         $checkInBrowser = false;
 
+        //If permissions for the requested page are defined we override the
+        //defaults with these.
         if (isset($_PERMISSIONS[$requestData['requestedPage']])) {
             $permissions = $_PERMISSIONS[$requestData['requestedPage']];
             
@@ -57,6 +73,7 @@ abstract class Authorization implements IMiddleware {
                 $checkInBrowser = $permissions['CHECKINBROWSER'];
         }
         
+        //Possible states
         $canDisplay = false;
         $hasToLogIn = false;
         $browserDenied = false;
@@ -65,6 +82,8 @@ abstract class Authorization implements IMiddleware {
         if ($everyone)
             $canDisplay = true;
         
+        //If a browser can display the page we get the data from the cookie
+        //and check if the growser has the required permission.
         if (!$canDisplay && ($checkInBrowser || $addRenewUserBrowser)) {
             if (!isset($_COOKIE['stippersAuthorization']))
                 $browserDenied = true;
@@ -86,6 +105,8 @@ abstract class Authorization implements IMiddleware {
             }
         }
         
+        //If certain users can display the page and someone is logged in
+        //we renew the user and check if the user has the required permission.
         if (!$canDisplay && ($member || $userManager || $hintManager || $authorizedBrowserManager || $admin)) {
             if (!isset($_SESSION['stippersUser']))
                 $hasToLogIn = true;
@@ -93,6 +114,7 @@ abstract class Authorization implements IMiddleware {
                 try {
                     $newUser = UserDB::getBasicUserById($_SESSION['stippersUser']->userId);
                     
+                    //If the user's password has changed we immediately log out!
                     if ($_SESSION['stippersUser']->passwordHash != $newUser->passwordHash) {
                         session_destroy();
                         ForcedLogoutController::get();

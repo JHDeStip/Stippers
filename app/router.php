@@ -1,16 +1,27 @@
 <?php
 
+/**
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * The router. This makes sure all requests get handled by the right controller.
+ */
+
 require_once 'config/DomainConfig.php';
 
+//Isolate the URL part that says which page is requested
 $requestData['requestedPage'] = explode('?', str_replace(DomainConfig::DOMAINSUFFIX, '', strtolower($_SERVER['REQUEST_URI'])), 2)[0];
-$middleware = array();
 
+//Add middleware
+$middleware = array();
 //require_once 'middleware/SessionCleanup.php';
 require_once 'middleware/Authorization.php';
 //array_push($middleware, 'SessionCleanup');
 array_push($middleware, 'Authorization');
 
-//Aliases
+//Aliases, with these you can define alternative names for pages
 switch ($requestData['requestedPage'])
 {
     case '':
@@ -20,8 +31,7 @@ switch ($requestData['requestedPage'])
 
 //Assign controllers
 $pageNotFound = false;
-switch ($requestData['requestedPage'])
-{
+switch ($requestData['requestedPage']) {
     case 'home':
         require_once('controllers/home/HomeController.php');
         $controller = 'HomeController';
@@ -42,14 +52,14 @@ switch ($requestData['requestedPage'])
         break;
 }
 
+//Run the middleware
 $mwPass = true;
-    for ($i = 0; $i < count($middleware) && $mwPass; $i++)
-    {
-        $mwPass = $middleware[$i]::run($requestData);
-    }
-    
-if ($mwPass)
-{
+for ($i = 0; $i < count($middleware) && $mwPass; $i++) {
+    $mwPass = $middleware[$i]::run($requestData);
+}
+
+//If all middleware gave their OK we can show the page!
+if ($mwPass) {
     if($_SERVER['REQUEST_METHOD'] === 'POST')
         $controller::post();
     else

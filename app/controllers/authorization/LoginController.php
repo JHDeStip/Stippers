@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * Controller for the login page.
+ */
+
 require_once __DIR__.'/../IController.php';
 require_once __DIR__.'/../../helperClasses/Page.php';
 
@@ -12,6 +21,7 @@ require_once __DIR__.'/../../models/user/UserDBException.php';
 require_once __DIR__.'/../../views/authorization/LoginViewValidator.php';
 
 abstract class LoginController implements IController {
+    
     public static function get() {
         $page = new Page();
         $page->data['title'] = 'Login';
@@ -24,10 +34,14 @@ abstract class LoginController implements IController {
     
     public static function post() {
         $errMsgs = LoginViewValidator::validate($_POST);
+        
         if (empty($errMsgs)) {
             try {
+                //Get the user's password salt and calculate password hash
                 $passwordSalt = UserDB::getPasswordSaltByEmail($_POST['email']);
                 $passwordHash = hash_pbkdf2("sha256", $_POST['password'], $passwordSalt, SecurityConfig::NPASSWORDHASHITERATIONS);
+                
+                //Get user from database
                 $_SESSION['stippersUser'] = UserDB::getBasicUserByEmailPasswordHash($_POST['email'], $passwordHash);
                 
                 /*
@@ -49,7 +63,8 @@ abstract class LoginController implements IController {
                     $page->data['title'] = 'Login';
                     $page->data['LoginView']['login_formAction'] = $_SERVER['REQUEST_URI'];
                     $page->data['LoginView']['email'] = $_POST['email'];
-                     
+                    
+                    // If the user doesn't exist we show the invalid credentials error, otherwise a generic error.
                     if ($ex->getCode() == UserDBException::NOUSERFOREMAILPASSWORD || $ex->getCode() == UserDBException::NOUSERFOREMAIL)
                         $page->data['LoginView']['errMsgs']['global'] = '<h2 class="error_message" id="login_form_error_message">E-mailadres en/of wachtwoord onjuist.</h2>';
                     else

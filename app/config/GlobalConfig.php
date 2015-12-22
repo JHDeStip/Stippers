@@ -6,12 +6,10 @@
  * 
  * @author Stan Wijckmans
  * 
- * Interface for controllers.
+ * This file contains blobal settings for Stippers.
  */
 
-interface IController
-{
-    public static function get();
-    
-    public static function post();
+abstract class GlobalConfig {
+    //This is the timezone all times will be displayed for
+    const TIMEZONE = '+01:00';
 }

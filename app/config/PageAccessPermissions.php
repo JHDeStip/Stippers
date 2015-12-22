@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * The settings in this file define by who are what browser the individual pages are accessible.
+ */
+
 //Permissions for the add or renew user page
 $_PERMISSIONS['home']['EVERYONE'] = false;
 $_PERMISSIONS['home']['MEMBER'] = true;

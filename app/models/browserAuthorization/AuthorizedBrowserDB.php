@@ -1,16 +1,27 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: Stan
- * Date: 3/12/2014
- * Time: 13:46
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * Class to do database operations regarding browser models.
  */
+
 require_once __DIR__.'/../../helperClasses/database/Database.php';
 require_once 'AuthorizedBrowser.php';
 require_once 'AuthorizedBrowserDBException.php';
 
 abstract class AuthorizedBrowserDB {
     
+    /**
+     * Gets all authorized browsers.
+     * 
+     * @return array AuthorizedBrowser
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws AuthorizedBrowserDBException error for if something goes wrong while getting the browsers
+     */
     public static function getAuthorizedBrowsers() {
         $browsers = array();
 
@@ -23,7 +34,7 @@ abstract class AuthorizedBrowserDB {
                 throw new AuthorizedBrowserDBException('Unknown error during statement execution while getting authorized browsers.', AuthorizedBrowserDBException::UNKNOWNERROR);
             else {
                 $stmt->bind_result($uuid, $name, $canAddUpdateUsers, $canCheckIn);
-                $i = 0;
+                $browsers = array();
                 
                 while ($stmt->fetch()) {
                     if ($canAddUpdateUsers == 0)
@@ -35,8 +46,7 @@ abstract class AuthorizedBrowserDB {
                     else
                         $canCheckInBool = true;
                     
-                    $browsers[$i] = new AuthorizedBrowser($uuid, $name, $canAddUpdateUsersBool, $canCheckInBool);
-                    $i++;
+                    array_push($browsers, new AuthorizedBrowser($uuid, $name, $canAddUpdateUsersBool, $canCheckInBool));
                 }
 
                 return $browsers;
@@ -53,6 +63,14 @@ abstract class AuthorizedBrowserDB {
         }
     }
 
+    /**
+     * Gets the browser for the given UUID.
+     * 
+     * @param string $uuid UUID of browser to get
+     * @return AuthorizedBrowser browser with permissions
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws AuthorizedBrowserDBException error for if something goes wrong while getting the browser
+     */
     public static function getBasicAuthorizedBrowser($uuid){
         try {
             $conn = Database::getConnection();
@@ -95,6 +113,13 @@ abstract class AuthorizedBrowserDB {
         }
     }
 
+    /**
+     * Adds a new browser.
+     * 
+     * @param AuthorizedBrowser $browser browser to add to the database
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws AuthorizedBrowserDBException error for if something goes wrong while adding the browser
+     */
     public static function addAuthorizedBrowser($browser) {
         try {
             $conn = Database::getConnection();
@@ -120,6 +145,14 @@ abstract class AuthorizedBrowserDB {
         }
     }
 
+    /**
+     * Updates a browser.
+     * 
+     * @param AuthorizedBrowser $oldBrowser browser with original data to check if someone else has already updated the browser
+     * @param AuthorizedBrowser $newBrowser browser with updated data
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws AuthorizedBrowserDBException error for if something goes wrong while updating the browser
+     */
     public static function updateAuthorizedBrowser($oldBrowser, $newBrowser) {
         try {
             $conn = Database::getConnection();
@@ -148,6 +181,13 @@ abstract class AuthorizedBrowserDB {
         }
     }
 
+    /**
+     * Removes a browser.
+     * 
+     * @param AuthorizedBrowser $browser browser to remove
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws AuthorizedBrowserDBException error for if something goes wrong while removing the browser
+     */
     public static function removeAuthorizedBrowser($browser) {
         try {
             $conn = Database::getConnection();

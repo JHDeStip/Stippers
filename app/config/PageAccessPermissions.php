@@ -117,6 +117,15 @@ $_PERMISSIONS['edituser']['AUTHORIZEDBROWSERMANAGER'] = false;
 $_PERMISSIONS['edituser']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['edituser']['CHECKINBROWSER'] = false;
 
+//Permissions for the weekly winner page
+$_PERMISSIONS['weeklywinner']['EVERYONE'] = false;
+$_PERMISSIONS['weeklywinner']['MEMBER'] = false;
+$_PERMISSIONS['weeklywinner']['ADMIN'] = true;
+$_PERMISSIONS['weeklywinner']['USERMANAGER'] = true;
+$_PERMISSIONS['weeklywinner']['AUTHORIZEDBROWSERMANAGER'] = false;
+$_PERMISSIONS['weeklywinner']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['weeklywinner']['CHECKINBROWSER'] = false;
+
 //Permissions for the page not found page
 $_PERMISSIONS['pagenotfound']['EVERYONE'] = true;
 $_PERMISSIONS['pagenotfound']['MEMBER'] = true;

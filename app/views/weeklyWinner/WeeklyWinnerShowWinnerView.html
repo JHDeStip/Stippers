@@ -1,0 +1,9 @@
+<p class="normal_text">De winnaar van deze week is <?php echo htmlentities($this->data['WeeklyWinnerShowWinnerView']['winnerFullName'], ENT_QUOTES, 'utf-8'); ?>.</p>
+<p class="normal_text">
+<?php
+if ($this->data['WeeklyWinnerShowWinnerView']['hasCollectedPrize'])
+    echo 'De prijs is opgehaald.';
+else
+    echo 'De prijs is niet opgehaald.';
+?>
+</p>

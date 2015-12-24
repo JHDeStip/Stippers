@@ -9,23 +9,20 @@
  * This class handles php errors.
  */
 
+require_once __DIR__.'/../Page.php';
+
 abstract class ErrorHandler {
-    
-    public static function exceptionErrorHandler($errno, $errstr, $errfile, $errline) {
-        throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
-    }
     
     /**
      * Executes when php encounters a fatal error. This is used to show a 'nice' error page.
      */
     public static function fatalErrorHandler() {
-        if (error_get_last()) {
-            ?>
-        <h2 class='error_message' id='fatal_error'>Er is iets misgegaan :(</h2>
-        </div>
-        </body>
-        </html>
-        <?php
+        if (error_get_last()['type'] == E_ERROR) {
+            $page = new Page();
+            $page->data['title'] = 'Er is iets misgegaan';
+            $page->data['ErrorNoDescriptionNoLinkView']['errorTitle'] = 'Er is iets misgegaan :(';
+            $page->addView('error/ErrorNoDescriptionNoLinkView');
+            $page->showBasic();
         }
     }
 }

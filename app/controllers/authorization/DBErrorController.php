@@ -17,8 +17,9 @@ abstract class DBErrorController implements IController {
     public static function get() {
         $page = new Page();
         $page->data['title'] = 'Database error';
-        $page->data['DBErrorView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
-        $page->addView('authorization/DBErrorView');
+        $page->data['ErrorNoDescriptionNoLinkView']['errorTitle'] = 'Kan authorizatiegegevens niet ophalen uit database.';
+        $page->data['ErrorNoDescriptionNoLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
+        $page->addView('error/ErrorNoDescriptionNoLinkView');
         $page->showBasic();
     }
     

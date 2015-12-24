@@ -78,7 +78,7 @@ abstract class UserDB {
     public static function getFullUserById($userId) {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT email, first_name, last_name, password_hash, balance, phone, DATE_FORMAT(date_of_birth, "%d/%m/%Y") date_of_birth, street, house_number, city, postal_code, country, bartender_info, is_admin, is_hint_manager, is_user_manager, is_authorized_browser_manager, DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") creation_time ' .
+            $commString = 'SELECT email, first_name, last_name, password_hash, balance, phone, DATE_FORMAT(date_of_birth, "%d/%m/%Y") date_of_birth, street, house_number, city, postal_code, country, is_admin, is_hint_manager, is_user_manager, is_authorized_browser_manager, DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") creation_time ' .
                 'FROM stippers_users WHERE user_id = ?';
             $stmt = $conn->prepare($commString);
             $timezone = GlobalConfig::TIMEZONE;
@@ -87,7 +87,7 @@ abstract class UserDB {
             if (!$stmt->execute())
                 throw new UserDBException('Unknown error during statement execution while getting the user.', UserDBException::UNKNOWNERROR);
             else {
-                $stmt->bind_result($email, $firstName, $lastName, $passwordHash, $balance, $phone, $dateOfBirth, $street, $houseNumber, $city, $postalCode, $country, $bartenderInfo, $isAdmin, $isHintManager, $isUserManager, $isAuthorizedBrowserManager, $creationTime);
+                $stmt->bind_result($email, $firstName, $lastName, $passwordHash, $balance, $phone, $dateOfBirth, $street, $houseNumber, $city, $postalCode, $country, $isAdmin, $isHintManager, $isUserManager, $isAuthorizedBrowserManager, $creationTime);
                 
                 if ($stmt->fetch()) {
                     $user = new User();
@@ -104,7 +104,6 @@ abstract class UserDB {
                     $user->city = $city;
                     $user->postalCode = $postalCode;
                     $user->country = $country;
-                    $user->bartenderInfo = $bartenderInfo;
                     $user->isAdmin = $isAdmin;
                     $user->isHintManager = $isHintManager;
                     $user->isUserManager = $isUserManager;
@@ -546,32 +545,6 @@ abstract class UserDB {
     }
 
     /**
-     * Gets the card number for a given user id for the year we are in.
-     * 
-     * @param int $userId id of the user to get card number for
-     * @return int card number
-     */
-    public static function getCardNumberByUserId($userId) {
-        $conn = Database::getConnection();
-
-        $commString = 'SELECT card FROM stippers_user_card_year WHERE user = @user AND year = YEAR(NOW())';
-        $comm = $conn->prepare($commString);
-        $comm->bind_param('i', $userId);
-
-        $comm->execute();
-        $result = $comm->get_result();
-
-        $comm->close();
-        $conn->kill($conn->thread_id);
-        $conn->close();
-
-        if ($row = $result->fetch_row())
-            return $row[0];
-        else
-            return null;
-    }
-
-    /**
      * Gets a basic user by it's card number. A basic user is a user
      * that has only basic properties such as permissions set.
      * 
@@ -676,7 +649,7 @@ abstract class UserDB {
      * @throws Exception generic error for if something goes wrong while talking to the database
      * @throws UserDBException error for if something goes wrong while getting the user
      */
-    public static function getUserByEmailPassword($email, $passwordHash) {
+    public static function getUserByEmailPasswordHash($email, $passwordHash) {
         $user = null;
 
         $conn = Database::getConnection();
@@ -994,134 +967,6 @@ abstract class UserDB {
         catch (Exception $ex) {
             if (isset($conn))
                 $conn->rollback();
-            throw $ex;
-        }
-        finally {
-            if (isset($conn)) {
-                $conn->kill($conn->thread_id);
-                $conn->close();
-            }
-        }
-    }
-
-    /**
-     * Checks if a user who's ID is given is a member this year.
-     * 
-     * @param int $userId ID of the user to check membership for
-     * @return boolean if the user is a member this year.
-     * @throws Exception generic error for if something goes wrong while talking to the database
-     * @throws UserDBException error for if something goes wrong while checking the user's membership
-     */
-    public static function isUserMemberThisYearByUserId($userId) {
-        try {
-            $conn = Database::getConnection();
-            $commString = 'SELECT count(*) FROM stippers_user_card_year WHERE user = ? AND membership_year = (SELECT YEAR(NOW()))';
-            $stmt = $conn->prepare($commString);
-            $stmt->bind_param('i', $userId);
-            
-            if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while checking if the user is a member this year.', CheckInDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($userCardYear);
-                
-                if ($stmt->fetch()) {
-                    if ($userCardYear == 0)
-                        return false;
-                    return true;
-                }
-                else
-                    throw new UserDBException('Unknown error during statement execution while checking if the user is a member this year.', CheckInDBException::UNKNOWNERROR);
-            }
-        }
-        catch (Exception $ex) {
-            throw $ex;
-        }
-        finally {
-            if (isset($conn)) {
-                $conn->kill($conn->thread_id);
-                $conn->close();
-            }
-        }
-    }
-/*
-    public static function getUserYearsDetailsByUserId($userId) {
-        try {
-            $conn = Database::getConnection();
-            $commString = 'SELECT membership_year, card, (SELECT count(*) FROM stippers_check_ins WHERE YEAR(time) = membership_year AND user = ?)
-            FROM stippers_user_card_year ORDER BY year DESC';
-            $stmt = $conn->prepare($commString);
-            $stmt->bind_param('i', $userId);
-            
-            if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while checking if the user is a member this year.', CheckInDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($membershipYear, $cardNumber, $nCheckIns, $sweater, $sweaterSize, $tshirt, $tshirtSize);
-
-                $userYearsDetails = array();
-                $i = 0;
-                
-                while ($stmt->fetch()) {
-                    $userYearsDetails[$i]['membershipYear'] = $membershipYear;
-                    $userYearsDetails[$i]['cardNumber'] = $cardNumber;
-                    $userYearsDetails[$i]['nCheckIns'] = $nCheckIns;
-                    $userYearsDetails[$i]['sweater'] = $sweater;
-                    if ($sweater)
-                        $userYearsDetails[$i]['sweaterSize'] = $sweaterSize;
-                    else
-                        $userYearsDetails[$i]['sweaterSize'] = -1;
-                    $userYearsDetails[$i]['tshirt'] = $tshirt;
-                    if ($tshirt)
-                        $userYearsDetails[$i]['tshirtSize'] = $tshirtSize;
-                    else
-                        $userYearsDetails[$i]['tshirtSize'] = -1;
-                    $i++;
-                }
-
-                return $userYearsDetails;
-            }
-        }
-        catch (Exception $ex) {
-            throw $ex;
-        }
-        finally {
-            if (isset($conn)) {
-                $conn->kill($conn->thread_id);
-                $conn->close();
-            }
-        }
-    }
-    */
-    
-    /**
-     * Get the IDs of all uers that are a member this year.
-     * 
-     * @return array IDs of users
-     * @throws Exception generic error for if something goes wrong while talking to the database
-     * @throws UserDBException error for if something goes wrong while getting the user IDs
-     */
-    public static function getUserIdsThisYear() {
-        try {
-            $conn = Database::getConnection();
-            $commString = 'SELECT user FROM stippers_user_card_year WHERE membership_year = (SELECT YEAR(NOW()))';
-            $stmt = $conn->prepare($commString);
-            
-            if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while getting the user IDs.', UserDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($userId);
-
-                $userIds = array();
-                $i = 0;
-                
-                while ($stmt->fetch()) {
-                    $userIds[$i] = $userId;
-                    $i++;
-                }
-
-                return $userIds;
-            }
-        }
-        catch (Exception $ex) {
             throw $ex;
         }
         finally {

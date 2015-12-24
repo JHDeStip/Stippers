@@ -1,4 +1,4 @@
 <h1 class="page_title">Leden zoeken</h1>
-<form action="<?php echo htmlspecialchars($this->data['UserSearchTopView']['user_search_formAction'], ENT_QUOTES, 'utf-8'); ?>" id="user_search_form" method="post" onsubmit="return validateUserSearchForm(this);">
+<form action="<?php echo htmlentities($this->data['UserSearchTopView']['user_search_formAction'], ENT_QUOTES, 'utf-8'); ?>" id="user_search_form" method="post" onsubmit="return validateUserSearchForm(this);">
 <table>
     <tr><th><h2 class="page_subtitle">Zoeken op</h2></th><th><h2 class="page_subtitle">Weergeven in resultaten</h2></th></tr>

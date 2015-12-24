@@ -44,6 +44,10 @@ switch ($requestData['requestedPage']) {
         require_once('controllers/editUser/EditUserController.php');
         $controller = 'EditUserController';
         break;
+    case 'weeklywinner':
+        require_once('controllers/weeklyWinner/WeeklyWinnerController.php');
+        $controller = 'WeeklyWinnerController';
+        break;
     case 'logout':
         require_once('controllers/authorization/LogoutController.php');
         $controller = 'LogoutController';

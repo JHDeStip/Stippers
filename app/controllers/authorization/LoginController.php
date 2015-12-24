@@ -42,7 +42,7 @@ abstract class LoginController implements IController {
                 $passwordHash = hash_pbkdf2("sha256", $_POST['password'], $passwordSalt, SecurityConfig::NPASSWORDHASHITERATIONS);
                 
                 //Get user from database
-                $_SESSION['stippersUser'] = UserDB::getBasicUserByEmailPasswordHash($_POST['email'], $passwordHash);
+                $_SESSION['Stippers']['user'] = UserDB::getBasicUserByEmailPasswordHash($_POST['email'], $passwordHash);
                 
                 /*
                 At this point we have a POST request with data from the login form. Because of that the router will try to run 'POST'

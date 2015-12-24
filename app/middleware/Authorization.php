@@ -108,30 +108,30 @@ abstract class Authorization implements IMiddleware {
         //If certain users can display the page and someone is logged in
         //we renew the user and check if the user has the required permission.
         if (!$canDisplay && ($member || $userManager || $hintManager || $authorizedBrowserManager || $admin)) {
-            if (!isset($_SESSION['stippersUser']))
+            if (!isset($_SESSION['Stippers']['user']))
                 $hasToLogIn = true;
             else {
                 try {
-                    $newUser = UserDB::getBasicUserById($_SESSION['stippersUser']->userId);
+                    $newUser = UserDB::getBasicUserById($_SESSION['Stippers']['user']->userId);
                     
                     //If the user's password has changed we immediately log out!
-                    if ($_SESSION['stippersUser']->passwordHash != $newUser->passwordHash) {
+                    if ($_SESSION['Stippers']['user']->passwordHash != $newUser->passwordHash) {
                         session_destroy();
                         ForcedLogoutController::get();
                         return false;
                     }
                     else {
-                        $_SESSION['stippersUser'] = $newUser;
+                        $_SESSION['Stippers']['user'] = $newUser;
                         
                         if ($member)
                             $canDisplay = true;
-                        else if ($userManager && $_SESSION['stippersUser']->isUserManager)
+                        else if ($userManager && $_SESSION['Stippers']['user']->isUserManager)
                             $canDisplay = true;
-                        else if ($hintManager && $_SESSION['stippersUser']->isHintManager)
+                        else if ($hintManager && $_SESSION['Stippers']['user']->isHintManager)
                             $canDisplay = true;
-                        else if ($authorizedBrowserManager && $_SESSION['stippersUser']->isAuthorizedBrowserManager)
+                        else if ($authorizedBrowserManager && $_SESSION['Stippers']['user']->isAuthorizedBrowserManager)
                             $canDisplay = true;
-                        else if ($admin && $_SESSION['stippersUser']->isAdmin)
+                        else if ($admin && $_SESSION['Stippers']['user']->isAdmin)
                             $canDisplay = true;
                         else
                             $userDenied = true;

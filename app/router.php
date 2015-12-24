@@ -1,55 +1,70 @@
 <?php
 
-require_once "config/DomainConfig.php";
+/**
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * The router. This makes sure all requests get handled by the right controller.
+ */
 
-$uri = strtoupper($_SERVER["REQUEST_URI"]);
-$requestData["requestedPage"] = str_replace(DomainConfig::DOMAINSUFFIX, "", $uri);
+require_once 'config/DomainConfig.php';
 
+//Isolate the URL part that says which page is requested
+$requestData['requestedPage'] = explode('?', str_replace(DomainConfig::DOMAINSUFFIX, '', strtolower($_SERVER['REQUEST_URI'])), 2)[0];
+
+//Add middleware
 $middleware = array();
+//require_once 'middleware/SessionCleanup.php';
+require_once 'middleware/Authorization.php';
+//array_push($middleware, 'SessionCleanup');
+array_push($middleware, 'Authorization');
 
-//require_once "middleware/SessionCleanup.php";
-require_once "middleware/Authorization.php";
-//array_push($middleware, "SessionCleanup");
-array_push($middleware, "Authorization");
-
-//Aliases
-switch ($requestData["requestedPage"])
+//Aliases, with these you can define alternative names for pages
+switch ($requestData['requestedPage'])
 {
-    case "":
-        $requestData["requestedPage"] = "HOME";
+    case '':
+        $requestData['requestedPage'] = 'home';
         break;
 }
 
+//Assign controllers
 $pageNotFound = false;
-switch ($requestData["requestedPage"])
-{
-    case "HOME":
-        require_once("controllers/home/HomeController.php");
+switch ($requestData['requestedPage']) {
+    case 'home':
+        require_once('controllers/home/HomeController.php');
         $controller = 'HomeController';
         break;
-    case "LOGOUT":
-        require_once("controllers/authorization/LogoutController.php");
+    case 'manageuser':
+        require_once('controllers/manageUser/ManageUserController.php');
+        $controller = 'ManageUserController';
+        break;
+    case 'edituser':
+        require_once('controllers/editUser/EditUserController.php');
+        $controller = 'EditUserController';
+        break;
+    case 'logout':
+        require_once('controllers/authorization/LogoutController.php');
         $controller = 'LogoutController';
         break;
     default:
         $pageNotFound = true;
-        require_once("controllers/pageNotFound/PageNotFoundController.php");
+        require_once('controllers/pageNotFound/PageNotFoundController.php');
         $controller = 'PageNotFoundController';
+        $requestData['requestedPage'] = 'pagenotfound';
         break;
 }
 
+//Run the middleware
 $mwPass = true;
-if (!$pageNotFound)
-{
-    for ($i = 0; $i < count($middleware) && $mwPass; $i++)
-    {
-        $mwPass = $middleware[$i]::run($requestData);
-    }
+for ($i = 0; $i < count($middleware) && $mwPass; $i++) {
+    $mwPass = $middleware[$i]::run($requestData);
 }
-    
-if ($mwPass)
-{
-    if($_SERVER["REQUEST_METHOD"] === "POST")
+
+//If all middleware gave their OK we can show the page!
+if ($mwPass) {
+    if($_SERVER['REQUEST_METHOD'] === 'POST')
         $controller::post();
     else
         $controller::get();

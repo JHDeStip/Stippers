@@ -1,0 +1,46 @@
+<h1 class="page_title">Gebruiker bewerken</h1>
+<h2 class="page_subtitle"><?php echo $this->data['EditUserTopView']['firstName']; ?></h2>
+
+<?php echo $this->data['EditUserTopView']['errMsgs']['global']; ?>
+
+<form action="<?php echo htmlspecialchars($this->data['EditUserTopView']['edit_user_formAction'], ENT_QUOTES, 'utf-8'); ?>" method="post" id='edit_user_form' onsubmit="return formSubmit(this);">
+    
+<label class="form_label" for="email">E-mail:*</label>
+<input class="textbox" type="text" id="email" name="email" maxlength="50" value="<?php echo htmlentities($this->data['EditUserTopView']['email'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>><?php echo $this->data['EditUserTopView']['errMsgs']['email']; ?><div class="clearfix"></div>
+    
+<label class="form_label" for="repeat_email">Herhaal e-mail:*</label>
+<input class="textbox" type="text" id="repeat_email" name="repeat_email" maxlength="50" value="<?php echo htmlentities($this->data['EditUserTopView']['repeatEmail'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>><?php echo $this->data['EditUserTopView']['errMsgs']['repeatEmail']; ?><div class="clearfix"></div>
+    
+<label class="form_label" for="first_name">Voornaam:*</label>
+<input class="textbox" type="text" id="first_name" name="first_name" maxlength="30" value="<?php echo htmlentities($this->data['EditUserTopView']['firstName'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>><?php echo $this->data['EditUserTopView']['errMsgs']['firstName']; ?><div class="clearfix"></div>
+    
+<label class="form_label" for="last_name">Achternaam:*</label>
+<input class="textbox" type="text" id="last_name" name="last_name" maxlength="30" value="<?php echo htmlentities($this->data['EditUserTopView']['lastName'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>><?php echo $this->data['EditUserTopView']['errMsgs']['lastName']; ?><div class="clearfix"></div>
+    
+<label class="form_label" for="street">Straat:*</label>
+<input class="textbox" type="text" id="street" name="street" maxlength="30" value="<?php echo htmlentities($this->data['EditUserTopView']['street'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>><?php echo $this->data['EditUserTopView']['errMsgs']['street']; ?><div class="clearfix"></div>
+    
+<label class="form_label" for="house_number">Huisnummer:*</label>
+<input class="textbox" type="text" id="house_number" name="house_number" maxlength="4" value="<?php echo htmlentities($this->data['EditUserTopView']['houseNumber'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>><?php echo $this->data['EditUserTopView']['errMsgs']['houseNumber']; ?><div class="clearfix"></div>
+    
+<label class="form_label" for="city">Gemeente:*</label>
+<input class="textbox" type="text" id="city" name="city" maxlength="30" value="<?php echo htmlentities($this->data['EditUserTopView']['city'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>><?php echo $this->data['EditUserTopView']['errMsgs']['city']; ?><div class="clearfix"></div>
+    
+<label class="form_label" for="postal_code">Postcode:*</label>
+<input class="textbox" type="text" id="postal_code" name="postal_code" maxlength="6" value="<?php echo htmlentities($this->data['EditUserTopView']['postalCode'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>><?php echo $this->data['EditUserTopView']['errMsgs']['postalCode']; ?><div class="clearfix"></div>
+    
+<label class="form_label" for="country">Land:*</label>
+<input class="textbox" type="text" id="country" name="country" maxlength="30" value="<?php echo htmlentities($this->data['EditUserTopView']['country'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>><?php echo $this->data['EditUserTopView']['errMsgs']['country']; ?><div class="clearfix"></div>
+    
+<label class="form_label" for="phone">Telefoonnummer:</label>
+<input class="textbox" type="text" id="phone" name="phone" maxlength="14" value="<?php echo htmlentities($this->data['EditUserTopView']['phone'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>><?php echo $this->data['EditUserTopView']['errMsgs']['phone']; ?><div class="clearfix"></div>
+    
+<label class="form_label" for="date_of_birth">Geboortedatum:*</label>
+<input class="textbox" type="text" id="date_of_birth" name="date_of_birth" maxlength="10" value="<?php echo htmlentities($this->data['EditUserTopView']['dateOfBirth'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>>
+<label class="form_label_example" for="date_of_birth"> Voorbeeld: 01/01/1995</label><?php echo $this->data['EditUserTopView']['errMsgs']['dateOfBirth']; ?><div class="clearfix"></div>
+    
+<label class="form_label" for="creation_time">Registratietijd:</label>
+<input class="textbox" type="text" id="creation_time" name="creation_time" value="<?php echo htmlentities($this->data['EditUserTopView']['creationTime'], ENT_QUOTES, 'utf-8'); ?>" disabled><div class="clearfix"></div>
+    
+<label class="form_label" for="balance">Saldo:</label>
+<input class="textbox" type="text" id="balance" name="balance" value="<?php echo htmlentities($this->data['EditUserTopView']['balance'], ENT_QUOTES, 'utf-8'); ?>" disabled><div class="clearfix"></div>

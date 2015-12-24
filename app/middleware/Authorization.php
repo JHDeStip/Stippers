@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * Middleware to do authentication and authorization.
+ */
+
 require_once "IMiddleware.php";
 
 require_once __DIR__."/../controllers/authorization/LoginController.php";
@@ -11,23 +20,27 @@ require_once __DIR__."/../models/browserAuthorization/AuthorizedBrowser.php";
 require_once __DIR__."/../models/browserAuthorization/AuthorizedBrowserDB.php";
 require_once __DIR__."/../models/browserAuthorization/AuthorizedBrowserDBException.php";
 
-require_once __DIR__."/../models/user/User.php";
-require_once __DIR__."/../models/user/UserDB.php";
-require_once __DIR__."/../models/user/UserDBException.php";
-require_once __DIR__."/../models/user/UserDBException.php";
+require_once __DIR__.'/../models/user/User.php';
+require_once __DIR__.'/../models/user/UserDB.php';
+require_once __DIR__.'/../models/user/UserDBException.php';
 
 abstract class Authorization implements IMiddleware {
     
     public static function run(array $requestData) {
         
+        //Make sure we have a session
         if (session_status() == PHP_SESSION_NONE)
             session_start();
         
-        if (isset($_POST["login"]))
+        //If we have login in our post this means we are on the login page in and we must call the login controller.
+        //The login controller will load
+        if (isset($_POST['login']))
             LoginController::post();
-                
-        require_once __DIR__."/../config/PageAccessPermissions.php";
         
+        //We can now check the page access permissions.
+        require_once __DIR__.'/../config/PageAccessPermissions.php';
+        
+        //Default to inaccessible for everyone
         $everyone = false;
         $member = false;
         $admin = false;
@@ -37,27 +50,30 @@ abstract class Authorization implements IMiddleware {
         $addRenewUserBrowser = false;
         $checkInBrowser = false;
 
-        if (isset($_PERMISSIONS[$requestData["requestedPage"]])) {
-            $permissions = $_PERMISSIONS[$requestData["requestedPage"]];
+        //If permissions for the requested page are defined we override the
+        //defaults with these.
+        if (isset($_PERMISSIONS[$requestData['requestedPage']])) {
+            $permissions = $_PERMISSIONS[$requestData['requestedPage']];
             
-            if (isset($permissions["EVERYONE"]))
-                $everyone = $permissions["EVERYONE"];
-            if (isset($permissions["MEMBER"]))
-                $member = $permissions["MEMBER"];
-            if (isset($permissions["ADMIN"]))
-                $admin = $permissions["ADMIN"];
-            if (isset($permissions["USERMANAGER"]))
-                $userManager = $permissions["USERMANAGER"];
-            if (isset($permissions["HINTMANAGER"]))
-                $hintManager = $permissions["HINTMANAGER"];
-            if (isset($permissions["AUTHORIZEDBROWSERMANAGER"]))
-                $authorizedBrowserManager = $permissions["AUTHORIZEDBROWSERMANAGER"];
-            if (isset($permissions["ADDRENEWUSERBROWSER"]))
-                $addRenewUserBrowser = $permissions["ADDRENEWUSERBROWSER"];
-            if (isset($permissions["CHECKINBROWSER"]))
-                $checkInBrowser = $permissions["CHECKINBROWSER"];
+            if (isset($permissions['EVERYONE']))
+                $everyone = $permissions['EVERYONE'];
+            if (isset($permissions['MEMBER']))
+                $member = $permissions['MEMBER'];
+            if (isset($permissions['ADMIN']))
+                $admin = $permissions['ADMIN'];
+            if (isset($permissions['USERMANAGER']))
+                $userManager = $permissions['USERMANAGER'];
+            if (isset($permissions['HINTMANAGER']))
+                $hintManager = $permissions['HINTMANAGER'];
+            if (isset($permissions['AUTHORIZEDBROWSERMANAGER']))
+                $authorizedBrowserManager = $permissions['AUTHORIZEDBROWSERMANAGER'];
+            if (isset($permissions['ADDRENEWUSERBROWSER']))
+                $addRenewUserBrowser = $permissions['ADDRENEWUSERBROWSER'];
+            if (isset($permissions['CHECKINBROWSER']))
+                $checkInBrowser = $permissions['CHECKINBROWSER'];
         }
         
+        //Possible states
         $canDisplay = false;
         $hasToLogIn = false;
         $browserDenied = false;
@@ -66,12 +82,14 @@ abstract class Authorization implements IMiddleware {
         if ($everyone)
             $canDisplay = true;
         
+        //If a browser can display the page we get the data from the cookie
+        //and check if the growser has the required permission.
         if (!$canDisplay && ($checkInBrowser || $addRenewUserBrowser)) {
-            if (!isset($_COOKIE["stippersAuthorization"]))
+            if (!isset($_COOKIE['stippersAuthorization']))
                 $browserDenied = true;
             else {
                 try {
-                    $authorizedBrowser = AuthorizedBrowserDB::getBasicAuthorizedBrowser($_COOKIE["stippersAuthorization"]);
+                    $authorizedBrowser = AuthorizedBrowserDB::getBasicAuthorizedBrowser($_COOKIE['stippersAuthorization']);
                     
                     if ($checkInBrowser && $authorizedBrowser->canCheckIn)
                         $canDisplay = true;
@@ -87,30 +105,33 @@ abstract class Authorization implements IMiddleware {
             }
         }
         
+        //If certain users can display the page and someone is logged in
+        //we renew the user and check if the user has the required permission.
         if (!$canDisplay && ($member || $userManager || $hintManager || $authorizedBrowserManager || $admin)) {
-            if (!isset($_SESSION["stippersUser"]))
+            if (!isset($_SESSION['Stippers']['user']))
                 $hasToLogIn = true;
             else {
                 try {
-                    $newUser = UserDB::getBasicUserById($_SESSION["stippersUser"]->userId);
+                    $newUser = UserDB::getBasicUserById($_SESSION['Stippers']['user']->userId);
                     
-                    if ($_SESSION["stippersUser"]->passwordHash != $newUser->passwordHash) {
+                    //If the user's password has changed we immediately log out!
+                    if ($_SESSION['Stippers']['user']->passwordHash != $newUser->passwordHash) {
                         session_destroy();
                         ForcedLogoutController::get();
                         return false;
                     }
                     else {
-                        $_SESSION["stippersUser"] = $newUser;
+                        $_SESSION['Stippers']['user'] = $newUser;
                         
                         if ($member)
                             $canDisplay = true;
-                        else if ($userManager && $_SESSION["stippersUser"]->isUserManager)
+                        else if ($userManager && $_SESSION['Stippers']['user']->isUserManager)
                             $canDisplay = true;
-                        else if ($hintManager && $_SESSION["stippersUser"]->isHintManager)
+                        else if ($hintManager && $_SESSION['Stippers']['user']->isHintManager)
                             $canDisplay = true;
-                        else if ($authorizedBrowserManager && $_SESSION["stippersUser"]->isAuthorizedBrowserManager)
+                        else if ($authorizedBrowserManager && $_SESSION['Stippers']['user']->isAuthorizedBrowserManager)
                             $canDisplay = true;
-                        else if ($admin && $_SESSION["stippersUser"]->isAdmin)
+                        else if ($admin && $_SESSION['Stippers']['user']->isAdmin)
                             $canDisplay = true;
                         else
                             $userDenied = true;

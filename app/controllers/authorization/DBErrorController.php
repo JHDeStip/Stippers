@@ -1,18 +1,28 @@
 <?php
 
-require_once __DIR__."/../IController.php";
-require_once __DIR__."/../../helperClasses/View.php";
+/**
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * Controller for when the an error occured when talking the database.
+ */
 
-abstract class DBErrorController implements IController
-{
-    public static function get()
-    {
-        $data["title"] = "Database error";
-        $data['DBErrorView']['tryAgainUrl'] = $_SERVER["REQUEST_URI"];
-        View::showBasicView(["authorization/DBErrorView"], $data);
+require_once __DIR__.'/../IController.php';
+require_once __DIR__.'/../../helperClasses/Page.php';
+
+abstract class DBErrorController implements IController {
+    
+    public static function get() {
+        $page = new Page();
+        $page->data['title'] = 'Database error';
+        $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan authorizatiegegevens niet ophalen uit database.';
+        $page->data['ErrorMessageNoDescriptionNoLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
+        $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
+        $page->showBasic();
     }
     
-    public static function post()
-    {
+    public static function post() {
     }
 }

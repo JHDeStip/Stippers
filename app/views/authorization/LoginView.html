@@ -1,7 +1,7 @@
 <h1 class="page_title">Aanmelden</h1>
-<?php echo $data["LoginView"]["errMsgs"]["global"]; ?>
-<form action="<?php echo $data['LoginView']['login_formAction']; ?>" id="login_form" method="post" onsubmit="return validateLoginForm(this);">
-            <label class="form_label" for="email">E-mail:</label><input class="textbox" type="text" id="email" name="email" value="<?php echo htmlentities($data['LoginView']['email'], ENT_QUOTES, 'utf-8'); ?>"><div class="clearfix"></div>
+<?php echo $this->data['LoginView']['errMsgs']['global']; ?>
+<form action="<?php echo htmlentities($this->data['LoginView']['login_formAction'], ENT_QUOTES, 'utf-8'); ?>" id="login_form" method="post" onsubmit="return validateLoginForm(this);">
+            <label class="form_label" for="email">E-mail:</label><input class="textbox" type="text" id="email" name="email" value="<?php echo htmlentities($this->data['LoginView']['email'], ENT_QUOTES, 'utf-8'); ?>"><div class="clearfix"></div>
             <label class="form_label" for="password">Wachtwoord:</label><input class="textbox" type="password" id="password" name="password" ><div class="clearfix"></div>
             <input class="submit_button" type="submit" name="login" value="Aanmelden" onclick="buttonClicked = SUBMITBUTTON;">
 </form>

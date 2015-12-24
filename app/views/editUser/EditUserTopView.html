@@ -3,7 +3,7 @@
 
 <?php echo $this->data['EditUserTopView']['errMsgs']['global']; ?>
 
-<form action="<?php echo htmlspecialchars($this->data['EditUserTopView']['edit_user_formAction'], ENT_QUOTES, 'utf-8'); ?>" method="post" id='edit_user_form' onsubmit="return formSubmit(this);">
+<form action="<?php echo htmlentities($this->data['EditUserTopView']['edit_user_formAction'], ENT_QUOTES, 'utf-8'); ?>" method="post" id='edit_user_form' onsubmit="return formSubmit(this);">
     
 <label class="form_label" for="email">E-mail:*</label>
 <input class="textbox" type="text" id="email" name="email" maxlength="50" value="<?php echo htmlentities($this->data['EditUserTopView']['email'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>><?php echo $this->data['EditUserTopView']['errMsgs']['email']; ?><div class="clearfix"></div>

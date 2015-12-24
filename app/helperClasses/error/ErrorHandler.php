@@ -20,8 +20,8 @@ abstract class ErrorHandler {
         if (error_get_last()['type'] == E_ERROR) {
             $page = new Page();
             $page->data['title'] = 'Er is iets misgegaan';
-            $page->data['ErrorNoDescriptionNoLinkView']['errorTitle'] = 'Er is iets misgegaan :(';
-            $page->addView('error/ErrorNoDescriptionNoLinkView');
+            $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Er is iets misgegaan :(';
+            $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
             $page->showBasic();
         }
     }

@@ -396,8 +396,8 @@ abstract class ManageUserController implements IController {
             }
         }
         catch (Exception $ex) {
-            $page->data['ErrorNoDescriptionNoLinkView']['errorTitle'] = 'Kan gebruikers niet ophalen.';
-            array_push($views, 'error/ErrorNoDescriptionNoLinkView');
+            $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan gebruikers niet ophalen.';
+            array_push($views, 'error/ErrorMessageNoDescriptionNoLinkView');
         }
     }
 }

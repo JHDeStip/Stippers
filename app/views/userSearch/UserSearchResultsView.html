@@ -45,7 +45,7 @@ if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->dateOfBirth
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->isAdmin)) echo '<td><input type="checkbox" onclick="return false;" '.($this->data['UserSearchResultsView']['users'][$i]['user']->isAdmin ? 'checked' : '').'></td>';
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->isUserManager)) echo '<td><input type="checkbox" onclick="return false;" '.($this->data['UserSearchResultsView']['users'][$i]['user']->isUserManager ? 'checked' : '').'></td>';
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->isAuthorizedBrowserManager)) echo '<td><input type="checkbox" onclick="return false;" '.($this->data['UserSearchResultsView']['users'][$i]['user']->isAuthorizedBrowserManager ? 'checked' : '').'></td>';
-    echo '<td><a href="'.DomainConfig::DOMAINSUFFIX.'logout?user='.$this->data['UserSearchResultsView']['users'][$i]['user']->userId.'">Bewerken</a></td>';
+    echo '<td><a href="'.DomainConfig::DOMAINSUFFIX.'edituser?user='.$this->data['UserSearchResultsView']['users'][$i]['user']->userId.'">Bewerken</a></td>';
 echo '</tr>';
 }
 

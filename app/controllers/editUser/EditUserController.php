@@ -36,7 +36,9 @@ abstract class EditUserController implements IController {
             $page = new Page();
             $page->data['title'] = 'Gebruiker bewerken';
             try {
+                //Get user who's ID is given in GET from database
                 $_SESSION['Stippers']['EditUser']['user'] = UserDB::getFullUserById($_GET['user']);
+                //Build views
                 EditUserController::buildEditUserTopView($page, false, false);
                 if ($_SESSION['Stippers']['user']->isAdmin)
                     EditUserController::buildEditUserAdminView($page, false, false);
@@ -53,10 +55,13 @@ abstract class EditUserController implements IController {
     } 
     
     public static function post() {
+        //Redirect to manageuser page if back to results button was clicked
         if (isset($_POST['back_to_search_results']))
             header('Location: manageuser', TRUE, 303);
+        //Stop editing if cancel was clocked, this should do the same as GET, so we just call get.
         elseif (isset($_POST['cancel']))
             EditUserController::get();
+        //If we click edit we show all views with enabled controls.
         elseif (isset($_POST['edit'])) {
             $page = new Page();
             $page->data['title'] = 'Gebruiker bewerken';
@@ -67,12 +72,14 @@ abstract class EditUserController implements IController {
             EditUserController::buildEditUserMembershipDetailsView($page);
             $page->showBasic();
         }
+        //If the save button was clicked
         else {
             $page = new Page();
             $page->data['title'] = 'Gebruiker bewerken';
             $postData['EditUserTopView'] = $_POST;
             $errMsgs = EditUserTopViewValidator::validate($postData);
             if (empty($errMsgs)) {
+                //If no error: create a new user from posted data and try to save it
                 $newUser = EditUserController::createUserFromPost();
                 try {
                     UserDB::updateUser($_SESSION['Stippers']['EditUser']['user'], $newUser);
@@ -81,6 +88,7 @@ abstract class EditUserController implements IController {
                     $page->addView('info/InfoMessageNoDescriptionWithLinkView');
                 }
                 catch (Exception $ex) {
+                    //Show correct error message for errors
                     if ($ex->getCode() == UserDBException::USEROUTOFDATE) {
                         $page->data['ErrorMessageWithDescriptionWithLinkView']['errorTitle'] = 'Gebruiker niet bijgewerkt';
                         $page->data['ErrorMessageWithDescriptionWithLinkView']['errorDescription'] = 'Iemand anders heeft de gebruiker in tussentijd al gewijzigd.';
@@ -101,6 +109,7 @@ abstract class EditUserController implements IController {
                 }
             }
             else {
+                //If we had an error we show the views with enabled controls and take data from POST
                 EditUserController::buildEditUserTopView($page, true, true);
                 if ($_SESSION['Stippers']['user']->isAdmin)
                     EditUserController::buildEditUserAdminView($page, true, true);
@@ -112,9 +121,18 @@ abstract class EditUserController implements IController {
         }
     }
     
+    /**
+     * Builds the view to view/change the user data
+     * that are not permission related.
+     * 
+     * @param Page $page page object to load data into
+     * @param type $enabled indicates if controlls should be enabled
+     * @param type $saveMode indicates if we are trying to safe
+     */
     private static function buildEditUserTopView($page, $enabled, $saveMode) {
         $page->data['EditUserTopView']['edit_user_formAction'] = $_SERVER['REQUEST_URI'];
         
+        //If we're traying to save we read the data from post
         if ($saveMode) {
             $page->data['EditUserTopView']['email'] = $_POST['email'];
             $page->data['EditUserTopView']['repeatEmail'] = $_POST['repeat_email'];
@@ -130,6 +148,8 @@ abstract class EditUserController implements IController {
             $page->data['EditUserTopView']['creationTime'] = $_SESSION['Stippers']['EditUser']['user']->creationTime;
             $page->data['EditUserTopView']['balance'] = $_SESSION['Stippers']['EditUser']['user']->balance;
         }
+        //If we're not trying to save we are showing existing data
+        //so we load it from the user object in session
         else {
             $page->data['EditUserTopView']['email'] = $_SESSION['Stippers']['EditUser']['user']->email;
             $page->data['EditUserTopView']['repeatEmail'] = $_SESSION['Stippers']['EditUser']['user']->email;
@@ -155,12 +175,22 @@ abstract class EditUserController implements IController {
         $page->data['EditUserTopView']['errMsgs'] = EditUserTopViewValidator::initErrMsgs();
     }
     
+    /**
+     * Builds the view to view/change the permission data.
+     * 
+     * @param Page $page page object to load data into
+     * @param type $enabled indicates if controlls should be enabled
+     * @param type $saveMode indicates if we are trying to safe
+     */
     private static function buildEditUserAdminView($page, $enabled, $saveMode) {
+        //If we're traying to save we read the data from post
         if ($saveMode) {
             $page->data['EditUserAdminView']['isAdminChecked'] = (isset($_POST['is_admin_checked']) ? 'checked' : '');
             $page->data['EditUserAdminView']['isUserManagerChecked'] = (isset($_POST['is_user_manager_checked']) ? 'checked' : '');
             $page->data['EditUserAdminView']['isAuthorizedBrowserManagerChecked'] = (isset($_POST['is_browser_manager_checked']) ? 'checked' : '');
         }
+        //If we're not trying to save we are showing existing data
+        //so we load it from the user object in session
         else {
             $page->data['EditUserAdminView']['isAdminChecked'] = ($_SESSION['Stippers']['EditUser']['user']->isAdmin ? 'checked' : '');
             $page->data['EditUserAdminView']['isUserManagerChecked'] = ($_SESSION['Stippers']['EditUser']['user']->isUserManager ? 'checked' : '');
@@ -175,6 +205,11 @@ abstract class EditUserController implements IController {
         $page->addView('editUser/EditUserAdminView');
     }
         
+    /**
+     * Builds the view for membership details.
+     * 
+     * @param Page $page page object to load data into
+     */
     private static function buildEditUserMembershipDetailsView($page) {
         try {
             $page->data['EditUserMembershipDetailsView']['membershipYearDetails'] = MembershipDB::getUserMembershipDetailsByUserId($_SESSION['Stippers']['EditUser']['user']->userId);
@@ -188,6 +223,11 @@ abstract class EditUserController implements IController {
         }
     }
     
+    /**
+     * Creates a user from data in POST.
+     * 
+     * @return User newly created user object
+     */
     private static function createUserFromPost() {
         $user = new User();
         $user->email = $_POST['email'];
@@ -209,6 +249,8 @@ abstract class EditUserController implements IController {
             $user->isUserManager = isset($_POST['is_user_manager']);
             $user->isAuthorizedBrowserManager = isset($_POST['is_authorized_browser_manager']);
         }
+        //If you're not an admin, don't take permission data from post
+        //but keep the data that was already in the session
         else {
             $user->isAdmin = $_SESSION['Stippers']['EditUser']['user']->isAdmin;
             $user->isUserManager = $_SESSION['Stippers']['EditUser']['user']->isUserManager;

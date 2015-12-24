@@ -10,7 +10,7 @@
  */
 
 require_once __DIR__.'/../../helperClasses/database/Database.php';
-include_once 'CheckInDBException.php';
+require_once 'CheckInDBException.php';
 
 abstract class CheckInDB {
     

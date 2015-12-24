@@ -43,7 +43,7 @@ abstract class UserSearchUserManagerViewValidator implements IValidator {
 
         if (strlen($data['cardNumber']) > DataValidationConfig::CARDNUMBERMAXLENGTH)
             $errMsgs['cardNumber'] = '<label class="form_label_error" for="country">Het kaartnummer mag maximaal uit 8 karakters bestaan.</label>';
-
+        
         if (strlen($data['membershipYear']) > DataValidationConfig::YEARMAXLENGTH)
             $errMsgs['membershipYear'] = '<label class="form_label_error" for="membership_year">Het lidjaar mag maximaal uit 4 karakters bestaan.</label>';
         

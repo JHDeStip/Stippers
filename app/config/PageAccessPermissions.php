@@ -108,6 +108,15 @@ $_PERMISSIONS['manageuser']['AUTHORIZEDBROWSERMANAGER'] = false;
 $_PERMISSIONS['manageuser']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['manageuser']['CHECKINBROWSER'] = false;
 
+//Permissions for the edit user page
+$_PERMISSIONS['edituser']['EVERYONE'] = false;
+$_PERMISSIONS['edituser']['MEMBER'] = false;
+$_PERMISSIONS['edituser']['ADMIN'] = true;
+$_PERMISSIONS['edituser']['USERMANAGER'] = true;
+$_PERMISSIONS['edituser']['AUTHORIZEDBROWSERMANAGER'] = false;
+$_PERMISSIONS['edituser']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['edituser']['CHECKINBROWSER'] = false;
+
 //Permissions for the page not found page
 $_PERMISSIONS['pagenotfound']['EVERYONE'] = true;
 $_PERMISSIONS['pagenotfound']['MEMBER'] = true;

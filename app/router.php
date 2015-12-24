@@ -36,9 +36,13 @@ switch ($requestData['requestedPage']) {
         require_once('controllers/home/HomeController.php');
         $controller = 'HomeController';
         break;
-	case 'manageuser':
+    case 'manageuser':
         require_once('controllers/manageUser/ManageUserController.php');
         $controller = 'ManageUserController';
+        break;
+    case 'edituser':
+        require_once('controllers/editUser/EditUserController.php');
+        $controller = 'EditUserController';
         break;
     case 'logout':
         require_once('controllers/authorization/LogoutController.php');

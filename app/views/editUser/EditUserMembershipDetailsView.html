@@ -1,0 +1,9 @@
+<table>
+    <tr><th>Lidjaar</th><th>Kaartnummer</th><th>Check ins</th></tr>
+<?php
+foreach ($this->data['EditUserMembershipDetailsView']['membershipYearDetails'] as $membershipDetails) {
+    echo '<tr><td>'.$membershipDetails['membershipYear'].'</td><td>'.$membershipDetails['cardNumber'].'</td><td>'.$membershipDetails['nCheckIns'].'</td></tr>';
+}
+?>
+</table>
+<p class="normal_text">Totaal aantal check-ins: <?php echo $this->data['EditUserMembershipDetailsView']['totalCheckIns']; ?></p>

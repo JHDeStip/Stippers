@@ -556,7 +556,7 @@ abstract class UserDB {
     public static function getBasicUserByCardNumber($cardNumber) {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT user_id, email, first_name, last_name FROM stippers_users WHERE user_id = (SELECT user FROM stipers_user_card_year WHERE card = ? AND membership_year = (SELECT YEAR(NOW())))';
+            $commString = 'SELECT user_id, email, first_name, last_name FROM stippers_users WHERE user_id = (SELECT user FROM stippers_user_card_year WHERE card = ? AND membership_year = (SELECT YEAR(NOW())))';
             $stmt = $conn->prepare($commString);
             $stmt->bind_param('i', $cardNumber);
             

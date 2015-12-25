@@ -9,6 +9,9 @@
  * Class to do database operations regarding check-ins.
  */
 
+require_once __DIR__.'/../../config/CheckInConfig.php';
+require_once __DIR__.'/../../config/CheckInConfig.php';
+
 require_once __DIR__.'/../../helperClasses/database/Database.php';
 require_once 'CheckInDBException.php';
 
@@ -26,13 +29,14 @@ abstract class CheckInDB {
         try {
             $conn = Database::getConnection();
 /*
-            if (!$conn->query("LOCK TABLES members_check_ins WRITE"))
+            if (!$conn->query("LOCK TABLES stippers_check_ins WRITE"))
                 throw new CheckInDBException("Unknown error during statement execution while acquiring table lock.", CheckInDBException::UNKNOWNERROR);
             $locked = true;
             */
-            $commString = 'SELECT COUNT(*) FROM stippers_check_ins WHERE user = ? AND (NOW() - INTERVAL 12 HOUR < ANY (SELECT time FROM stippers_check_ins WHERE user = ?))';
+            $commString = 'SELECT COUNT(*) FROM stippers_check_ins WHERE user = ? AND (NOW() - INTERVAL ? HOUR < ANY (SELECT time FROM stippers_check_ins WHERE user = ?))';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('ii', $userId, $userId);
+            $minCheckInInterval = CheckInConfig::MINCHECKININTERVAL;
+            $stmt->bind_param('iii', $userId, $minCheckInInterval, $userId);
             if (!$stmt->execute())
                 throw new CheckInDBException('Unknown error during statement execution while counting too soon check-ins.', CheckInDBException::UNKNOWNERROR);
             else {
@@ -40,10 +44,10 @@ abstract class CheckInDB {
                 if (!$stmt->fetch())
                     throw new CheckInDBException('Unknown error during statement execution while counting too soon check-ins.', CheckInDBException::UNKNOWNERROR);
                 else if($nCheckIns > 0)
-                    throw new CheckInDBException('This user was checked in less than 12 hours ago.', CheckInDBException::ALREADYCHECKEDIN);
+                    throw new CheckInDBException('This user was checked in less than CheckInConfig::MINCHECKININTERVAL hours ago.', CheckInDBException::ALREADYCHECKEDIN);
                 else {
                     $stmt->close();
-                    $commString = 'INSERT INTO members_check_ins (user) VALUES (?)';
+                    $commString = 'INSERT INTO stippers_check_ins (user) VALUES (?)';
                     $stmt = $conn->prepare($commString);
                     $stmt->bind_param('i', $userId);
                     if (!$stmt->execute())

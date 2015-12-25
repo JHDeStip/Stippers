@@ -126,6 +126,15 @@ $_PERMISSIONS['weeklywinner']['AUTHORIZEDBROWSERMANAGER'] = false;
 $_PERMISSIONS['weeklywinner']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['weeklywinner']['CHECKINBROWSER'] = false;
 
+//Permissions for the check-in page
+$_PERMISSIONS['checkin']['EVERYONE'] = false;
+$_PERMISSIONS['checkin']['MEMBER'] = false;
+$_PERMISSIONS['checkin']['ADMIN'] = true;
+$_PERMISSIONS['checkin']['USERMANAGER'] = false;
+$_PERMISSIONS['checkin']['AUTHORIZEDBROWSERMANAGER'] = false;
+$_PERMISSIONS['checkin']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['checkin']['CHECKINBROWSER'] = true;
+
 //Permissions for the page not found page
 $_PERMISSIONS['pagenotfound']['EVERYONE'] = true;
 $_PERMISSIONS['pagenotfound']['MEMBER'] = true;

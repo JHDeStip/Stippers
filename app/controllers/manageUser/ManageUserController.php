@@ -12,8 +12,7 @@
 require_once __DIR__.'/../IController.php';
 require_once __DIR__.'/../../helperClasses/Page.php';
 
-require_once __DIR__.'/../../views/userSearch/UserSearchBasicViewValidator.php';
-require_once __DIR__.'/../../views/userSearch/UserSearchUserManagerViewValidator.php';
+require_once __DIR__.'/../../views/userSearch/UserSearchTopViewValidator.php';
 require_once __DIR__.'/../../views/userSearch/UserSearchAdminViewValidator.php';
 
 require_once __DIR__.'/../../models/user/User.php';
@@ -28,7 +27,7 @@ abstract class ManageUserController implements IController {
         
         //If we don't have search variables in our session we load empty data
         //in session (no post is et) and repare the views.
-        if (!isset($_SESSION['Stippers']['UserSearch']['inputData'])) {
+        if (!isset($_SESSION['Stippers']['ManageUserSearch']['inputData'])) {
             ManageUserController::loadDataInSession();
             ManageUserController::prepUserSearchViews($page);
         }
@@ -69,16 +68,12 @@ abstract class ManageUserController implements IController {
     private static function prepUserSearchViews($page) {
         ManageUserController::prepUserSearchTopViewData($page);
         $page->addView('userSearch/UserSearchTopView');
-        ManageUserController::prepUserSearchBasicViewData($page);
-        $page->addView('userSearch/UserSearchBasicView');
-        ManageUserController::prepUserSearchUserManagerViewData($page);
-        $page->addView('userSearch/UserSearchUserManagerView');
         if ($_SESSION['Stippers']['user']->isAdmin) {
             ManageUserController::prepUserSearchAdminViewData($page);
             $page->addView('userSearch/UserSearchAdminView');
         }
-        ManageUserController::prepUserSearchUserManagerOptionsViewData($page);
-        $page->addView('userSearch/UserSearchUserManagerOptionsView');
+        ManageUserController::prepUserSearchOptionsViewData($page);
+        $page->addView('userSearch/UserSearchOptionsView');
         $page->addView('userSearch/UserSearchBottomView');
     }
     
@@ -89,114 +84,96 @@ abstract class ManageUserController implements IController {
      */
     private static function prepUserSearchTopViewData($page) {
         $page->data['UserSearchTopView']['user_search_formAction'] = $_SERVER['REQUEST_URI'];
-    }
-    
-    /**
-     * Prepares data for view and add view to page.
-     * 
-     * @param Page $page
-     */
-    private static function prepUserSearchBasicViewData($page) {
-        $page->data['UserSearchBasicView']['firstName'] = $_SESSION['Stippers']['UserSearch']['inputData']['values']['firstName'];
-        $page->data['UserSearchBasicView']['lastName'] = $_SESSION['Stippers']['UserSearch']['inputData']['values']['lastName'];
-        $page->data['UserSearchBasicView']['email'] = $_SESSION['Stippers']['UserSearch']['inputData']['values']['email'];
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['firstName'])
-            $page->data['UserSearchBasicView']['showFirstNameChecked'] = 'checked';
+        $page->data['UserSearchTopView']['firstName'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['firstName'];
+        $page->data['UserSearchTopView']['lastName'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['lastName'];
+        $page->data['UserSearchTopView']['email'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['email'];
+        $page->data['UserSearchTopView']['balance'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['balance'];
+        $page->data['UserSearchTopView']['phone'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['phone'];
+        $page->data['UserSearchTopView']['dateOfBirth'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['dateOfBirth'];
+        $page->data['UserSearchTopView']['street'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['street'];
+        $page->data['UserSearchTopView']['houseNumber'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['houseNumber'];
+        $page->data['UserSearchTopView']['city'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['city'];
+        $page->data['UserSearchTopView']['postalCode'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['postalCode'];
+        $page->data['UserSearchTopView']['country'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['country'];
+        $page->data['UserSearchTopView']['membershipYear'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['membershipYear'];
+        $page->data['UserSearchTopView']['cardNumber'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['cardNumber'];
+        
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['firstName'])
+            $page->data['UserSearchTopView']['showFirstNameChecked'] = 'checked';
         else
-            $page->data['UserSearchBasicView']['showFirstNameChecked'] = '';
+            $page->data['UserSearchTopView']['showFirstNameChecked'] = '';
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['lastName'])
-            $page->data['UserSearchBasicView']['showLastNameChecked'] = 'checked';
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['lastName'])
+            $page->data['UserSearchTopView']['showLastNameChecked'] = 'checked';
         else
-            $page->data['UserSearchBasicView']['showLastNameChecked'] = '';
+            $page->data['UserSearchTopView']['showLastNameChecked'] = '';
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['email'])
-            $page->data['UserSearchBasicView']['showEmailChecked'] = 'checked';
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['email'])
+            $page->data['UserSearchTopView']['showEmailChecked'] = 'checked';
         else
-            $page->data['UserSearchBasicView']['showEmailChecked'] = '';
-        
-        $page->data['UserSearchBasicView']['errMsgs'] = UserSearchBasicViewValidator::initErrMsgs();
-    }
-    
-    /**
-     * Prepares data for view and add view to page.
-     * 
-     * @param Page $page
-     */
-    private static function prepUserSearchUserManagerViewData($page) {
-        $page->data['UserSearchUserManagerView']['balance'] = $_SESSION['Stippers']['UserSearch']['inputData']['values']['balance'];
-        $page->data['UserSearchUserManagerView']['phone'] = $_SESSION['Stippers']['UserSearch']['inputData']['values']['phone'];
-        $page->data['UserSearchUserManagerView']['dateOfBirth'] = $_SESSION['Stippers']['UserSearch']['inputData']['values']['dateOfBirth'];
-        $page->data['UserSearchUserManagerView']['street'] = $_SESSION['Stippers']['UserSearch']['inputData']['values']['street'];
-        $page->data['UserSearchUserManagerView']['houseNumber'] = $_SESSION['Stippers']['UserSearch']['inputData']['values']['houseNumber'];
-        $page->data['UserSearchUserManagerView']['city'] = $_SESSION['Stippers']['UserSearch']['inputData']['values']['city'];
-        $page->data['UserSearchUserManagerView']['postalCode'] = $_SESSION['Stippers']['UserSearch']['inputData']['values']['postalCode'];
-        $page->data['UserSearchUserManagerView']['country'] = $_SESSION['Stippers']['UserSearch']['inputData']['values']['country'];
-        $page->data['UserSearchUserManagerView']['membershipYear'] = $_SESSION['Stippers']['UserSearch']['inputData']['values']['membershipYear'];
-        $page->data['UserSearchUserManagerView']['cardNumber'] = $_SESSION['Stippers']['UserSearch']['inputData']['values']['cardNumber'];
-        
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['balance'])
-            $page->data['UserSearchUserManagerView']['showBalanceChecked'] = 'checked';
+            $page->data['UserSearchTopView']['showEmailChecked'] = '';
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['balance'])
+            $page->data['UserSearchTopView']['showBalanceChecked'] = 'checked';
         else
-            $page->data['UserSearchUserManagerView']['showBalanceChecked'] = '';
+            $page->data['UserSearchTopView']['showBalanceChecked'] = '';
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['phone'])
-            $page->data['UserSearchUserManagerView']['showPhoneChecked'] = 'checked';
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['phone'])
+            $page->data['UserSearchTopView']['showPhoneChecked'] = 'checked';
         else
-            $page->data['UserSearchUserManagerView']['showPhoneChecked'] = '';
+            $page->data['UserSearchTopView']['showPhoneChecked'] = '';
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['dateOfBirth'])
-            $page->data['UserSearchUserManagerView']['showDateOfBirthChecked'] = 'checked';
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['dateOfBirth'])
+            $page->data['UserSearchTopView']['showDateOfBirthChecked'] = 'checked';
         else
-            $page->data['UserSearchUserManagerView']['showDateOfBirthChecked'] = '';
+            $page->data['UserSearchTopView']['showDateOfBirthChecked'] = '';
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['street'])
-            $page->data['UserSearchUserManagerView']['showStreetChecked'] = 'checked';
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['street'])
+            $page->data['UserSearchTopView']['showStreetChecked'] = 'checked';
         else
-            $page->data['UserSearchUserManagerView']['showStreetChecked'] = '';
+            $page->data['UserSearchTopView']['showStreetChecked'] = '';
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['houseNumber'])
-            $page->data['UserSearchUserManagerView']['showHouseNumberChecked'] = 'checked';
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['houseNumber'])
+            $page->data['UserSearchTopView']['showHouseNumberChecked'] = 'checked';
         else
-            $page->data['UserSearchUserManagerView']['showHouseNumberChecked'] = '';
+            $page->data['UserSearchTopView']['showHouseNumberChecked'] = '';
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['city'])
-            $page->data['UserSearchUserManagerView']['showCityChecked'] = 'checked';
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['city'])
+            $page->data['UserSearchTopView']['showCityChecked'] = 'checked';
         else
-            $page->data['UserSearchUserManagerView']['showCityChecked'] = '';
+            $page->data['UserSearchTopView']['showCityChecked'] = '';
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['postalCode'])
-            $page->data['UserSearchUserManagerView']['showPostalCodeChecked'] = 'checked';
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['postalCode'])
+            $page->data['UserSearchTopView']['showPostalCodeChecked'] = 'checked';
         else
-            $page->data['UserSearchUserManagerView']['showPostalCodeChecked'] = '';
+            $page->data['UserSearchTopView']['showPostalCodeChecked'] = '';
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['country'])
-            $page->data['UserSearchUserManagerView']['showCountryChecked'] = 'checked';
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['country'])
+            $page->data['UserSearchTopView']['showCountryChecked'] = 'checked';
         else
-            $page->data['UserSearchUserManagerView']['showCountryChecked'] = '';
+            $page->data['UserSearchTopView']['showCountryChecked'] = '';
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['membershipYear'])
-            $page->data['UserSearchUserManagerView']['showMembershipYearChecked'] = 'checked';
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['membershipYear'])
+            $page->data['UserSearchTopView']['showMembershipYearChecked'] = 'checked';
         else
-            $page->data['UserSearchUserManagerView']['showMembershipYearChecked'] = '';
+            $page->data['UserSearchTopView']['showMembershipYearChecked'] = '';
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['cardNumber'])
-            $page->data['UserSearchUserManagerView']['showCardNumberChecked'] = 'checked';
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['cardNumber'])
+            $page->data['UserSearchTopView']['showCardNumberChecked'] = 'checked';
         else
-            $page->data['UserSearchUserManagerView']['showCardNumberChecked'] = '';
+            $page->data['UserSearchTopView']['showCardNumberChecked'] = '';
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['creationTime'])
-            $page->data['UserSearchUserManagerView']['showCreationTimeChecked'] = 'checked';
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['creationTime'])
+            $page->data['UserSearchTopView']['showCreationTimeChecked'] = 'checked';
         else
-            $page->data['UserSearchUserManagerView']['showCreationTimeChecked'] = '';
+            $page->data['UserSearchTopView']['showCreationTimeChecked'] = '';
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['nCheckInsPerYear'])
-            $page->data['UserSearchUserManagerView']['nCheckInsPerYearChecked'] = 'checked';
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['nCheckInsPerYear'])
+            $page->data['UserSearchTopView']['nCheckInsPerYearChecked'] = 'checked';
         else
-            $page->data['UserSearchUserManagerView']['nCheckInsPerYearChecked'] = '';
+            $page->data['UserSearchTopView']['nCheckInsPerYearChecked'] = '';
         
-        $page->data['UserSearchUserManagerView']['errMsgs'] = UserSearchUserManagerViewValidator::initErrMsgs();
+        $page->data['UserSearchTopView']['errMsgs'] = UserSearchTopViewValidator::initErrMsgs();
     }
     
     /**
@@ -205,35 +182,35 @@ abstract class ManageUserController implements IController {
      * @param Page $page
      */
     private static function prepUserSearchAdminViewData($page) {
-        $page->data['UserSearchAdminView']['isAdmin'] = $_SESSION['Stippers']['UserSearch']['inputData']['values']['isAdmin'];
+        $page->data['UserSearchAdminView']['isAdmin'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isAdmin'];
         $page->data['UserSearchAdminView']['isAdminSelected'][''] = '';
         $page->data['UserSearchAdminView']['isAdminSelected']['0'] = '';
         $page->data['UserSearchAdminView']['isAdminSelected']['1'] = '';
-        $page->data['UserSearchAdminView']['isAdminSelected'][$_SESSION['Stippers']['UserSearch']['inputData']['values']['isAdmin']] = 'selected';
+        $page->data['UserSearchAdminView']['isAdminSelected'][$_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isAdmin']] = 'selected';
         
-        $page->data['UserSearchAdminView']['isUserManager'] = $_SESSION['Stippers']['UserSearch']['inputData']['values']['isUserManager'];
+        $page->data['UserSearchAdminView']['isUserManager'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isUserManager'];
         $page->data['UserSearchAdminView']['isUserManagerSelected'][''] = '';
         $page->data['UserSearchAdminView']['isUserManagerSelected']['0'] = '';
         $page->data['UserSearchAdminView']['isUserManagerSelected']['1'] = '';
-        $page->data['UserSearchAdminView']['isUserManagerSelected'][$_SESSION['Stippers']['UserSearch']['inputData']['values']['isUserManager']] = 'selected';
+        $page->data['UserSearchAdminView']['isUserManagerSelected'][$_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isUserManager']] = 'selected';
         
-        $page->data['UserSearchAdminView']['isAuthorizedBrowserManager'] = $_SESSION['Stippers']['UserSearch']['inputData']['values']['isAuthorizedBrowserManager'];
-        $page->data['UserSearchAdminView']['isAuthorizedBrowserManagerSelected'][''] = "";
-        $page->data['UserSearchAdminView']['isAuthorizedBrowserManagerSelected']['0'] = "";
-        $page->data['UserSearchAdminView']['isAuthorizedBrowserManagerSelected']['1'] = "";
-        $page->data['UserSearchAdminView']['isAuthorizedBrowserManagerSelected'][$_SESSION['Stippers']['UserSearch']['inputData']['values']['isAuthorizedBrowserManager']] = 'selected';
+        $page->data['UserSearchAdminView']['isAuthorizedBrowserManager'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isAuthorizedBrowserManager'];
+        $page->data['UserSearchAdminView']['isAuthorizedBrowserManagerSelected'][''] = '';
+        $page->data['UserSearchAdminView']['isAuthorizedBrowserManagerSelected']['0'] = '';
+        $page->data['UserSearchAdminView']['isAuthorizedBrowserManagerSelected']['1'] = '';
+        $page->data['UserSearchAdminView']['isAuthorizedBrowserManagerSelected'][$_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isAuthorizedBrowserManager']] = 'selected';
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['isAdmin'])
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isAdmin'])
             $page->data['UserSearchAdminView']['showIsAdminChecked'] = 'checked';
         else
             $page->data['UserSearchAdminView']['showIsAdminChecked'] = '';
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['isUserManager'])
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isUserManager'])
             $page->data['UserSearchAdminView']['showIsUserManagerChecked'] = 'checked';
         else
             $page->data['UserSearchAdminView']['showIsUserManagerChecked'] = '';
         
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['show']['isAuthorizedBrowserManager'])
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isAuthorizedBrowserManager'])
             $page->data['UserSearchAdminView']['showIsAuthorizedBrowserManagerChecked'] = 'checked';
         else
             $page->data['UserSearchAdminView']['showIsAuthorizedBrowserManagerChecked'] = '';
@@ -246,11 +223,11 @@ abstract class ManageUserController implements IController {
      * 
      * @param Page $page
      */
-    private static function prepUserSearchUserManagerOptionsViewData($page) {
-        if ($_SESSION['Stippers']['UserSearch']['inputData']['options']['orderByBirthday'])
-            $page->data['UserSearchUserManagerOptionsView']['orderByBirthdayChecked'] = 'checked';
+    private static function prepUserSearchOptionsViewData($page) {
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['options']['orderByBirthday'])
+            $page->data['UserSearchOptionsView']['orderByBirthdayChecked'] = 'checked';
         else
-            $page->data['UserSearchUserManagerOptionsView']['orderByBirthdayChecked'] = '';
+            $page->data['UserSearchOptionsView']['orderByBirthdayChecked'] = '';
     }
     
     /**
@@ -261,15 +238,9 @@ abstract class ManageUserController implements IController {
     private static function validateUserSearchViewsData($data) {
         $invalid = false;
         
-        $errMsgs = UserSearchBasicViewValidator::validate($data['UserSearchBasicView']);
+        $errMsgs = UserSearchTopViewValidator::validate($data['UserSearchTopView']);
         if (!empty($errMsgs)) {
-            $data['UserSearchBasicView']['errMsgs'] = array_merge($data['UserSearchBasicView']['errMsgs'], $errMsgs);
-            $invalid = true;
-        }
-        
-        $errMsgs = UserSearchUserManagerViewValidator::validate($data['UserSearchUserManagerView']);
-        if (!empty($errMsgs)) {
-            $data['UserSearchUserManagerView']['errMsgs'] = array_merge($data['UserSearchUserManagerView']['errMsgs'], $errMsgs);
+            $data['UserSearchTopView']['errMsgs'] = array_merge($data['UserSearchTopView']['errMsgs'], $errMsgs);
             $invalid = true;
         }
         
@@ -290,94 +261,94 @@ abstract class ManageUserController implements IController {
      */
     private static function loadDataInSession() {
         if (isset($_POST['first_name']))
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['firstName'] = $_POST['first_name'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['firstName'] = $_POST['first_name'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['firstName'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['firstName'] = '';
         if (isset($_POST['last_name']))
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['lastName'] = $_POST['last_name'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['lastName'] = $_POST['last_name'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['lastName'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['lastName'] = '';
         if (isset($_POST['email']))
-            $_SESSION['Stippers']['UserSearch']['values']['email'] = $_POST['email'];
+            $_SESSION['Stippers']['ManageUserSearch']['values']['email'] = $_POST['email'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['email'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['email'] = '';
         if (isset($_POST['balance']))
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['balance'] = $_POST['balance'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['balance'] = $_POST['balance'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['balance'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['balance'] = '';
         if (isset($_POST['phone']))
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['phone'] = $_POST['phone'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['phone'] = $_POST['phone'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['phone'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['phone'] = '';
         if (isset($_POST['date_of_birth']))
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['dateOfBirth'] = $_POST['date_of_birth'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['dateOfBirth'] = $_POST['date_of_birth'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['dateOfBirth'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['dateOfBirth'] = '';
         if (isset($_POST['street']))
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['street'] = $_POST['street'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['street'] = $_POST['street'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['street'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['street'] = '';
         if (isset($_POST['house_number']))
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['houseNumber'] = $_POST['house_number'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['houseNumber'] = $_POST['house_number'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['houseNumber'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['houseNumber'] = '';
         if (isset($_POST['city']))
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['city'] = $_POST['city'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['city'] = $_POST['city'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['city'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['city'] = '';
         if (isset($_POST['postalCode']))
-            $_SESSION['Stippers']['UserSearch']['inputData']['postalCode'] = $_POST['postalCode'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['postalCode'] = $_POST['postalCode'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['postalCode'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['postalCode'] = '';
         if (isset($_POST['country']))
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['country'] = $_POST['country'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['country'] = $_POST['country'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['country'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['country'] = '';
         if (isset($_POST['membership_year']))
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['membershipYear'] = $_POST['membership_year'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['membershipYear'] = $_POST['membership_year'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['membershipYear'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['membershipYear'] = '';
         if (isset($_POST['card_number']))
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['cardNumber'] = $_POST['card_number'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['cardNumber'] = $_POST['card_number'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['cardNumber'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['cardNumber'] = '';
         if (isset($_POST['creation_time']))
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['creationTime'] = $_POST['creation_time'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['creationTime'] = $_POST['creation_time'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['creationTime'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['creationTime'] = '';
         if (isset($_POST['is_admin']))
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['isAdmin'] = $_POST['is_admin'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isAdmin'] = $_POST['is_admin'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['isAdmin'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isAdmin'] = '';
         if (isset($_POST['is_user_manager']))
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['isUserManager'] = $_POST['is_user_manager'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isUserManager'] = $_POST['is_user_manager'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['isUserManager'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isUserManager'] = '';
         if (isset($_POST['is_authorized_browser_manager']))
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['isAuthorizedBrowserManager'] = $_POST['is_authorized_browser_manager'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isAuthorizedBrowserManager'] = $_POST['is_authorized_browser_manager'];
         else
-            $_SESSION['Stippers']['UserSearch']['inputData']['values']['isAuthorizedBrowserManager'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isAuthorizedBrowserManager'] = '';
         
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['firstName'] = isset($_POST['show_first_name']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['lastName'] = isset($_POST['show_last_name']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['email'] = isset($_POST['show_email']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['balance'] = isset($_POST['show_balance']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['phone'] = isset($_POST['show_phone']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['dateOfBirth'] = isset($_POST['show_date_of_birth']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['street'] = isset($_POST['show_street']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['houseNumber'] = isset($_POST['show_house_number']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['city'] = isset($_POST['show_city']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['postalCode'] = isset($_POST['show_postal_code']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['country'] = isset($_POST['show_country']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['membershipYear'] = isset($_POST['show_membership_year']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['cardNumber'] = isset($_POST['show_card_number']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['creationTime'] = isset($_POST['show_creation_time']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['nCheckInsPerYear'] = isset($_POST['n_check_ins_per_year']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['isAdmin'] = isset($_POST['show_is_admin']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['isUserManager'] = isset($_POST['show_is_user_manager']);
-        $_SESSION['Stippers']['UserSearch']['inputData']['show']['isAuthorizedBrowserManager'] = isset($_POST['show_is_authorized_browser_manager']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['firstName'] = isset($_POST['show_first_name']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['lastName'] = isset($_POST['show_last_name']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['email'] = isset($_POST['show_email']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['balance'] = isset($_POST['show_balance']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['phone'] = isset($_POST['show_phone']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['dateOfBirth'] = isset($_POST['show_date_of_birth']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['street'] = isset($_POST['show_street']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['houseNumber'] = isset($_POST['show_house_number']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['city'] = isset($_POST['show_city']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['postalCode'] = isset($_POST['show_postal_code']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['country'] = isset($_POST['show_country']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['membershipYear'] = isset($_POST['show_membership_year']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['cardNumber'] = isset($_POST['show_card_number']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['creationTime'] = isset($_POST['show_creation_time']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['nCheckInsPerYear'] = isset($_POST['n_check_ins_per_year']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isAdmin'] = isset($_POST['show_is_admin']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isUserManager'] = isset($_POST['show_is_user_manager']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isAuthorizedBrowserManager'] = isset($_POST['show_is_authorized_browser_manager']);
         
-        $_SESSION['Stippers']['UserSearch']['inputData']['options']['orderByBirthday'] = isset($_POST['order_by_birthday']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['options']['orderByBirthday'] = isset($_POST['order_by_birthday']);
     }
     
     /**
@@ -387,7 +358,7 @@ abstract class ManageUserController implements IController {
      */
     private static function loadSearchResults($page) {
         try {
-            $users = UserDB::getSearchUsers($_SESSION['Stippers']['UserSearch']['inputData']['show'], $_SESSION['Stippers']['UserSearch']['inputData']['values'], $_SESSION['Stippers']['UserSearch']['inputData']['options']);
+            $users = UserDB::getSearchUsers($_SESSION['Stippers']['ManageUserSearch']['inputData']['show'], $_SESSION['Stippers']['ManageUserSearch']['inputData']['values'], $_SESSION['Stippers']['ManageUserSearch']['inputData']['options']);
             if (count($users) == 0)
                 $page->addView('userSearch/UserSearchNoResultsView');
             else {
@@ -397,7 +368,7 @@ abstract class ManageUserController implements IController {
         }
         catch (Exception $ex) {
             $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan gebruikers niet ophalen.';
-            array_push($views, 'error/ErrorMessageNoDescriptionNoLinkView');
+            $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
         }
     }
 }

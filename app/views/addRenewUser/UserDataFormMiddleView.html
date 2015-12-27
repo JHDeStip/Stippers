@@ -1,0 +1,18 @@
+<label class="form_label" for="first_name">Voornaam:*</label>
+<input class="textbox" type="text" id="first_name" name="first_name" maxlength="30" autocomplete="off" value="<?php echo htmlentities($this->data['UserDataFormMiddleView']['firstName'], ENT_QUOTES, 'utf-8'); ?>"><?php echo $this->data['UserDataFormMiddleView']['errMsgs']['firstName']; ?><div class="clearfix"></div>
+<label class="form_label" for="last_name">Achternaam:*</label>
+<input class="textbox" type="text" id="last_name" name="last_name" maxlength="30" value="<?php echo htmlentities($this->data['UserDataFormMiddleView']['lastName'], ENT_QUOTES, 'utf-8'); ?>" autocomplete="off"><?php echo $this->data['UserDataFormMiddleView']['errMsgs']['lastName']; ?><div class="clearfix"></div>
+<label class="form_label" for="street">Straat:*</label>
+<input class="textbox" type="text" id="street" name="street" maxlength="30" value="<?php echo htmlentities($this->data['UserDataFormMiddleView']['street'], ENT_QUOTES, 'utf-8'); ?>"><?php echo $this->data['UserDataFormMiddleView']['errMsgs']['street']; ?><div class="clearfix"></div>
+<label class="form_label" for="house_number">Huisnummer:*</label>
+<input class="textbox" type="text" id="house_number" name="house_number" maxlength="4" value="<?php echo htmlentities($this->data['UserDataFormMiddleView']['houseNumber'], ENT_QUOTES, 'utf-8'); ?>" autocomplete="off"><?php echo $this->data['UserDataFormMiddleView']['errMsgs']['houseNumber']; ?><div class="clearfix"></div>
+<label class="form_label" for="city">Gemeente:*</label>
+<input class="textbox" type="text" id="city" name="city" maxlength="30" value="<?php echo htmlentities($this->data['UserDataFormMiddleView']['city'], ENT_QUOTES, 'utf-8'); ?>"><?php echo $this->data['UserDataFormMiddleView']['errMsgs']['city']; ?><div class="clearfix"></div>
+<label class="form_label" for="postal_code">Postcode:*</label>
+<input class="textbox" type="text" id="postal_code" name="postal_code" maxlength="6" value="<?php echo htmlentities($this->data['UserDataFormMiddleView']['postalCode'], ENT_QUOTES, 'utf-8'); ?>"><?php echo $this->data['UserDataFormMiddleView']['errMsgs']['postalCode']; ?><div class="clearfix"></div>
+<label class="form_label" for="country">Land:*</label>
+<input class="textbox" type="text" id="country" name="country" maxlength="30" value="<?php echo htmlentities($this->data['UserDataFormMiddleView']['country'], ENT_QUOTES, 'utf-8'); ?>"><?php echo $this->data['UserDataFormMiddleView']['errMsgs']['country']; ?><div class="clearfix"></div>
+<label class="form_label" for="phone">Telefoonnummer:</label>
+<input class="textbox" type="text" id="phone" name="phone" maxlength="14" value="<?php echo htmlentities($this->data['UserDataFormMiddleView']['phone'], ENT_QUOTES, 'utf-8'); ?>" autocomplete="off"><?php echo $this->data['UserDataFormMiddleView']['errMsgs']['phone']; ?><div class="clearfix"></div>
+<label class="form_label" for="date_of_birth">Geboortedatum:*</label>
+<input class="textbox" type="text" id="date_of_birth" name="date_of_birth" maxlength="10" value="<?php echo htmlentities($this->data['UserDataFormMiddleView']['dateOfBirth'], ENT_QUOTES, 'utf-8'); ?>" autocomplete="off"><label class="form_label_example" for="date_of_birth">Voorbeeld: 01/01/1995</label><?php echo $this->data['UserDataFormMiddleView']['errMsgs']['dateOfBirth']; ?><div class="clearfix"></div>

@@ -1,0 +1,8 @@
+<?php echo $this->data['UserDataFormTopView']['errMsgs']['global']; ?>
+<form action="<?php echo htmlentities($this->data['UserDataFormTopView']['user_data_formAction'], ENT_QUOTES, 'utf-8'); ?>" method="post" id="user_data_form" onsubmit="return validateAddUserForm(this);" autocomplete="off">
+    <label class="form_label" for="card_number">Kaartnummer:*</label>
+    <input class="textbox" type="text" id="card_number" name="card_number" maxlength="8" autocomplete="off" value="<?php echo htmlentities($this->data['UserDataFormTopView']['cardNumber'], ENT_QUOTES, 'utf-8'); ?>"><?php echo $this->data['UserDataFormTopView']['errMsgs']['cardNumber']; ?><div class="clearfix"></div>
+    <label class="form_label" for="email">E-mail:*</label>
+    <input class="textbox" type="email" id="email" name="email" maxlength="50" value="<?php echo htmlentities($this->data['UserDataFormTopView']['email'], ENT_QUOTES, 'utf-8'); ?>" autocomplete="off"><?php echo $this->data['UserDataFormTopView']['errMsgs']['email']; ?><div class="clearfix"></div>
+    <label class="form_label" for="repeat_email">Herhaal e-mail:*</label>
+    <input class="textbox" type="text" id="repeat_email" name="repeat_email" maxlength="50" value="<?php echo htmlentities($this->data['UserDataFormTopView']['repeatEmail'], ENT_QUOTES, 'utf-8'); ?>" autocomplete="off"><?php echo $this->data['UserDataFormTopView']['errMsgs']['repeatEmail']; ?><div class="clearfix"></div>

@@ -271,69 +271,69 @@ abstract class UserDB {
             $searchPart = 'email LIKE ? AND first_name LIKE ? AND last_name LIKE ? AND balance LIKE ? AND phone LIKE ? AND date_of_birth LIKE ? AND street LIKE ? AND house_number LIKE ? AND city LIKE ? AND postal_code LIKE ? AND country LIKE ? AND card LIKE ? AND stippers_user_card_year.membership_year LIKE ? ';
 
             //Add small parst to the parts for the specified options properties and properties to include
-            if ($options['orderByBirthday']) {
+            if (isset($options['orderByBirthday']) && $options['orderByBirthday']) {
                 $selectPart .= ', DATE_FORMAT(date_of_birth, "%m/%d") birthday';
                 $orderPart .= ', birthday ASC';
                 $groupByPart .= ', birthday';
             }
-            if ($select['lastName']) {
+            if (isset($select['lastName']) && $select['lastName']) {
                 $selectPart .= ', last_name';
                 $orderPart .= ', last_name';
                 $groupByPart .= ', last_name';
             }
-            if ($select['firstName']) {
+            if (isset($select['firstName']) && $select['firstName']) {
                 $selectPart .= ', first_name';
                 $orderPart .= ', first_name';
                 $groupByPart .= ', first_name';
             }
-            if ($select['membershipYear']) {
+            if (isset($select['membershipYear']) && $select['membershipYear']) {
                 $selectPart .= ', stippers_user_card_year.membership_year';
                 $orderPart .= ', membership_year DESC';
                 $groupByPart .= ', membership_year';
             }
-            if ($select['street']) {
+            if (isset($select['street']) && $select['street']) {
                 $selectPart .= ', street';
                 $orderPart .= ', street';
                 $groupByPart .= ', street';
             }
-            if ($select['houseNumber']) {
+            if (isset($select['houseNumber']) && $select['houseNumber']) {
                 $selectPart .= ', house_number';
                 $orderPart .= ', house_number';
                 $groupByPart .= ', house_number';
             }
-            if ($select['city']) {
+            if (isset($select['city']) && $select['city']) {
                 $selectPart .= ', city';
                 $orderPart .= ', city';
                 $groupByPart .= ', city';
             }
-            if ($select['postalCode']) {
+            if (isset($select['postalCode']) && $select['postalCode']) {
                 $selectPart .= ', postal_code';
                 $orderPart .= ', postal_code';
                 $groupByPart .= ', postal_code';
             }
-            if ($select['country']) {
+            if (isset($select['country']) && $select['country']) {
                 $selectPart .= ', country';
                 $orderPart .= ', country';
                 $groupByPart .= ', country';
             }
-            if ($select['email']) {
+            if (isset($select['email']) && $select['email']) {
                 $selectPart .= ', email';
                 $orderPart .= ', email';
                 $groupByPart .= ', email';
             }
-            if ($select['balance']) {
+            if (isset($select['balance']) && $select['balance']) {
                 $selectPart .= ', balance';
                 $groupByPart .= ', balance';
             }
-            if ($select['phone']) {
+            if (isset($select['phone']) && $select['phone']) {
                 $selectPart .= ', phone';
                 $groupByPart .= ', phone';
             }
-            if ($select['dateOfBirth']) {
+            if (isset($select['dateOfBirth']) && $select['dateOfBirth']) {
                 $selectPart .= ', DATE_FORMAT(date_of_birth, "%d/%m/%Y") date_of_birth';
                 $groupByPart .= ', date_of_birth';
             }
-            if ($select['isAdmin']) {
+            if (isset($select['isAdmin']) && $select['isAdmin']) {
                 $selectPart .= ', is_admin';
                 $groupByPart .= ', is_admin';
             }
@@ -344,59 +344,59 @@ abstract class UserDB {
                 $groupByPart .= ', is_hint_manager';
             }
             */
-            if ($select['isUserManager']) {
+            if (isset($select['isUserManager']) && $select['isUserManager']) {
                 $selectPart .= ', is_user_manager';
                 $groupByPart .= ', is_user_manager';
             }
-            if ($select['isAuthorizedBrowserManager']) {
+            if (isset($select['isAuthorizedBrowser']) && $select['isAuthorizedBrowserManager']) {
                 $selectPart .= ', is_authorized_browser_manager';
                 $groupByPart .= ', is_authorized_browser_manager';
             }
-            if ($select['creationTime']) {
+            if (isset($select['creationTime']) && $select['creationTime']) {
                 $selectPart .= ', DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") creation_time';
                 $params['types'] .= 's';
                 $timezone = GlobalConfig::TIMEZONE;
                 $params['timezone'] = &$timezone;
                 $groupByPart .= ', creation_time';
             }
-            if ($select['nCheckInsPerYear']) {
+            if (isset($select['nCheckInsPerYear']) && $select['nCheckInsPerYear']) {
                 $selectPart .= ', COUNT(*) n_check_ins';
                 //Don't group by this! This is what we need 'per group'!
             }
-            if ($select['cardNumber']) {
+            if (isset($select['cardNumber']) && $select['cardNumber']) {
                 $selectPart .= ', card';
                 $groupByPart .= ', card';
             }
             //Create the parameter list to pass to the query statement
             $params['types'] .= 'sssssssssssss';
-            $likeStringEmail = '%' . $search['email'] . '%';
+            $likeStringEmail = (isset($search['email']) ? '%'.$search['email'].'%' : '%');
             $params['email'] = &$likeStringEmail;
-            $likeStringFirstName = '%' . $search['firstName'] . '%';
+            $likeStringFirstName = (isset($search['firstName']) ? '%'.$search['firstName'].'%' : '%');
             $params['firstName'] = &$likeStringFirstName;
-            $likeStringLastName = '%' . $search['lastName'] . '%';
+            $likeStringLastName = (isset($search['lastName']) ? '%'.$search['lastName'].'%' : '%');
             $params['lastName'] = &$likeStringLastName;
-            $likeStringBalance = '%' . $search['balance'] . '%';
+            $likeStringBalance = (isset($search['balance']) ? '%'.$search['balance'].'%' : '%');
             $params['balance'] = &$likeStringBalance;
-            $likeStringPhone = '%' . $search['phone'] . '%';
+            $likeStringPhone = (isset($search['phone']) ? '%'.$search['phone'].'%' : '%');
             $params['phone'] = &$likeStringPhone;
-            $likeStringDateOfBirth = '%' . $search['dateOfBirth'] . '%';
-            $params['datefBirth'] = &$likeStringDateOfBirth;
-            $likeStringStreet = '%' . $search['street'] . '%';
+            $likeStringDateOfBirth = (isset($search['dateOfBirth']) ? '%'.$search['dateOfBirth'].'%' : '%');
+            $params['dateofBirth'] = &$likeStringDateOfBirth;
+            $likeStringStreet = (isset($search['street']) ? '%'.$search['street'].'%' : '%');
             $params['street'] = &$likeStringStreet;
-            $likeStringHouseNumber = '%' . $search['houseNumber'] . '%';
+            $likeStringHouseNumber = (isset($search['houseNumber']) ? '%'.$search['houseNumber'].'%' : '%');
             $params['houseNumber'] = &$likeStringHouseNumber;
-            $likeStringCity = '%' . $search['city'] . '%';
+            $likeStringCity = (isset($search['city']) ? '%'.$search['city'].'%' : '%');
             $params['city'] = &$likeStringCity;
-            $likeStringPostalCode = '%' . $search['postalCode'] . '%';
+            $likeStringPostalCode = (isset($search['postalCode']) ? '%'.$search['postalCode'].'%' : '%');
             $params['postalCode'] = &$likeStringPostalCode;
-            $likeStringCountry = '%' . $search['country'] . '%';
+            $likeStringCountry = (isset($search['country']) ? '%'.$search['country'].'%' : '%');
             $params['country'] = &$likeStringCountry;
-            $likeStringCardNumber = '%' . $search['cardNumber'] . '%';
+            $likeStringCardNumber = (isset($search['cardNumber']) ? '%'.$search['cardNumber'].'%' : '%');
             $params['cardNumber'] = &$likeStringCardNumber;
-            $likeStringMembershipYear = '%' . $search['membershipYear'] . '%';
+            $likeStringMembershipYear = (isset($search['membershipYear']) ? '%'.$search['membershipYear'].'%' : '%');
             $params['membershipYear'] = &$likeStringMembershipYear;
 
-            if ($search['isAdmin'] != '') {
+            if (isset($search['isAdmin']) && $search['isAdmin'] != '') {
                 $params['types'] .= 'i';
                 $searchPart .= ' AND is_admin = ?';
                 $likeStringIsAdmin = $search['isAdmin'];
@@ -411,13 +411,13 @@ abstract class UserDB {
                 $params['isHintManager'] = &$likeStringIsHintManager;
             }
             */
-            if ($search['isUserManager'] != '') {
+            if (isset($search['isUserManager']) && $search['isUserManager'] != '') {
                 $params['types'] .= 'i';
                 $searchPart .= ' AND is_user_manager = ?';
                 $likeStringIsUserManager = $search['isUserManager'];
                 $params['isUserManager'] = &$likeStringIsUserManager;
             }
-            if ($search['isAuthorizedBrowserManager'] != '') {
+            if (isset($search['isAuthorizedBrowserManager']) && $search['isAuthorizedBrowserManager'] != '') {
                 $params['types'] .= 'i';
                 $searchPart .= ' AND is_authorized_browser_manager = ?';
                 $likeStringIsAuthorizedBrowserManager = $search['isAuthorizedBrowserManager'];
@@ -434,7 +434,7 @@ abstract class UserDB {
             $stmt = $conn->prepare($commString);
             //Because we want to bind an array with parameters we use call_user_func_array
             call_user_func_array(array($stmt, 'bind_param'), $params);
-            
+
             if (!$stmt->execute())
                 throw new UserDBException('Unknown error during statement execution while getting search users.', UserDBException::UNKNOWNERROR);
             else {
@@ -445,46 +445,46 @@ abstract class UserDB {
                 while ($row = $result->fetch_assoc()) {
                     $searchUsers[$i]['user'] = new User();
                     $searchUsers[$i]['user']->userId = $row['user_id'];
-                    if ($select['email'])
+                    if (isset($select['email']) && $select['email'])
                         $searchUsers[$i]['user']->email = $row['email'];
-                    if ($select['firstName'])
+                    if (isset($select['firstName']) && $select['firstName'])
                         $searchUsers[$i]['user']->firstName = $row['first_name'];
-                    if ($select['lastName'])
+                    if (isset($select['lastName']) && $select['lastName'])
                         $searchUsers[$i]['user']->lastName = $row['last_name'];
-                    if ($select['balance'])
+                    if (isset($select['balance']) && $select['balance'])
                         $searchUsers[$i]['user']->balance = $row['balance'];
-                    if ($select['phone'])
+                    if (isset($select['phone']) && $select['phone'])
                         $searchUsers[$i]['user']->phone = $row['phone'];
-                    if ($select['dateOfBirth'])
+                    if (isset($select['dateofBrith']) && $select['dateOfBirth'])
                         $searchUsers[$i]['user']->dateOfBirth = $row['date_of_birth'];
-                    if ($select['street'])
+                    if (isset($select['street']) && $select['street'])
                         $searchUsers[$i]['user']->street = $row['street'];
-                    if ($select['houseNumber'])
+                    if (isset($select['houseNumber']) && $select['houseNumber'])
                         $searchUsers[$i]['user']->houseNumber = $row['house_number'];
-                    if ($select['city'])
+                    if (isset($select['city']) && $select['city'])
                         $searchUsers[$i]['user']->city = $row['city'];
-                    if ($select['postalCode'])
+                    if (isset($select['postalCode']) && $select['postalCode'])
                         $searchUsers[$i]['user']->postalCode = $row['postal_code'];
-                    if ($select['country'])
+                    if (isset($select['country']) && $select['country'])
                         $searchUsers[$i]['user']->country = $row['country'];
-                    if ($select['isAdmin'])
+                    if (isset($select['isAdmin']) && $select['isAdmin'])
                         $searchUsers[$i]['user']->isAdmin = $row['is_admin'];
                     /*
                     This is for a future feature.
                     if ($select['isHintManager'])
                         $searchUsers[$i]['user']->isHintManager = $row['is_hint_manager'];
                     */
-                    if ($select['isUserManager'])
+                    if (isset($select['isUserManager']) && $select['isUserManager'])
                         $searchUsers[$i]['user']->isUserManager = $row['is_user_manager'];
-                    if ($select['isAuthorizedBrowserManager'])
+                    if (isset($select['isAuthorizedBrowserManager']) && $select['isAuthorizedBrowserManager'])
                         $searchUsers[$i]['user']->isAuthorizedBrowserManager = $row['is_authorized_browser_manager'];
-                    if ($select['creationTime'])
+                    if (isset($select['creationTime']) && $select['creationTime'])
                         $searchUsers[$i]['user']->creationTime = $row['creation_time'];
-                    if ($select['membershipYear'])
+                    if (isset($select['membershipYear']) && $select['membershipYear'])
                         $searchUsers[$i]['membershipYear'] = $row['membership_year'];
-                    if ($select['cardNumber'])
+                    if (isset($select['cardNumber']) && $select['cardNumber'])
                         $searchUsers[$i]['cardNumber'] = $row['card'];
-                    if ($select['nCheckInsPerYear'])
+                    if (isset($select['nCheckInsPerYear']) && $select['nCheckInsPerYear'])
                         $searchUsers[$i]['nCheckIns'] = $row['n_check_ins'];
                     
                     $i++;
@@ -707,7 +707,7 @@ abstract class UserDB {
 
             $conn->autocommit(false);
 
-            $commString = 'SELECT members_nextval("stippers_users_seq")';
+            $commString = 'SELECT stippers_nextval("stippers_users_seq")';
             $stmt = $conn->prepare($commString);
             
             if (!$stmt->execute())
@@ -721,7 +721,7 @@ abstract class UserDB {
             $stmt->close();
 
             $commString = 'INSERT INTO stippers_users (user_id, email, first_name, last_name, password_hash, password_salt, phone, date_of_birth, street, house_number, city, postal_code, country) ' .
-                'VALUES (?, ?, ?, ?, ?, ?, STR_TO_DATE(?, "%d/%m/%Y"), ?, ?, ?, ?, ?)';
+                'VALUES (?, ?, ?, ?, ?, ?, ?, STR_TO_DATE(?, "%d/%m/%Y"), ?, ?, ?, ?, ?)';
             $stmt = $conn->prepare($commString);
             $stmt->bind_param('issssssssssss', $userId, $user->email, $user->firstName, $user->lastName, $user->passwordHash, $passwordSalt, $user->phone, $user->dateOfBirth, $user->street, $user->houseNumber, $user->city, $user->postalCode, $user->country);
             
@@ -929,11 +929,11 @@ abstract class UserDB {
         try {
             $conn = Database::getConnection();
             $conn->autocommit(false);
-            $commString = 'UPDATE stippers_users SET email = ?, first_name = ?, last_name = ?, phone = ?, date_of_birth = STR_TO_DATE(?, "%d/%m/%Y"), street = ?, house_number = ?, city = ?, postal_code = ?, country = ?' .
+            $commString = 'UPDATE stippers_users SET email = ?, first_name = ?, last_name = ?, phone = ?, date_of_birth = STR_TO_DATE(?, "%d/%m/%Y"), street = ?, house_number = ?, city = ?, postal_code = ?, country = ? ' .
                 'WHERE user_id = ? AND email = ? AND first_name = ? AND last_name = ? AND password_hash = ? AND balance = ? AND phone = ? AND date_of_birth = STR_TO_DATE(?, "%d/%m/%Y") AND street = ? AND house_number = ? AND city = ? AND postal_code = ? AND country = ? AND DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") = ? AND is_admin = ? AND is_hint_manager = ? AND is_user_manager = ? AND is_authorized_browser_manager = ?';
             $stmt = $conn->prepare($commString);
             $timezone = GlobalConfig::TIMEZONE;
-            $stmt->bind_param('ssssssssssissssssssssssssiiii', $newUser->email, $newUser->firstName, $newUser->lastName, $newUser->phone, $newUser->dateOfBirth, $newUser->street, $newUser->houseNumber, $newUser->city, $newUser->postalCode, $newUser->country, $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->balance, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $oldUser->bartenderInfo, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isAuthorizedBrowserManager);
+            $stmt->bind_param('ssssssssssissssdsssssssssiiii', $newUser->email, $newUser->firstName, $newUser->lastName, $newUser->phone, $newUser->dateOfBirth, $newUser->street, $newUser->houseNumber, $newUser->city, $newUser->postalCode, $newUser->country, $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->balance, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isAuthorizedBrowserManager);
             
             if (!$stmt->execute()) {
                 if ($stmt->errno == 1062)
@@ -947,7 +947,7 @@ abstract class UserDB {
             $stmt->close();
             //Inserting 0000 for the year is a dirty hack to work around a bug in MySQL < 5.7.1.
             //Anywhere in the code where the year should go to the default (current year) you should insert 0000 instead of NULL.
-            $commString = 'INSERT INTO members_user_card_year (user, card, membership_year) VALUES (?, ?, 0000)';
+            $commString = 'INSERT INTO stippers_user_card_year (user, card, membership_year) VALUES (?, ?, 0000)';
             $stmt = $conn->prepare($commString);
             $stmt->bind_param('ii', $oldUser->userId, $cardNumber);
             
@@ -955,7 +955,7 @@ abstract class UserDB {
                 $conn->commit();
             else {
                 if ($stmt->errno == 1062) {
-                    if (substr($stmt->error, strlen($stmt->error) - 9) == '"PRIMARY"')
+                    if (substr($stmt->error, strlen($stmt->error) - 9) == '\'PRIMARY\'')
                         throw new UserDBException('This user is already a member this year.', UserDBException::USERALREADYMEMBER);
                     else
                         throw new UserDBException('This card is already used.', UserDBException::CARDALREADYUSED);

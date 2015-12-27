@@ -21,7 +21,7 @@ $_PERMISSIONS['home']['CHECKINBROWSER'] = false;
 //Permissions for the add or renew user page
 $_PERMISSIONS['addorrenewuser']['EVERYONE'] = false;
 $_PERMISSIONS['addorrenewuser']['MEMBER'] = false;
-$_PERMISSIONS['addorrenewuser']['ADMIN'] = false;
+$_PERMISSIONS['addorrenewuser']['ADMIN'] = true;
 $_PERMISSIONS['addorrenewuser']['USERMANAGER'] = false;
 $_PERMISSIONS['addorrenewuser']['AUTHORIZEDBROWSERMANAGER'] = false;
 $_PERMISSIONS['addorrenewuser']['ADDRENEWUSERBROWSER'] = true;
@@ -30,7 +30,7 @@ $_PERMISSIONS['addorrenewuser']['CHECKINBROWSER'] = false;
 //Permissions for the add user page
 $_PERMISSIONS['adduser']['EVERYONE'] = false;
 $_PERMISSIONS['adduser']['MEMBER'] = false;
-$_PERMISSIONS['adduser']['ADMIN'] = false;
+$_PERMISSIONS['adduser']['ADMIN'] = true;
 $_PERMISSIONS['adduser']['USERMANAGER'] = false;
 $_PERMISSIONS['adduser']['AUTHORIZEDBROWSERMANAGER'] = false;
 $_PERMISSIONS['adduser']['ADDRENEWUSERBROWSER'] = true;
@@ -39,11 +39,20 @@ $_PERMISSIONS['adduser']['CHECKINBROWSER'] = false;
 //Permissions for the renew user page
 $_PERMISSIONS['renewuser']['EVERYONE'] = false;
 $_PERMISSIONS['renewuser']['MEMBER'] = false;
-$_PERMISSIONS['renewuser']['ADMIN'] = false;
+$_PERMISSIONS['renewuser']['ADMIN'] = true;
 $_PERMISSIONS['renewuser']['USERMANAGER'] = false;
 $_PERMISSIONS['renewuser']['AUTHORIZEDBROWSERMANAGER'] = false;
 $_PERMISSIONS['renewuser']['ADDRENEWUSERBROWSER'] = true;
 $_PERMISSIONS['renewuser']['CHECKINBROWSER'] = false;
+
+//Permissions for the renew user search page
+$_PERMISSIONS['renewusersearch']['EVERYONE'] = false;
+$_PERMISSIONS['renewusersearch']['MEMBER'] = false;
+$_PERMISSIONS['renewusersearch']['ADMIN'] = true;
+$_PERMISSIONS['renewusersearch']['USERMANAGER'] = false;
+$_PERMISSIONS['renewusersearch']['AUTHORIZEDBROWSERMANAGER'] = false;
+$_PERMISSIONS['renewusersearch']['ADDRENEWUSERBROWSER'] = true;
+$_PERMISSIONS['renewusersearch']['CHECKINBROWSER'] = false;
 
 //Permissions for the authorized browser manager page
 $_PERMISSIONS['authorizedbrowsermanager']['EVERYONE'] = false;
@@ -51,7 +60,7 @@ $_PERMISSIONS['authorizedbrowsermanager']['MEMBER'] = false;
 $_PERMISSIONS['authorizedbrowsermanager']['ADMIN'] = true;
 $_PERMISSIONS['authorizedbrowsermanager']['USERMANAGER'] = false;
 $_PERMISSIONS['authorizedbrowsermanager']['AUTHORIZEDBROWSERMANAGER'] = false;
-$_PERMISSIONS['authorizedbrowsermanager']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['authorizedbrowsermanager']['ADDRENEWUSERBROWSER'] = true;
 $_PERMISSIONS['authorizedbrowsermanager']['CHECKINBROWSER'] = false;
 
 //Permissions for the change password page
@@ -66,7 +75,7 @@ $_PERMISSIONS['changepassword']['CHECKINBROWSER'] = false;
 //Permissions for the check in page
 $_PERMISSIONS['check-in']['EVERYONE'] = false;
 $_PERMISSIONS['check-in']['MEMBER'] = false;
-$_PERMISSIONS['check-in']['ADMIN'] = false;
+$_PERMISSIONS['check-in']['ADMIN'] = true;
 $_PERMISSIONS['check-in']['USERMANAGER'] = false;
 $_PERMISSIONS['check-in']['AUTHORIZEDBROWSERMANAGER'] = false;
 $_PERMISSIONS['check-in']['ADDRENEWUSERBROWSER'] = false;

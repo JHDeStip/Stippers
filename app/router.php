@@ -22,8 +22,7 @@ require_once 'middleware/Authorization.php';
 array_push($middleware, 'Authorization');
 
 //Aliases, with these you can define alternative names for pages
-switch ($requestData['requestedPage'])
-{
+switch ($requestData['requestedPage']) {
     case '':
         $requestData['requestedPage'] = 'home';
         break;
@@ -51,6 +50,22 @@ switch ($requestData['requestedPage']) {
     case 'checkin':
         require_once('controllers/checkIn/CheckInController.php');
         $controller = 'CheckInController';
+        break;
+    case 'addorrenewuser':
+        require_once('controllers/addOrRenewUser/AddOrRenewUserController.php');
+        $controller = 'AddOrRenewUserController';
+        break;
+    case 'adduser':
+        require_once('controllers/addUser/AddUserController.php');
+        $controller = 'AddUserController';
+        break;
+    case 'renewusersearch':
+        require_once('controllers/renewUserSearch/RenewUserSearchController.php');
+        $controller = 'RenewUserSearchController';
+        break;
+    case 'renewuser':
+        require_once('controllers/renewUser/RenewUserController.php');
+        $controller = 'RenewUserController';
         break;
     case 'logout':
         require_once('controllers/authorization/LogoutController.php');

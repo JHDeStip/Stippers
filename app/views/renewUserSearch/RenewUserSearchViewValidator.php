@@ -6,21 +6,21 @@
  * 
  * @author Stan Wijckmans
  * 
- * Validator for the User Search Basic view.
+ * Validator for the Renew User Search Top view.
  */
 
 require_once __DIR__.'/../IValidator.php';
 require_once __DIR__.'/../../config/DataValidationConfig.php';
 
-abstract class UserSearchBasicViewValidator implements IValidator {
+abstract class RenewUserSearchViewValidator implements IValidator {
     
     public static function validate(array $data) {
         $errMsgs = array();
 
-        if (strlen($data['firstName']) > DataValidationConfig::STRINGMAXLENGTH)
+        if (strlen($data['first_name']) > DataValidationConfig::STRINGMAXLENGTH)
             $errMsgs['firstName'] = '<label class="form_label_error" for="first_name">De voornaam mag maximaal uit 30 karakters bestaan.</label>';
 
-        if (strlen($data['lastName']) > DataValidationConfig::STRINGMAXLENGTH)
+        if (strlen($data['last_name']) > DataValidationConfig::STRINGMAXLENGTH)
             $errMsgs['lastName'] = '<label class="form_label_error" for="last_name">De achternaam mag maximaal uit 30 karakters bestaan.</label>';
 
         if (strlen($data['email']) > DataValidationConfig::EMAILMAXLENGTH)

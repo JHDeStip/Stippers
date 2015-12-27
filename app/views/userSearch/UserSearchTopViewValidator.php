@@ -6,17 +6,26 @@
  * 
  * @author Stan Wijckmans
  * 
- * Validator for the User Search User Manager view.
+ * Validator for the User Search Top view.
  */
 
 require_once __DIR__.'/../IValidator.php';
 require_once __DIR__.'/../../config/DataValidationConfig.php';
 
-abstract class UserSearchUserManagerViewValidator implements IValidator {
+abstract class UserSearchTopViewValidator implements IValidator {
     
     public static function validate(array $data) {
         $errMsgs = array();
 
+        if (strlen($data['firstName']) > DataValidationConfig::STRINGMAXLENGTH)
+            $errMsgs['firstName'] = '<label class="form_label_error" for="first_name">De voornaam mag maximaal uit 30 karakters bestaan.</label>';
+
+        if (strlen($data['lastName']) > DataValidationConfig::STRINGMAXLENGTH)
+            $errMsgs['lastName'] = '<label class="form_label_error" for="last_name">De achternaam mag maximaal uit 30 karakters bestaan.</label>';
+
+        if (strlen($data['email']) > DataValidationConfig::EMAILMAXLENGTH)
+            $errMsgs['email'] = '<label class="form_label_error" for="email">Het e-mailadres mag maximaal uit 50 karakters bestaan.</label>';
+        
         if (strlen($data['balance']) > DataValidationConfig::BALANCEMAXLENGTH)
             $errMsgs['balance'] = '<label class="form_label_error" for="balance">Het saldo mag maximaal uit 6 karakters bestaan.</label>';
 
@@ -51,6 +60,9 @@ abstract class UserSearchUserManagerViewValidator implements IValidator {
     }
     
     public static function initErrMsgs() {
+        $errMsgs['firstName'] = '';
+        $errMsgs['lastName'] = '';
+        $errMsgs['email'] = '';
         $errMsgs['balance'] = '';
         $errMsgs['phone'] = '';
         $errMsgs['dateOfBirth'] = '';

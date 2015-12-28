@@ -9,28 +9,28 @@
  * Controller for the renew user search page.
  */
 
-require_once __DIR__.'/../IController.php';
-require_once __DIR__.'/../../helperClasses/Page.php';
+require_once __DIR__.'/../../IController.php';
+require_once __DIR__.'/../../../helperClasses/Page.php';
 
-require_once __DIR__.'/../../views/renewUserSearch/RenewUserSearchViewValidator.php';
+require_once __DIR__.'/../../../views/addRenewUser/renewUserSearch/RenewUserSearchViewValidator.php';
 
-require_once __DIR__.'/../../models/user/User.php';
-require_once __DIR__.'/../../models/user/UserDB.php';
-require_once __DIR__.'/../../models/user/UserDBException.php';
+require_once __DIR__.'/../../../models/user/User.php';
+require_once __DIR__.'/../../../models/user/UserDB.php';
+require_once __DIR__.'/../../../models/user/UserDBException.php';
 
 abstract class RenewUserSearchController implements IController {
     
     public static function get() {
         $page = new Page();
         $page->data['title'] = 'Gebruiker hernieuwen';
-        RenewUserSearchController::buildRenewUserSearchPage($page);
+        RenewUserSearchController::buildRenewUserSearchView($page, false);
         $page->showBasic();
     }
     
     public static function post() {
         $page = new Page();
         $page->data['title'] = 'Gebruikers hernieuwen';
-        RenewUserSearchController::buildRenewUserSearchPage($page);
+        RenewUserSearchController::buildRenewUserSearchView($page, true);
         
         $errMsgs = RenewUserSearchViewValidator::validate($_POST);
         
@@ -47,23 +47,21 @@ abstract class RenewUserSearchController implements IController {
      * 
      * @param Page $page page to add the views to
      */
-    private static function buildRenewUserSearchPage(Page $page) {
+    private static function buildRenewUserSearchView(Page $page, $searchMode) {
         $page->data['RenewUserSearchView']['renew_user_search_formAction'] = $_SERVER['REQUEST_URI'];
         
-        if (isset($_POST['first_name']))
+        if ($searchMode) {
             $page->data['RenewUserSearchView']['firstName'] = $_POST['first_name'];
-        else
-            $page->data['RenewUserSearchView']['firstName'] = '';
-        if (isset($_POST['last_name']))
             $page->data['RenewUserSearchView']['lastName'] = $_POST['last_name'];
-        else
-            $page->data['RenewUserSearchView']['lastName'] = '';
-        if (isset($_POST['email']))
             $page->data['RenewUserSearchView']['email'] = $_POST['email'];
-        else
+        }
+        else {
+            $page->data['RenewUserSearchView']['firstName'] = '';
+            $page->data['RenewUserSearchView']['lastName'] = '';
             $page->data['RenewUserSearchView']['email'] = '';
+        }
         
-        $page->addView('renewUserSearch/RenewUserSearchView');
+        $page->addView('addRenewUser/renewUserSearch/RenewUserSearchView');
     }
     
     /**
@@ -78,7 +76,7 @@ abstract class RenewUserSearchController implements IController {
                 $page->addView('userSearch/UserSearchNoResultsView');
             else {
                 $page->data['RenewUserSearchResultsView']['users'] = $users;
-                $page->addView('renewUserSearch/RenewUserSearchResultsView');
+                $page->addView('addRenewUser/renewUserSearch/RenewUserSearchResultsView');
             }
         }
         catch (Exception $ex) {

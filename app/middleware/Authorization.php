@@ -16,9 +16,9 @@ require_once __DIR__."/../controllers/authorization/DBErrorController.php";
 require_once __DIR__."/../controllers/authorization/ForcedLogoutController.php";
 require_once __DIR__."/../controllers/authorization/AccessDeniedController.php";
 
-require_once __DIR__."/../models/browserAuthorization/AuthorizedBrowser.php";
-require_once __DIR__."/../models/browserAuthorization/AuthorizedBrowserDB.php";
-require_once __DIR__."/../models/browserAuthorization/AuthorizedBrowserDBException.php";
+require_once __DIR__."/../models/browser/Browser.php";
+require_once __DIR__."/../models/browser/BrowserDB.php";
+require_once __DIR__."/../models/browser/BrowserDBException.php";
 
 require_once __DIR__.'/../models/user/User.php';
 require_once __DIR__.'/../models/user/UserDB.php';
@@ -46,7 +46,7 @@ abstract class Authorization implements IMiddleware {
         $admin = false;
         $userManager = false;
         $hintManager = false;
-        $authorizedBrowserManager = false;
+        $browserManager = false;
         $addRenewUserBrowser = false;
         $checkInBrowser = false;
 
@@ -65,8 +65,8 @@ abstract class Authorization implements IMiddleware {
                 $userManager = $permissions['USERMANAGER'];
             if (isset($permissions['HINTMANAGER']))
                 $hintManager = $permissions['HINTMANAGER'];
-            if (isset($permissions['AUTHORIZEDBROWSERMANAGER']))
-                $authorizedBrowserManager = $permissions['AUTHORIZEDBROWSERMANAGER'];
+            if (isset($permissions['BROWSERMANAGER']))
+                $browserManager = $permissions['BROWSERMANAGER'];
             if (isset($permissions['ADDRENEWUSERBROWSER']))
                 $addRenewUserBrowser = $permissions['ADDRENEWUSERBROWSER'];
             if (isset($permissions['CHECKINBROWSER']))
@@ -89,14 +89,20 @@ abstract class Authorization implements IMiddleware {
                 $browserDenied = true;
             else {
                 try {
-                    $authorizedBrowser = AuthorizedBrowserDB::getBasicAuthorizedBrowser($_COOKIE['stippersAuthorization']);
+                    $browser = BrowserDB::getBasicBrowserByUuid($_COOKIE['stippersAuthorization']);
                     
-                    if ($checkInBrowser && $authorizedBrowser->canCheckIn)
+                    if ($checkInBrowser && $browser->canCheckIn)
                         $canDisplay = true;
-                    else if ($authorizedBrowser && $authorizedBrowser->canAddUpdateUsers)
+                    else if ($browser && $browser->canAddRenewUsers)
                         $canDisplay = true;
                     else
-                        $BrowserDenied = true;
+                        $browserDenied = true;
+                }
+                catch(BrowserDBException $ex) {
+                    if ($ex->getCode() != BrowserDBException::NOBROWSERFORUUID) {
+                        DBErrorController::get();
+                        return false;
+                    }
                 }
                 catch(Exception $ex) {
                     DBErrorController::get();
@@ -107,7 +113,7 @@ abstract class Authorization implements IMiddleware {
         
         //If certain users can display the page and someone is logged in
         //we renew the user and check if the user has the required permission.
-        if (!$canDisplay && ($member || $userManager || $hintManager || $authorizedBrowserManager || $admin)) {
+        if (!$canDisplay && ($member || $userManager || $hintManager || $browserManager || $admin)) {
             if (!isset($_SESSION['Stippers']['user']))
                 $hasToLogIn = true;
             else {
@@ -129,7 +135,7 @@ abstract class Authorization implements IMiddleware {
                             $canDisplay = true;
                         else if ($hintManager && $_SESSION['Stippers']['user']->isHintManager)
                             $canDisplay = true;
-                        else if ($authorizedBrowserManager && $_SESSION['Stippers']['user']->isAuthorizedBrowserManager)
+                        else if ($browserManager && $_SESSION['Stippers']['user']->isBrowserManager)
                             $canDisplay = true;
                         else if ($admin && $_SESSION['Stippers']['user']->isAdmin)
                             $canDisplay = true;

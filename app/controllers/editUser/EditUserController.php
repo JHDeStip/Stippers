@@ -30,7 +30,7 @@ abstract class EditUserController implements IController {
         if (!isset($_GET['user'])) {
             //No user id given so redirect to the manageuser
             //page to search a user
-            header('Location: manageuser', TRUE, 303);
+            header('Location: manageuser', true, 303);
         }
         else {
             $page = new Page();
@@ -45,8 +45,17 @@ abstract class EditUserController implements IController {
                 $page->addView('editUser/EditUserDisabledFormBottomView');
                 EditUserController::buildEditUserMembershipDetailsView($page);
             }
+            catch (UserDBException $ex) {
+                if ($ex->getCode() == UserDBException::NOUSERFORID)
+                    $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Er is geen gebruiker met deze id';
+                else
+                    $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan gegevens niet ophalen uit de database';
+                
+                $page->data['ErrorMessageNoDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
+                $page->addView('error/ErrorMessageNoDescriptionWithLinkView');
+            }
             catch (Exception $ex) {
-                $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan gegevens niet ophalen uit de database.';
+                $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan gegevens niet ophalen uit de database';
                 $page->data['ErrorMessageNoDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
                 $page->addView('error/ErrorMessageNoDescriptionWithLinkView');
             }
@@ -57,7 +66,7 @@ abstract class EditUserController implements IController {
     public static function post() {
         //Redirect to manageuser page if back to results button was clicked
         if (isset($_POST['back_to_search_results']))
-            header('Location: manageuser', TRUE, 303);
+            header('Location: manageuser', true, 303);
         //Stop editing if cancel was clocked, this should do the same as GET, so we just call get.
         elseif (isset($_POST['cancel']))
             EditUserController::get();
@@ -76,16 +85,15 @@ abstract class EditUserController implements IController {
         else {
             $page = new Page();
             $page->data['title'] = 'Gebruiker bewerken';
-            $postData['EditUserTopView'] = $_POST;
-            $errMsgs = EditUserTopViewValidator::validate($postData);
+            $errMsgs = EditUserTopViewValidator::validate($_POST);
             if (empty($errMsgs)) {
                 //If no error: create a new user from posted data and try to save it
                 $newUser = EditUserController::createUserFromPost();
                 try {
                     UserDB::updateUser($_SESSION['Stippers']['EditUser']['user'], $newUser);
-                    $page->data['InfoMessageNoDescriptionWithLinkView']['infoTitle'] = 'Gebruiker succesvol bijgewerkt';
-                    $page->data['InfoMessageNoDescriptionWithLinkView']['redirectUrl'] = $_SERVER['REQUEST_URI'];
-                    $page->addView('info/InfoMessageNoDescriptionWithLinkView');
+                    $page->data['SuccessMessageNoDescriptionWithLinkView']['successTitle'] = 'Gebruiker succesvol bijgewerkt';
+                    $page->data['SuccessMessageNoDescriptionWithLinkView']['redirectUrl'] = $_SERVER['REQUEST_URI'];
+                    $page->addView('success/SuccessMessageNoDescriptionWithLinkView');
                 }
                 catch (Exception $ex) {
                     //Show correct error message for errors
@@ -187,14 +195,14 @@ abstract class EditUserController implements IController {
         if ($saveMode) {
             $page->data['EditUserAdminView']['isAdminChecked'] = (isset($_POST['is_admin_checked']) ? 'checked' : '');
             $page->data['EditUserAdminView']['isUserManagerChecked'] = (isset($_POST['is_user_manager_checked']) ? 'checked' : '');
-            $page->data['EditUserAdminView']['isAuthorizedBrowserManagerChecked'] = (isset($_POST['is_browser_manager_checked']) ? 'checked' : '');
+            $page->data['EditUserAdminView']['isBrowserManagerChecked'] = (isset($_POST['is_browser_manager_checked']) ? 'checked' : '');
         }
         //If we're not trying to save we are showing existing data
         //so we load it from the user object in session
         else {
             $page->data['EditUserAdminView']['isAdminChecked'] = ($_SESSION['Stippers']['EditUser']['user']->isAdmin ? 'checked' : '');
             $page->data['EditUserAdminView']['isUserManagerChecked'] = ($_SESSION['Stippers']['EditUser']['user']->isUserManager ? 'checked' : '');
-            $page->data['EditUserAdminView']['isAuthorizedBrowserManagerChecked'] = ($_SESSION['Stippers']['EditUser']['user']->isAuthorizedBrowserManager ? 'checked' : '');
+            $page->data['EditUserAdminView']['isBrowserManagerChecked'] = ($_SESSION['Stippers']['EditUser']['user']->isBrowserManager ? 'checked' : '');
         }
         
         if ($enabled)
@@ -247,14 +255,14 @@ abstract class EditUserController implements IController {
         if ($_SESSION['Stippers']['user']->isAdmin) {
             $user->isAdmin = isset($_POST['is_admin']);
             $user->isUserManager = isset($_POST['is_user_manager']);
-            $user->isAuthorizedBrowserManager = isset($_POST['is_authorized_browser_manager']);
+            $user->isBrowserManager = isset($_POST['is_browser_manager']);
         }
         //If you're not an admin, don't take permission data from post
         //but keep the data that was already in the session
         else {
             $user->isAdmin = $_SESSION['Stippers']['EditUser']['user']->isAdmin;
             $user->isUserManager = $_SESSION['Stippers']['EditUser']['user']->isUserManager;
-            $user->isAuthorizedBrowserManager = $_SESSION['Stippers']['EditUser']['user']->isAuthorizedBrowserManager;
+            $user->isBrowserManager = $_SESSION['Stippers']['EditUser']['user']->isBrowserManager;
         }
         
         return $user;

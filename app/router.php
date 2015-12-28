@@ -52,20 +52,32 @@ switch ($requestData['requestedPage']) {
         $controller = 'CheckInController';
         break;
     case 'addorrenewuser':
-        require_once('controllers/addOrRenewUser/AddOrRenewUserController.php');
+        require_once('controllers/addRenewUser/addOrRenewUser/AddOrRenewUserController.php');
         $controller = 'AddOrRenewUserController';
         break;
     case 'adduser':
-        require_once('controllers/addUser/AddUserController.php');
+        require_once('controllers/addRenewUser/addUser/AddUserController.php');
         $controller = 'AddUserController';
         break;
     case 'renewusersearch':
-        require_once('controllers/renewUserSearch/RenewUserSearchController.php');
+        require_once('controllers/addRenewUser/renewUserSearch/RenewUserSearchController.php');
         $controller = 'RenewUserSearchController';
         break;
     case 'renewuser':
-        require_once('controllers/renewUser/RenewUserController.php');
+        require_once('controllers/addRenewUser/renewUser/RenewUserController.php');
         $controller = 'RenewUserController';
+        break;
+    case 'managebrowser':
+        require_once('controllers/manageBrowser/ManageBrowserController.php');
+        $controller = 'ManageBrowserController';
+        break;
+    case 'addbrowser':
+        require_once('controllers/manageBrowser/AddBrowserController.php');
+        $controller = 'AddBrowserController';
+        break;
+    case 'editbrowser':
+        require_once('controllers/manageBrowser/EditBrowserController.php');
+        $controller = 'EditBrowserController';
         break;
     case 'logout':
         require_once('controllers/authorization/LogoutController.php');

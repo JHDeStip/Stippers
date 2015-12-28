@@ -9,8 +9,8 @@
  * Controller for the add or renew user page.
  */
 
-require_once __DIR__.'/../IController.php';
-require_once __DIR__.'/../../helperClasses/Page.php';
+require_once __DIR__.'/../../IController.php';
+require_once __DIR__.'/../../../helperClasses/Page.php';
 
 abstract class AddOrRenewUserController implements IController {
     
@@ -24,9 +24,9 @@ abstract class AddOrRenewUserController implements IController {
     
     public static function post() {
         if (isset($_POST['yes']))
-            header('Location: renewusersearch', TRUE, 303);
+            header('Location: renewusersearch', true, 303);
         else
-            header('Location: adduser', TRUE, 303);
+            header('Location: adduser', true, 303);
     }
     
 }

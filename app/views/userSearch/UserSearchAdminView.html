@@ -22,12 +22,12 @@
 </tr>
 <tr>
     <td>
-        <label class="form_label" for="is_authorized_browser_manager">Browserbeheerder:</label>
-        <select name="is_authorized_browser_manager" id="is_authorized_browser_manager">
-            <option value="" <?php echo $this->data['UserSearchAdminView']['isAuthorizedBrowserManagerSelected']['']; ?>>Alles</option>
-            <option value="0" <?php echo $this->data['UserSearchAdminView']['isAuthorizedBrowserManagerSelected']['0']; ?>>Nee</option>
-            <option value="1" <?php echo $this->data['UserSearchAdminView']['isAuthorizedBrowserManagerSelected']['1']; ?>>Ja</option>
+        <label class="form_label" for="is_browser_manager">Browserbeheerder:</label>
+        <select name="is_browser_manager" id="is_browser_manager">
+            <option value="" <?php echo $this->data['UserSearchAdminView']['isBrowserManagerSelected']['']; ?>>Alles</option>
+            <option value="0" <?php echo $this->data['UserSearchAdminView']['isBrowserManagerSelected']['0']; ?>>Nee</option>
+            <option value="1" <?php echo $this->data['UserSearchAdminView']['isBrowserManagerSelected']['1']; ?>>Ja</option>
         </select>
     </td>
-    <td><input type="checkbox" class="checkbox" id="show_is_authorized_browser_manager" name="show_is_authorized_browser_manager" <?php echo $this->data['UserSearchAdminView']['showIsAuthorizedBrowserManagerChecked']; ?>></td>
+    <td><input type="checkbox" class="checkbox" id="show_is_browser_manager" name="show_is_browser_manager" <?php echo $this->data['UserSearchAdminView']['showIsBrowserManagerChecked']; ?>></td>
 </tr>

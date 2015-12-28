@@ -6,14 +6,16 @@
  * 
  * @author Stan Wijckmans
  * 
- * Authorized Computer Database exception class.
+ * Browser Database exception class.
  */
 
-class AuthorizedBrowserDBException extends Exception{
+class BrowserDBException extends Exception{
     const UNKNOWNERROR = 1;
     const BROWSERNAMEEXISTS = 2;
     const BROWSERNOTFOUND = 3;
     const BROWSEROUTOFDATE = 4;
+    const NOBROWSERFORID = 5;
+    const NOBROWSERFORUUID = 6;
 
     public function __construct($message, $code = 0, $previous = null){
         parent::__construct($message, $code, $previous);

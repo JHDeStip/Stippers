@@ -9,23 +9,27 @@
  * Model representing a browser with permissions.
  */
 
-class AuthorizedBrowser {
+class Browser {
+    public $browserId;
     public $uuid;
     public $name;
-    public $canAddUpdateUsers;
+    public $canAddRenewUsers;
     public $canCheckIn;
 
     /**
-     * 
+     * Constructor for browser with ID. 
+     *
+     * @param long $browser_id ID of browser
      * @param string $uuid UUID of browser
      * @param string $name name given to browser
-     * @param bool $canAddUpdateUsers permission for creating and updating users
+     * @param bool $canAddRenewUsers permission for creating and updating users
      * @param type $canCheckIn permission for checking in
      */
-    public function __construct($uuid, $name, $canAddUpdateUsers, $canCheckIn) {
+    public function __construct($browserId, $uuid, $name, $canAddRenewUsers, $canCheckIn) {
+        $this->browserId = $browserId;
         $this->uuid = $uuid;
         $this->name = $name;
-        $this->canAddUpdateUsers = $canAddUpdateUsers;
+        $this->canAddRenewUsers = $canAddRenewUsers;
         $this->canCheckIn = $canCheckIn;
     }
 }

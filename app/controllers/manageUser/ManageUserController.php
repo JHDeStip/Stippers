@@ -194,11 +194,11 @@ abstract class ManageUserController implements IController {
         $page->data['UserSearchAdminView']['isUserManagerSelected']['1'] = '';
         $page->data['UserSearchAdminView']['isUserManagerSelected'][$_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isUserManager']] = 'selected';
         
-        $page->data['UserSearchAdminView']['isAuthorizedBrowserManager'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isAuthorizedBrowserManager'];
-        $page->data['UserSearchAdminView']['isAuthorizedBrowserManagerSelected'][''] = '';
-        $page->data['UserSearchAdminView']['isAuthorizedBrowserManagerSelected']['0'] = '';
-        $page->data['UserSearchAdminView']['isAuthorizedBrowserManagerSelected']['1'] = '';
-        $page->data['UserSearchAdminView']['isAuthorizedBrowserManagerSelected'][$_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isAuthorizedBrowserManager']] = 'selected';
+        $page->data['UserSearchAdminView']['isBrowserManager'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isBrowserManager'];
+        $page->data['UserSearchAdminView']['isBrowserManagerSelected'][''] = '';
+        $page->data['UserSearchAdminView']['isBrowserManagerSelected']['0'] = '';
+        $page->data['UserSearchAdminView']['isBrowserManagerSelected']['1'] = '';
+        $page->data['UserSearchAdminView']['isBrowserManagerSelected'][$_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isBrowserManager']] = 'selected';
         
         if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isAdmin'])
             $page->data['UserSearchAdminView']['showIsAdminChecked'] = 'checked';
@@ -210,10 +210,10 @@ abstract class ManageUserController implements IController {
         else
             $page->data['UserSearchAdminView']['showIsUserManagerChecked'] = '';
         
-        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isAuthorizedBrowserManager'])
-            $page->data['UserSearchAdminView']['showIsAuthorizedBrowserManagerChecked'] = 'checked';
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isBrowserManager'])
+            $page->data['UserSearchAdminView']['showIsBrowserManagerChecked'] = 'checked';
         else
-            $page->data['UserSearchAdminView']['showIsAuthorizedBrowserManagerChecked'] = '';
+            $page->data['UserSearchAdminView']['showIsBrowserManagerChecked'] = '';
         
         $page->data['UserSearchAdminView']['errMsgs'] = UserSearchAdminViewValidator::initErrMsgs();
     }
@@ -324,10 +324,10 @@ abstract class ManageUserController implements IController {
             $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isUserManager'] = $_POST['is_user_manager'];
         else
             $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isUserManager'] = '';
-        if (isset($_POST['is_authorized_browser_manager']))
-            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isAuthorizedBrowserManager'] = $_POST['is_authorized_browser_manager'];
+        if (isset($_POST['is_browser_manager']))
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isBrowserManager'] = $_POST['is_browser_manager'];
         else
-            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isAuthorizedBrowserManager'] = '';
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isBrowserManager'] = '';
         
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['firstName'] = isset($_POST['show_first_name']);
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['lastName'] = isset($_POST['show_last_name']);
@@ -346,7 +346,7 @@ abstract class ManageUserController implements IController {
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['nCheckInsPerYear'] = isset($_POST['n_check_ins_per_year']);
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isAdmin'] = isset($_POST['show_is_admin']);
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isUserManager'] = isset($_POST['show_is_user_manager']);
-        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isAuthorizedBrowserManager'] = isset($_POST['show_is_authorized_browser_manager']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isBrowserManager'] = isset($_POST['show_is_browser_manager']);
         
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['options']['orderByBirthday'] = isset($_POST['order_by_birthday']);
     }

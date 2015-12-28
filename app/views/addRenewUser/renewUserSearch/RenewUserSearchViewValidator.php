@@ -9,8 +9,8 @@
  * Validator for the Renew User Search Top view.
  */
 
-require_once __DIR__.'/../IValidator.php';
-require_once __DIR__.'/../../config/DataValidationConfig.php';
+require_once __DIR__.'/../../IValidator.php';
+require_once __DIR__.'/../../../config/DataValidationConfig.php';
 
 abstract class RenewUserSearchViewValidator implements IValidator {
     

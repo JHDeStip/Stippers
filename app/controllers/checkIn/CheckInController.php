@@ -30,7 +30,7 @@ abstract class CheckInController implements IController {
     public static function get() {
         $page = new Page();
         $page->data['title'] = 'Inchecken';
-        CheckInController::buildCheckInFormView($page);
+        CheckInController::buildCheckInFormView($page, false);
         $page->showBasic();
     }
     
@@ -70,7 +70,7 @@ abstract class CheckInController implements IController {
             }
             catch(UserDBException $ex) {
                 //Check-in failed (can't get user)
-                CheckInController::buildCheckInFormView($page);
+                CheckInController::buildCheckInFormView($page, true);
                 if ($ex->getCode() == UserDBException::NOUSERFORCARDNUMER)
                     $page->data['CheckInFormView']['errMsgs']['global'] = '<h2 class="error_message" id="check_in_form_error_message">Dit kaartnummer is niet gekoppeld aan een gebruiker.</h2>';
                 else
@@ -78,7 +78,7 @@ abstract class CheckInController implements IController {
             }
             catch(CheckInDBException $ex) {
                 //Check-in failed (something went wrong or check-in isn't valid)
-                CheckInController::buildCheckInFormView($page);
+                CheckInController::buildCheckInFormView($page, true);
                 if ($ex->getCode() == CheckInDBException::ALREADYCHECKEDIN)
                     $page->data['CheckInFormView']['errMsgs']['global'] = '<h2 class="error_message" id="check_in_form_error_message">Deze gebruiker is de voorbije 12 uur al ingechecked.</h2>';
                 else
@@ -94,13 +94,13 @@ abstract class CheckInController implements IController {
             }
             catch(Exception $ex) {
                 //Something else went wrong
-                CheckInController::buildCheckInFormView($page);
+                CheckInController::buildCheckInFormView($page, true);
                 $page->data['CheckInFormView']['errMsgs']['global'] = '<h2 class="error_message" id="check_in_form_error_message">Kan gebruiker niet inchecken, probeer het opnieuw.</h2>';
             }
         }
         else {
             //Errors in the form, retry
-            CheckInController::buildCheckInFormView($page);
+            CheckInController::buildCheckInFormView($page, true);
             $page->data['CheckInFormView']['errMsgs'] = array_merge($page->data['CheckInFormView']['errMsgs'], $errMsgs);
         }
         
@@ -112,11 +112,14 @@ abstract class CheckInController implements IController {
      * 
      * @param Page $page page to add the view to
      */
-    private static function buildCheckInFormView(Page $page) {
+    private static function buildCheckInFormView(Page $page, $checkInMode) {
         $page->data['CheckInFormView']['check_in_formAction'] = $_SERVER['REQUEST_URI'];
-        if(isset($_POST['cardNumber']))
-            $page->data['CheckInFormView']['cardNumber'] = $_POST['cardNumber'];
-        $page->data['CheckInFormView']['cardNumber'] = '';
+        
+        if($checkInMode)
+            $page->data['CheckInFormView']['cardNumber'] = $_POST['card_number'];
+        else
+            $page->data['CheckInFormView']['cardNumber'] = '';
+        
         $page->data['CheckInFormView']['errMsgs'] = CheckInFormViewValidator::initErrMsgs();
         $page->addView('checkIn/CheckInFormView');
     }

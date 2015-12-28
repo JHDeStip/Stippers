@@ -23,8 +23,8 @@ abstract class UserSearchAdminViewValidator implements IValidator {
         if ($data['isUserManager'] != '' && (!ctype_digit($data['isUserManager']) || $data['isUserManager'] < DataValidationConfig::USERMANAGERPERMISSIONMIN || $data['isUserManager'] > DataValidationConfig::USERMANAGERPERMISSIONMAX))
             $errMsgs['isUserManager'] = '<label class="form_label_error" for="is_user_manager">Selecteer een geldige optie.</label>';
 
-        if ($data['isAuthorizedBrowserManager'] != '' && (!ctype_digit($data['isAuthorizedBrowserManager']) || $data['isAuthorizedBrowserManager'] < DataValidationConfig::AUTHORIZEDBROWSERMANAGERPERMISSIONMIN || $data['isAuthorizedBrowserManager'] > DataValidationConfig::AUTHORIZEDBROWSERMANAGERPERMISSIONMAX))
-            $errMsgs['isAuthorizedBrowserManager'] = '<label class="form_label_error" for="is_authorized_browser_manager">Selecteer een geldige optie.</label>';
+        if ($data['isBrowserManager'] != '' && (!ctype_digit($data['isBrowserManager']) || $data['isBrowserManager'] < DataValidationConfig::BROWSERMANAGERPERMISSIONMIN || $data['isBrowserManager'] > DataValidationConfig::BROWSERMANAGERPERMISSIONMAX))
+            $errMsgs['isBrowserManager'] = '<label class="form_label_error" for="is_browser_manager">Selecteer een geldige optie.</label>';
         
         return $errMsgs;
     }
@@ -32,7 +32,7 @@ abstract class UserSearchAdminViewValidator implements IValidator {
     public static function initErrMsgs() {
         $errMsgs['isAdmin'] = '';
         $errMsgs['isUserManager'] = '';
-        $errMsgs['isAuthorizedBrowserManager'] = '';
+        $errMsgs['isBrowserManager'] = '';
         
         return $errMsgs;
     }

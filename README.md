@@ -46,12 +46,12 @@ Currently the following user permissions are available:
 * member: by default all users have this permission.
 * admin: admins can do anything. By default only the admin account has this permission set. Members with the admin permissions can set permissions of other users. Not here that there is a difference between the admin users and users with admin permissions. While multiple users can have admin permissions, there can be only one admin account.
 * userManager: This permission allows a user to manage other users.
-* authorizedBrowserManager: This permission allows the user to manage browser tied permissions.
+* browserManager: This permission allows the user to manage browser tied permissions.
 
 #### Browser tied permissions
 Some pages should not be visible from anywhere, but only from selected browsers. Think of the check-in page. Nobody should be able to check-in at home. The pages to add or renew users are another example, because users should get their membership card and pay you. This can only happen in your club.
 
-This is where browser tied permissions come in to play. They allow you to give permissions to a specific browser. All users with the authorizedBrowserManager permission set can change permissions of browser.
+This is where browser tied permissions come in to play. They allow you to give permissions to a specific browser. All users with the browserManager permission set can change permissions of browser.
 
 Currently the following browser permissions are available:
 * checkInBrowser: enables the browser to access the check-in page.

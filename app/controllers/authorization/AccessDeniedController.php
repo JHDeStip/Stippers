@@ -17,7 +17,7 @@ abstract class AccessDeniedController implements IController {
         $page = new Page();
         $page->data['title'] = 'Geen toegang';
         $page->addView('authorization/AccessDeniedView');
-        $page->showBasic();
+        $page->showWithMenu();
     }
     
     public static function post() {

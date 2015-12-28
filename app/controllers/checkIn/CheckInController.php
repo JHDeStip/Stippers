@@ -31,7 +31,7 @@ abstract class CheckInController implements IController {
         $page = new Page();
         $page->data['title'] = 'Inchecken';
         CheckInController::buildCheckInFormView($page, false);
-        $page->showBasic();
+        $page->showWithMenu();
     }
     
     public static function post() {
@@ -68,7 +68,7 @@ abstract class CheckInController implements IController {
                 if ($isWinner)
                     $page->addView('checkIn/CheckInWeeklyWinnerImageView');                
             }
-            catch(UserDBException $ex) {
+            catch (UserDBException $ex) {
                 //Check-in failed (can't get user)
                 CheckInController::buildCheckInFormView($page, true);
                 if ($ex->getCode() == UserDBException::NOUSERFORCARDNUMER)
@@ -76,7 +76,7 @@ abstract class CheckInController implements IController {
                 else
                     $page->data['CheckInFormView']['errMsgs']['global'] = '<h2 class="error_message" id="check_in_form_error_message">Kan gebruiker niet inchecken, probeer het opnieuw.</h2>';
             }
-            catch(CheckInDBException $ex) {
+            catch (CheckInDBException $ex) {
                 //Check-in failed (something went wrong or check-in isn't valid)
                 CheckInController::buildCheckInFormView($page, true);
                 if ($ex->getCode() == CheckInDBException::ALREADYCHECKEDIN)
@@ -84,7 +84,7 @@ abstract class CheckInController implements IController {
                 else
                     $page->data['CheckInFormView']['errMsgs']['global'] = '<h2 class="error_message" id="check_in_form_error_message">Kan gebruiker niet inchecken, probeer het opnieuw.</h2>';
             }
-            catch(WeeklyWinnerDBException $ex) {
+            catch (WeeklyWinnerDBException $ex) {
                 //Can't check/update weekly winner data, but check-in succeeded
                 $page->addView('checkIn/CheckInSuccessfulTitleView');
                 CheckInController::buildCheckInSuccessfulView($page, $user);
@@ -92,7 +92,7 @@ abstract class CheckInController implements IController {
                 $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan niet controleren of je de winnaar van de week bent.';
                 $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
             }
-            catch(Exception $ex) {
+            catch (Exception $ex) {
                 //Something else went wrong
                 CheckInController::buildCheckInFormView($page, true);
                 $page->data['CheckInFormView']['errMsgs']['global'] = '<h2 class="error_message" id="check_in_form_error_message">Kan gebruiker niet inchecken, probeer het opnieuw.</h2>';
@@ -104,7 +104,7 @@ abstract class CheckInController implements IController {
             $page->data['CheckInFormView']['errMsgs'] = array_merge($page->data['CheckInFormView']['errMsgs'], $errMsgs);
         }
         
-        $page->showBasic();
+        $page->showWithMenu();
     }
     
     /**

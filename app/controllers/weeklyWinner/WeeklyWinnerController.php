@@ -52,7 +52,7 @@ abstract class WeeklyWinnerController implements IController {
             $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
         }
         
-        $page->showBasic();
+        $page->showWithMenu();
     }
     
     public static function post() {
@@ -83,7 +83,7 @@ abstract class WeeklyWinnerController implements IController {
             $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan geen nieuwe winnaar loten.';
             $page->data['ErrorMessageNoDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
             $page->addView('error/ErrorMessageNoDescriptionWithLinkView');
-            $page->showBasic();
+            $page->showWithMenu();
         }
     }
 }

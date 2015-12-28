@@ -37,6 +37,43 @@ abstract class Authorization implements IMiddleware {
         if (isset($_POST['login']))
             LoginController::post();
         
+        $errorGettingUser = false;
+        $errorGettingBrowser = false;
+        
+        //Check if we have data about a user in session, in which case renew it.
+        //Also check if we're not logging in because then we already have fresh user data.
+        if (isset($_SESSION['Stippers']['user']) && !isset($_POST['login'])) {
+            try {
+                $newUser = UserDB::getBasicUserById($_SESSION['Stippers']['user']->userId);
+                
+                //If the user's password has changed we immediately log out!
+                if ($_SESSION['Stippers']['user']->passwordHash != $newUser->passwordHash) {
+                    session_destroy();
+                    ForcedLogoutController::get();
+                    return false;
+                }
+                else
+                    $_SESSION['Stippers']['user'] = $newUser;
+            }
+            catch (Exception $ex) {
+                $errorGettingUser = true;
+            }
+        }
+        
+        //Get the browser data for this browser
+        if (isset($_COOKIE['stippersAuthorization'])) {
+            try {
+                $_SESSION['Stippers']['browser'] = BrowserDB::getBasicBrowserByUuid($_COOKIE['stippersAuthorization']);
+            }
+            catch (BrowserDBException $ex) {
+                if ($ex->getCode() != BrowserDBException::NOBROWSERFORUUID)
+                    $errorGettingBrowser = true;
+            }
+            catch (Exception $ex) {
+                $errorGettingBrowser = true;
+            }
+        }
+                                
         //We can now check the page access permissions.
         require_once __DIR__.'/../config/PageAccessPermissions.php';
         
@@ -76,83 +113,46 @@ abstract class Authorization implements IMiddleware {
         //Possible states
         $canDisplay = false;
         $hasToLogIn = false;
-        $browserDenied = false;
-        $userDenied = false;
         
         if ($everyone)
             $canDisplay = true;
-        
-        //If a browser can display the page we get the data from the cookie
-        //and check if the growser has the required permission.
+        ;
+        //If a browser can display the page we check if the current browser has the required permissions.
         if (!$canDisplay && ($checkInBrowser || $addRenewUserBrowser)) {
-            if (!isset($_COOKIE['stippersAuthorization']))
-                $browserDenied = true;
-            else {
-                try {
-                    $browser = BrowserDB::getBasicBrowserByUuid($_COOKIE['stippersAuthorization']);
-                    
-                    if ($checkInBrowser && $browser->canCheckIn)
-                        $canDisplay = true;
-                    else if ($browser && $browser->canAddRenewUsers)
-                        $canDisplay = true;
-                    else
-                        $browserDenied = true;
-                }
-                catch(BrowserDBException $ex) {
-                    if ($ex->getCode() != BrowserDBException::NOBROWSERFORUUID) {
-                        DBErrorController::get();
-                        return false;
-                    }
-                }
-                catch(Exception $ex) {
-                    DBErrorController::get();
-                    return false;
-                }
+            if (isset($_SESSION['Stippers']['browser'])) {
+                if ($checkInBrowser && $_SESSION['Stippers']['browser']->canCheckIn)
+                    $canDisplay = true;
+                elseif ($addRenewUserBrowser && $_SESSION['Stippers']['browser']->canAddRenewUsers)
+                    $canDisplay = true;
             }
         }
         
-        //If certain users can display the page and someone is logged in
-        //we renew the user and check if the user has the required permission.
+        //If certain users can display the page and someone is logged in we check if the logged in user has the required permissions.
         if (!$canDisplay && ($member || $userManager || $hintManager || $browserManager || $admin)) {
+            //No access yet and no user in session? Let user login!
             if (!isset($_SESSION['Stippers']['user']))
                 $hasToLogIn = true;
             else {
-                try {
-                    $newUser = UserDB::getBasicUserById($_SESSION['Stippers']['user']->userId);
-                    
-                    //If the user's password has changed we immediately log out!
-                    if ($_SESSION['Stippers']['user']->passwordHash != $newUser->passwordHash) {
-                        session_destroy();
-                        ForcedLogoutController::get();
-                        return false;
-                    }
-                    else {
-                        $_SESSION['Stippers']['user'] = $newUser;
-                        
-                        if ($member)
-                            $canDisplay = true;
-                        else if ($userManager && $_SESSION['Stippers']['user']->isUserManager)
-                            $canDisplay = true;
-                        else if ($hintManager && $_SESSION['Stippers']['user']->isHintManager)
-                            $canDisplay = true;
-                        else if ($browserManager && $_SESSION['Stippers']['user']->isBrowserManager)
-                            $canDisplay = true;
-                        else if ($admin && $_SESSION['Stippers']['user']->isAdmin)
-                            $canDisplay = true;
-                        else
-                            $userDenied = true;
-                    }
-                }
-                catch(Exception $ex) {
-                    DBErrorController::get();
-                    return false;
-                }
+                if ($member)
+                    $canDisplay = true;
+                else if ($userManager && $_SESSION['Stippers']['user']->isUserManager)
+                    $canDisplay = true;
+                else if ($hintManager && $_SESSION['Stippers']['user']->isHintManager)
+                    $canDisplay = true;
+                else if ($browserManager && $_SESSION['Stippers']['user']->isBrowserManager)
+                    $canDisplay = true;
+                else if ($admin && $_SESSION['Stippers']['user']->isAdmin)
+                    $canDisplay = true;
             }
         }
-
+        
         if (!$canDisplay) {
             if ($hasToLogIn) {
                 LoginController::get();
+                return false;
+            }
+            elseif ($errorGettingBrowser || $errorGettingUser) {
+                DBErrorController::get();
                 return false;
             }
             else {

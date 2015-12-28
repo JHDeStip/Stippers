@@ -28,7 +28,7 @@ abstract class AddUserController implements IController {
         $page = new Page();
         $page->data['title'] = 'Gebruiker toevoegen';
         AddUserController::buildAddUserPage($page, false);
-        $page->showBasic();
+        $page->showWithMenu();
     }
     
     public static function post() {
@@ -61,7 +61,7 @@ abstract class AddUserController implements IController {
                 UserDB::addUser($user, $passwordSalt, $_POST['card_number']);
                 $page->addView('addRenewUser/addUser/SuccessfullyAddedView');
             }
-            catch(UserDBException $ex) {
+            catch (UserDBException $ex) {
                 AddUserController::buildAddUserPage($page, true);
                 if ($ex->getCode() == UserDBException::EMAILALREADYEXISTS)
                     $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Dit e-mailadres is al in gebruik.</h2>';
@@ -70,7 +70,7 @@ abstract class AddUserController implements IController {
                 else
                     $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Kan gebruiker niet toevoegen, probeer het opnieuw.</h2>';
             }
-            catch(Exception $ex) {
+            catch (Exception $ex) {
                 AddUserController::buildAddUserPage($page, true);
                 $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Kan gebruiker niet toevoegen, probeer het opnieuw.</h2>';
             }
@@ -81,7 +81,7 @@ abstract class AddUserController implements IController {
             $page->data['UserDataFormPasswordView']['errMsgs'] = array_merge($page->data['UserDataFormPasswordView']['errMsgs'], $formPasswordViewErrMsgs);
             $page->data['UserDataFormMiddleView']['errMsgs'] = array_merge($page->data['UserDataFormMiddleView']['errMsgs'], $formMiddleViewErrMsgs);
         }
-        $page->showBasic();
+        $page->showWithMenu();
     }
     
     /**

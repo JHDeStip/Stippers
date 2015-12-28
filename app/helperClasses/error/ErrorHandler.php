@@ -22,7 +22,7 @@ abstract class ErrorHandler {
             $page->data['title'] = 'Er is iets misgegaan';
             $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Er is iets misgegaan :(';
             $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
-            $page->showBasic();
+            $page->showWithMenu();
         }
     }
 }

@@ -83,6 +83,10 @@ switch ($requestData['requestedPage']) {
         require_once('controllers/authorization/LogoutController.php');
         $controller = 'LogoutController';
         break;
+    case 'login':
+        require_once('controllers/authorization/LoginController.php');
+        $controller = 'LoginController';
+        break;
     default:
         $pageNotFound = true;
         require_once('controllers/pageNotFound/PageNotFoundController.php');

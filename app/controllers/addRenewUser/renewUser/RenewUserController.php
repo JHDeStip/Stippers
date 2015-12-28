@@ -47,12 +47,12 @@ abstract class RenewUserController implements IController {
                 $page->data['ErrorMessageNoDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
                 $page->addView('error/ErrorMessageNoDescriptionWithLinkView');
             }
-            catch(Exception $ex) {
+            catch (Exception $ex) {
                 $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kon gegevens van gebruiker niet ophalen';
                 $page->data['ErrorMessageNoDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
                 $page->addView('error/ErrorMessageNoDescriptionWithLinkView');
             }
-            $page->showBasic();
+            $page->showWithMenu();
         }
     }
     
@@ -92,7 +92,7 @@ abstract class RenewUserController implements IController {
                     UserDB::renewMembership($_SESSION['Stippers']['RenewUser']['user'], $newUser, $_POST['card_number']);
                     $page->addView('addRenewUser/renewUser/SuccessfullyRenewedView');
                 }
-                catch(UserDBException $ex) {
+                catch (UserDBException $ex) {
                     if ($ex->getCode() == UserDBException::USERALREADYMEMBER) {
                         $page->addView('addRenewUser/renewUser/UserAlreadyMemberView');
                     }
@@ -112,7 +112,7 @@ abstract class RenewUserController implements IController {
                             $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Kan gebruiker niet hernieuwen, probeer het opnieuw.</h2>';
                     }
                 }
-                catch(Exception $ex) {
+                catch (Exception $ex) {
                     RenewUserController::buildRenewUserPage($page, true);
                     $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Kan gebruiker niet hernieuwen, probeer het opnieuw.</h2>';
                 }
@@ -123,7 +123,7 @@ abstract class RenewUserController implements IController {
                 $page->data['UserDataFormPasswordView']['errMsgs'] = array_merge($page->data['UserDataFormPasswordView']['errMsgs'], $formPasswordViewErrMsgs);
                 $page->data['UserDataFormMiddleView']['errMsgs'] = array_merge($page->data['UserDataFormMiddleView']['errMsgs'], $formMiddleViewErrMsgs);
             }
-            $page->showBasic();
+            $page->showWithMenu();
         }
         else
             header('Location: renewusersearch', true, 303);

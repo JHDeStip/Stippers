@@ -33,7 +33,7 @@ abstract class ManageBrowserController implements IController {
             else
                 $page->addView('manageBrowser/ManageBrowserNoBrowsersView');
         }
-        catch(Exception $ex) {
+        catch (Exception $ex) {
             $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan browsers niet ophalen';
             $page->data['ErrorMessageNoDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
             $page->addView('error/ErrorMessageNoDescriptionWithLinkView');
@@ -41,7 +41,7 @@ abstract class ManageBrowserController implements IController {
         $page->data['ManageBrowserNewBrowserView']['new_browser_formAction'] = $_SERVER['REQUEST_URI'];
         $page->addView('manageBrowser/ManageBrowserNewBrowserView');
         
-        $page->showBasic();
+        $page->showWithMenu();
     }
     
     public static function post() {

@@ -36,7 +36,7 @@ abstract class EditBrowserController implements IController {
                 $_SESSION['Stippers']['EditBrowser']['browser'] = BrowserDB::getBrowserById($_GET['browser']);
                 EditBrowserController::buildAddEditBrowserTopView($page, false);
             }
-            catch(BrowserDBException $ex) {
+            catch (BrowserDBException $ex) {
                 if ($ex->getCode() == BrowserDBException::NOBROWSERFORID)
                     $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Er is geen browser met deze id';
                 else
@@ -44,13 +44,13 @@ abstract class EditBrowserController implements IController {
                 $page->data['ErrorMessageNoDescriptionWithLinkView']['tryAgainUrl'] = 'managebrowser';
                 $page->addView('error/ErrorMessageNoDescriptionWithLinkView');
             }
-            catch(Exception $ex) {
+            catch (Exception $ex) {
                 $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan browser niet ophalen';
                 $page->data['ErrorMessageNoDescriptionWithLinkView']['tryAgainUrl'] = 'managebrowser';
                 $page->addView('error/ErrorMessageNoDescriptionWithLinkView');
             }
             
-            $page->showBasic();
+            $page->showWithMenu();
         }
     }
     
@@ -70,7 +70,7 @@ abstract class EditBrowserController implements IController {
                     $page->data['SuccessMessageNoDescriptionWithLinkView']['redirectUrl'] = 'managebrowser';
                     $page->addView('success/SuccessMessageNoDescriptionWithLinkView');
                 }
-                catch(BrowserDBException $ex) {
+                catch (BrowserDBException $ex) {
                     if ($ex->getCode() == BrowserDBException::BROWSEROUTOFDATE) {
                         $page->data['ErrorMessageWithDescriptionWithLinkView']['errorTitle'] = 'Gebruiker niet hernieuwd';
                         $page->data['ErrorMessageWithDescriptionWithLinkView']['errorDescription'] = 'Iemand anders heeft de gebruiker in tussentijd al gewijzigd.';
@@ -85,7 +85,7 @@ abstract class EditBrowserController implements IController {
                             $page->data['AddEditBrowserTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_edit_browser_form_error_message">Kan browser niet wijzigen, probeer het opnieuw.</h2>';
                     }
                 }
-                catch(Exception $ex) {
+                catch (Exception $ex) {
                     EditBrowserController::buildAddEditBrowserTopView($page, true);
                     $page->data['AddEditBrowserTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_edit_browser_form_error_message">Kan browser niet wijzigen, probeer het opnieuw.</h2>';
                 }
@@ -95,7 +95,7 @@ abstract class EditBrowserController implements IController {
                 $page->data['AddEditBrowserTopView']['errMsgs'] = array_merge($page->data['AddEditBrowserTopView']['errMsgs'], $errMsgs);
             }
             
-            $page->showBasic();
+            $page->showWithMenu();
         }
         elseif (isset($_POST['delete'])) {
             try {
@@ -104,7 +104,7 @@ abstract class EditBrowserController implements IController {
                 $page->data['SuccessMessageNoDescriptionWithLinkView']['redirectUrl'] = 'managebrowser';
                 $page->addView('success/SuccessMessageNoDescriptionWithLinkView');
             }
-            catch(BrowserDBException $ex) {
+            catch (BrowserDBException $ex) {
                 if ($ex->getCode() == BrowserDBException::BROWSEROUTOFDATE) {
                     $page->data['ErrorMessageWithDescriptionWithLinkView']['errorTitle'] = 'Gebruiker niet hernieuwd';
                     $page->data['ErrorMessageWithDescriptionWithLinkView']['errorDescription'] = 'Iemand anders heeft de gebruiker in tussentijd al gewijzigd.';
@@ -116,12 +116,12 @@ abstract class EditBrowserController implements IController {
                     $page->data['AddEditBrowserTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_edit_browser_form_error_message">Kan browser niet wijzigen, probeer het opnieuw.</h2>';
                 }
             }
-            catch(Exception $ex) {
+            catch (Exception $ex) {
                 EditBrowserController::buildAddEditBrowserTopView($page, true);
                 $page->data['AddEditBrowserTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_edit_browser_form_error_message">Kan browser niet wijzigen, probeer het opnieuw.</h2>';
             }
                 
-            $page->showBasic();
+            $page->showWithMenu();
         }
         else
             header('Location: managebrowser', true, 303);

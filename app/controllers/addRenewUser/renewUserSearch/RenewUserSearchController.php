@@ -24,7 +24,7 @@ abstract class RenewUserSearchController implements IController {
         $page = new Page();
         $page->data['title'] = 'Gebruiker hernieuwen';
         RenewUserSearchController::buildRenewUserSearchView($page, false);
-        $page->showBasic();
+        $page->showWithMenu();
     }
     
     public static function post() {
@@ -39,7 +39,7 @@ abstract class RenewUserSearchController implements IController {
             RenewUserSearchController::loadSearchResults($page);
         else
             $page->data['RenewUserSearchView']['errMsgs'] = array_merge($page->data['RenewUserSearchView']['errMsgs'], $errMsgs);
-        $page->showBasic();
+        $page->showWithMenu();
     }
     
     /**

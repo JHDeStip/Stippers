@@ -18,7 +18,7 @@ abstract class HomeController implements IController {
         $page = new Page();
         $page->data['title'] = 'Home';
         $page->addView('home/HomeView');
-        $page->showBasic();
+        $page->showWithMenu();
     }
     
     public static function post() {

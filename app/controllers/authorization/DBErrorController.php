@@ -20,7 +20,7 @@ abstract class DBErrorController implements IController {
         $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan authorizatiegegevens niet ophalen uit database.';
         $page->data['ErrorMessageNoDescriptionNoLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
         $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
-        $page->showBasic();
+        $page->showWithMenu();
     }
     
     public static function post() {

@@ -41,7 +41,7 @@ abstract class ManageUserController implements IController {
                 ManageUserController::loadSearchResults($page);
         }
 
-        $page->showBasic();
+        $page->showWithMenu();
     }
     
     public static function post() {
@@ -57,7 +57,7 @@ abstract class ManageUserController implements IController {
         if (!$invalid)
             ManageUserController::loadSearchResults($page);
         
-        $page->showBasic();
+        $page->showWithMenu();
     }
     
     /**

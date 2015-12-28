@@ -29,6 +29,6 @@ abstract class PageNotFoundController implements IController {
         $page = new Page();
         $page->data['title'] = 'Pagina niet gevonden';
         $page->addView('pageNotFound/PageNotFoundView');
-        $page->showBasic();
+        $page->showWithMenu();
     }
 }

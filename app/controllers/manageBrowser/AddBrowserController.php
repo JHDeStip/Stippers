@@ -25,7 +25,7 @@ abstract class AddBrowserController implements IController {
         $page = new Page();
         $page->data['title'] = 'Browser toevoegen';
         AddBrowserController::buildAddEditBrowserTopView($page, false);
-        $page->showBasic();
+        $page->showWithMenu();
     }
     
     public static function post() {
@@ -46,7 +46,7 @@ abstract class AddBrowserController implements IController {
                     $page->data['SuccessMessageNoDescriptionWithLinkView']['redirectUrl'] = 'managebrowser';
                     $page->addView('success/SuccessMessageNoDescriptionWithLinkView');
                 }
-                catch(BrowserDBException $ex) {
+                catch (BrowserDBException $ex) {
                     if ($ex->getCode() == BrowserDBException::BROWSERNAMEEXISTS) {
                         AddBrowserController::buildAddEditBrowserTopView($page, true);
                         $page->data['AddEditBrowserTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_edit_browser_form_error_message">Deze naam is reeds in gebruik.</h2>';
@@ -56,7 +56,7 @@ abstract class AddBrowserController implements IController {
                     $page->data['AddEditBrowserTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_edit_browser_form_error_message">Kan browser niet toevoegen, probeer het opnieuw.</h2>';
                     }
                 }
-                catch(Exception $ex) {
+                catch (Exception $ex) {
                     AddBrowserController::buildAddEditBrowserTopView($page, true);
                     $page->data['AddEditBrowserTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_edit_browser_form_error_message">Kan browser niet toevoegen, probeer het opnieuw.</h2>';
                 }
@@ -66,7 +66,7 @@ abstract class AddBrowserController implements IController {
                 $page->data['AddEditBrowserTopView']['errMsgs'] = array_merge($page->data['AddEditBrowserTopView']['errMsgs'], $errMsgs);
             }
             
-            $page->showBasic();
+            $page->showWithMenu();
         }
         else
             header('Location: managebrowser', true, 303);

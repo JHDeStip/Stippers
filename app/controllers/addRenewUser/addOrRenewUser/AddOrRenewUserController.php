@@ -19,7 +19,7 @@ abstract class AddOrRenewUserController implements IController {
         $page->data['title'] = 'Gebruiker toevoegen of hernieuwen';
         $page->data['AddOrRenewUserView']['add_or_renew_user_formAction'] = $_SERVER['REQUEST_URI'];
         $page->addView('addRenewUser/AddOrRenewUserView');
-        $page->showBasic();
+        $page->showWithMenu();
     }
     
     public static function post() {

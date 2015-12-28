@@ -19,6 +19,15 @@ $_PERMISSIONS['home']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['home']['CHECKINBROWSER'] = false;
 
 //Permissions for the add or renew user page
+$_PERMISSIONS['login']['EVERYONE'] = false;
+$_PERMISSIONS['login']['MEMBER'] = true;
+$_PERMISSIONS['login']['ADMIN'] = true;
+$_PERMISSIONS['login']['USERMANAGER'] = true;
+$_PERMISSIONS['login']['BROWSERMANAGER'] = true;
+$_PERMISSIONS['login']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['login']['CHECKINBROWSER'] = false;
+
+//Permissions for the add or renew user page
 $_PERMISSIONS['addorrenewuser']['EVERYONE'] = false;
 $_PERMISSIONS['addorrenewuser']['MEMBER'] = false;
 $_PERMISSIONS['addorrenewuser']['ADMIN'] = true;
@@ -54,13 +63,13 @@ $_PERMISSIONS['renewusersearch']['BROWSERMANAGER'] = false;
 $_PERMISSIONS['renewusersearch']['ADDRENEWUSERBROWSER'] = true;
 $_PERMISSIONS['renewusersearch']['CHECKINBROWSER'] = false;
 
-//Permissions for the manage browser page
+//Permissions for the browser manager page
 $_PERMISSIONS['managebrowser']['EVERYONE'] = false;
 $_PERMISSIONS['managebrowser']['MEMBER'] = false;
 $_PERMISSIONS['managebrowser']['ADMIN'] = true;
 $_PERMISSIONS['managebrowser']['USERMANAGER'] = false;
 $_PERMISSIONS['managebrowser']['BROWSERMANAGER'] = true;
-$_PERMISSIONS['managebrowser']['ADDRENEWUSERBROWSER'] = true;
+$_PERMISSIONS['managebrowser']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['managebrowser']['CHECKINBROWSER'] = false;
 
 //Permissions for the add browser page
@@ -69,16 +78,16 @@ $_PERMISSIONS['addbrowser']['MEMBER'] = false;
 $_PERMISSIONS['addbrowser']['ADMIN'] = true;
 $_PERMISSIONS['addbrowser']['USERMANAGER'] = false;
 $_PERMISSIONS['addbrowser']['BROWSERMANAGER'] = true;
-$_PERMISSIONS['addbrowser']['ADDRENEWUSERBROWSER'] = true;
+$_PERMISSIONS['addbrowser']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['addbrowser']['CHECKINBROWSER'] = false;
 
-//Permissions for the browser manager page
+//Permissions for the edit browser page
 $_PERMISSIONS['editbrowser']['EVERYONE'] = false;
 $_PERMISSIONS['editbrowser']['MEMBER'] = false;
 $_PERMISSIONS['editbrowser']['ADMIN'] = true;
 $_PERMISSIONS['editbrowser']['USERMANAGER'] = false;
 $_PERMISSIONS['editbrowser']['BROWSERMANAGER'] = true;
-$_PERMISSIONS['editbrowser']['ADDRENEWUSERBROWSER'] = true;
+$_PERMISSIONS['editbrowser']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['editbrowser']['CHECKINBROWSER'] = false;
 
 //Permissions for the change password page

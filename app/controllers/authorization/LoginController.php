@@ -23,13 +23,18 @@ require_once __DIR__.'/../../views/authorization/LoginViewValidator.php';
 abstract class LoginController implements IController {
     
     public static function get() {
+        //If a user is logged in we redirect to home
+        if (isset($_SESSION['Stippers']['user']))
+            header('Location: home', true, 303);
+        else {
         $page = new Page();
         $page->data['title'] = 'Login';
         $page->data['LoginView']['login_formAction'] = $_SERVER['REQUEST_URI'];
         $page->data['LoginView']['email'] = '';
         $page->data['LoginView']['errMsgs'] = LoginViewValidator::initErrMsgs();
         $page->addView('authorization/LoginView');
-        $page->showBasic();
+        $page->showWithMenu();
+        }
     }
     
     public static function post() {
@@ -56,6 +61,10 @@ abstract class LoginController implements IController {
                 For example the user search pages will pre populate their fields with this data if we don't clear it.
                 */
                 unset($_POST);
+                
+                //If we directly request the login page we redirect to the home page
+                if (explode('?', str_replace(DomainConfig::DOMAINSUFFIX, '', strtolower($_SERVER['REQUEST_URI'])), 2)[0] == 'login')
+                    header('Location: home', true, 303);
             }
             catch (Exception $ex) {
                 if (is_a($ex, 'UserDBException')) {
@@ -71,7 +80,7 @@ abstract class LoginController implements IController {
                         $page->data['LoginView']['errMsgs']['global'] = '<h2 class="error_message" id="login_form_error_message">Kan niet aanmelden, probeer het opnieuw.</h2>';
                     
                     $page->addView('authorization/LoginView');
-                    $page->showBasic();
+                    $page->showWithMenu();
                 }
             }
         }
@@ -83,7 +92,7 @@ abstract class LoginController implements IController {
             $page->data['LoginView']['errMsgs'] = LoginViewValidator::initErrMsgs();
             $page->data['LoginView']['errMsgs'] = array_merge($page->data['LoginView']['errMsgs'], $errMsgs);
             $page->addView("authorization/LoginView");
-            $page->showBasic();
+            $page->showWithMenu();
         }
     }
 }

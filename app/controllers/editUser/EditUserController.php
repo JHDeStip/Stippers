@@ -59,7 +59,7 @@ abstract class EditUserController implements IController {
                 $page->data['ErrorMessageNoDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
                 $page->addView('error/ErrorMessageNoDescriptionWithLinkView');
             }
-            $page->showBasic();
+            $page->showWithMenu();
         }
     } 
     
@@ -79,7 +79,7 @@ abstract class EditUserController implements IController {
                 EditUserController::buildEditUserAdminView($page, true, false);
             $page->addView('editUser/EditUserEnabledFormBottomView');
             EditUserController::buildEditUserMembershipDetailsView($page);
-            $page->showBasic();
+            $page->showWithMenu();
         }
         //If the save button was clicked
         else {
@@ -125,7 +125,7 @@ abstract class EditUserController implements IController {
                 $page->data['EditUserTopView']['errMsgs'] = array_merge($page->data['EditUserTopView']['errMsgs'], $errMsgs);
                 EditUserController::buildEditUserMembershipDetailsView($page);
             }
-            $page->showBasic();
+            $page->showWithMenu();
         }
     }
     

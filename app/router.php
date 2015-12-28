@@ -15,11 +15,12 @@ require_once 'config/DomainConfig.php';
 $requestData['requestedPage'] = explode('?', str_replace(DomainConfig::DOMAINSUFFIX, '', strtolower($_SERVER['REQUEST_URI'])), 2)[0];
 
 //Add middleware
+//Session is started in authorization, so always run that first
 $middleware = array();
-//require_once 'middleware/SessionCleanup.php';
 require_once 'middleware/Authorization.php';
-//array_push($middleware, 'SessionCleanup');
+require_once 'middleware/SessionCleanup.php';
 array_push($middleware, 'Authorization');
+array_push($middleware, 'SessionCleanup');
 
 //Aliases, with these you can define alternative names for pages
 switch ($requestData['requestedPage']) {
@@ -98,6 +99,7 @@ switch ($requestData['requestedPage']) {
 //Run the middleware
 $mwPass = true;
 for ($i = 0; $i < count($middleware) && $mwPass; $i++) {
+    echo ($middleware[$i]);
     $mwPass = $middleware[$i]::run($requestData);
 }
 

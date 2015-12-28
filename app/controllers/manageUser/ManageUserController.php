@@ -269,7 +269,7 @@ abstract class ManageUserController implements IController {
         else
             $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['lastName'] = '';
         if (isset($_POST['email']))
-            $_SESSION['Stippers']['ManageUserSearch']['values']['email'] = $_POST['email'];
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['email'] = $_POST['email'];
         else
             $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['email'] = '';
         if (isset($_POST['balance']))

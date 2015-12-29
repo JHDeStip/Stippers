@@ -88,6 +88,14 @@ switch ($requestData['requestedPage']) {
         require_once('controllers/manageBrowser/EditBrowserController.php');
         $controller = 'EditBrowserController';
         break;
+    case 'manageemail':
+        require_once('controllers/manageEmail/ManageEmailController.php');
+        $controller = 'ManageEmailController';
+        break;
+    case 'editemail':
+        require_once('controllers/manageEmail/EditEmailController.php');
+        $controller = 'EditEmailController';
+        break;
     case 'logout':
         require_once('controllers/authorization/LogoutController.php');
         $controller = 'LogoutController';

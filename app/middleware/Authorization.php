@@ -31,7 +31,14 @@ abstract class Authorization implements IMiddleware {
         //Make sure we have a session
         if (session_status() == PHP_SESSION_NONE)
             session_start();
-        
+        /*
+        //Count hits
+        if (isset($_SESSION['Stippers']['hits']))
+            $_SESSION['Stippers']['hits']++;
+        else
+            $_SESSION['Stippers']['hits'] = 0;
+        echo $_SESSION['Stippers']['hits'];
+        */
         //If we have login in our post this means we are on the login page in and we must call the login controller.
         //The login controller will load
         if (isset($_POST['login']))

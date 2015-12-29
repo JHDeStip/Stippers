@@ -6,10 +6,12 @@
  * 
  * @author Stan Wijckmans
  * 
- * This file contains global settings for Stippers.
+ * This file contains email settings for Stippers.
  */
 
-abstract class GlobalConfig {
-    //This is the timezone all times will be displayed for
-    const TIMEZONE = '+01:00';
+abstract class EmailConfig {
+    //This is the directory where email files will be stored and retreived from
+    const EMAILFILESDIR = 'emailFiles';
+    
+    const MAXFILESIZE = 1048576;
 }

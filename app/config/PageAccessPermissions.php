@@ -189,6 +189,24 @@ $_PERMISSIONS['checkin']['BROWSERMANAGER'] = false;
 $_PERMISSIONS['checkin']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['checkin']['CHECKINBROWSER'] = true;
 
+//Permissions for the email management page
+$_PERMISSIONS['manageemail']['EVERYONE'] = false;
+$_PERMISSIONS['manageemail']['MEMBER'] = false;
+$_PERMISSIONS['manageemail']['ADMIN'] = true;
+$_PERMISSIONS['manageemail']['USERMANAGER'] = true;
+$_PERMISSIONS['manageemail']['BROWSERMANAGER'] = false;
+$_PERMISSIONS['manageemail']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['manageemail']['CHECKINBROWSER'] = false;
+
+//Permissions for the edit email page
+$_PERMISSIONS['editemail']['EVERYONE'] = false;
+$_PERMISSIONS['editemail']['MEMBER'] = false;
+$_PERMISSIONS['editemail']['ADMIN'] = true;
+$_PERMISSIONS['editemail']['USERMANAGER'] = true;
+$_PERMISSIONS['editemail']['BROWSERMANAGER'] = false;
+$_PERMISSIONS['editemail']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['editemail']['CHECKINBROWSER'] = false;
+
 //Permissions for the page not found page
 $_PERMISSIONS['pagenotfound']['EVERYONE'] = true;
 $_PERMISSIONS['pagenotfound']['MEMBER'] = true;

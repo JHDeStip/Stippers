@@ -43,7 +43,7 @@ abstract class EditUserController implements IController {
                 if ($_SESSION['Stippers']['user']->isAdmin)
                     EditUserController::buildEditUserAdminView($page, false, false);
                 $page->addView('editUser/EditUserDisabledFormBottomView');
-                EditUserController::buildEditUserMembershipDetailsView($page);
+                EditUserController::buildMembershipDetailsView($page);
             }
             catch (UserDBException $ex) {
                 if ($ex->getCode() == UserDBException::NOUSERFORID)
@@ -78,7 +78,7 @@ abstract class EditUserController implements IController {
             if ($_SESSION['Stippers']['user']->isAdmin)
                 EditUserController::buildEditUserAdminView($page, true, false);
             $page->addView('editUser/EditUserEnabledFormBottomView');
-            EditUserController::buildEditUserMembershipDetailsView($page);
+            EditUserController::buildMembershipDetailsView($page);
             $page->showWithMenu();
         }
         //If the save button was clicked
@@ -103,27 +103,25 @@ abstract class EditUserController implements IController {
                         $page->data['ErrorMessageWithDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
                         $page->addView('error/ErrorMessageWithDescriptionWithLinkView');
                     }
-                    elseif($ex->getCode() == UserDBException::EMAILALREADYEXISTS) {
-                        $page->data['ErrorMessageWithDescriptionWithLinkView']['errorTitle'] = 'Gebruiker niet bijgewerkt';
-                        $page->data['ErrorMessageWithDescriptionWithLinkView']['errorDescription'] = 'Dit e-mailadres is al in gebruik.';
-                        $page->data['ErrorMessageWithDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
-                        $page->addView('error/ErrorMessageWithDescriptionWithLinkView');
-                    }
                     else {
-                        $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan gebruiker niet bijwerken';
-                        $page->data['ErrorMessageNoDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
-                        $page->addView('error/ErrorMessageNoDescriptionWithLinkView');
+                        EditUserController::buildEditUserTopView($page, true, true);
+                        
+                        if($ex->getCode() == UserDBException::EMAILALREADYEXISTS)
+                            $page->data['EditUserTopView']['errMsgs']['global'] = '<h2 class="error_message" id="edit_user_form_error_message">Dit e-mailadres is al in gebruik.</h2>';
+                        else
+                            $page->data['EditUserTopView']['errMsgs']['global'] = '<h2 class="error_message" id="edit_user_form_error_message">Kan gebruiker niet bijwerken, probeer het opnieuw.</h2>';
+                            
+                        page->addView('editUser/EditUserEnabledFormBottomView');
+                        EditUserController::buildMembershipDetailsView($page);
                     }
                 }
             }
             else {
                 //If we had an error we show the views with enabled controls and take data from POST
                 EditUserController::buildEditUserTopView($page, true, true);
-                if ($_SESSION['Stippers']['user']->isAdmin)
-                    EditUserController::buildEditUserAdminView($page, true, true);
                 $page->addView('editUser/EditUserEnabledFormBottomView');
                 $page->data['EditUserTopView']['errMsgs'] = array_merge($page->data['EditUserTopView']['errMsgs'], $errMsgs);
-                EditUserController::buildEditUserMembershipDetailsView($page);
+                EditUserController::buildMembershipDetailsView($page);
             }
             $page->showWithMenu();
         }
@@ -218,11 +216,12 @@ abstract class EditUserController implements IController {
      * 
      * @param Page $page page object to load data into
      */
-    private static function buildEditUserMembershipDetailsView($page) {
+    private static function buildMembershipDetailsView($page) {
+        $page->addView('editUser/EditUserMembershipDetailsView');
         try {
-            $page->data['EditUserMembershipDetailsView']['membershipYearDetails'] = MembershipDB::getUserMembershipDetailsByUserId($_SESSION['Stippers']['EditUser']['user']->userId);
-            $page->data['EditUserMembershipDetailsView']['totalCheckIns'] = CheckInDB::getTotalCheckInsByUserId($_SESSION['Stippers']['EditUser']['user']->userId);
-            $page->addView('editUser/EditUserMemberShipDetailsView');
+            $page->data['MembershipDetailsView']['membershipYearDetails'] = MembershipDB::getUserMembershipDetailsByUserId($_SESSION['Stippers']['EditUser']['user']->userId);
+            $page->data['MembershipDetailsView']['totalCheckIns'] = CheckInDB::getTotalCheckInsByUserId($_SESSION['Stippers']['EditUser']['user']->userId);
+            $page->addView('membershipDetails/MemberShipDetailsView');
         }
         catch (Exception $ex) {
             $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan gegevens niet ophalen uit de database.';

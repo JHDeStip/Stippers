@@ -56,6 +56,8 @@ abstract class Authorization implements IMiddleware {
                     $_SESSION['Stippers']['user'] = $newUser;
             }
             catch (Exception $ex) {
+                //unset because we don't want to use old data
+                unset($_SESSION['Stippers']['user']);
                 $errorGettingUser = true;
             }
         }
@@ -66,10 +68,16 @@ abstract class Authorization implements IMiddleware {
                 $_SESSION['Stippers']['browser'] = BrowserDB::getBasicBrowserByUuid($_COOKIE['stippersAuthorization']);
             }
             catch (BrowserDBException $ex) {
+                //unset because we don't want to use old data
+                unset($_SESSION['Stippers']['browser']);
+                
                 if ($ex->getCode() != BrowserDBException::NOBROWSERFORUUID)
                     $errorGettingBrowser = true;
             }
             catch (Exception $ex) {
+                //unset because we don't want to use old data
+                unset($_SESSION['Stippers']['browser']);
+                
                 $errorGettingBrowser = true;
             }
         }

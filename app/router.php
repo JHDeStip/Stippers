@@ -36,6 +36,10 @@ switch ($requestData['requestedPage']) {
         require_once('controllers/home/HomeController.php');
         $controller = 'HomeController';
         break;
+    case 'profile':
+        require_once('controllers/profile/ProfileController.php');
+        $controller = 'ProfileController';
+        break;
     case 'manageuser':
         require_once('controllers/manageUser/ManageUserController.php');
         $controller = 'ManageUserController';
@@ -99,7 +103,6 @@ switch ($requestData['requestedPage']) {
 //Run the middleware
 $mwPass = true;
 for ($i = 0; $i < count($middleware) && $mwPass; $i++) {
-    echo ($middleware[$i]);
     $mwPass = $middleware[$i]::run($requestData);
 }
 

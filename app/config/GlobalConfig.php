@@ -6,7 +6,7 @@
  * 
  * @author Stan Wijckmans
  * 
- * This file contains blobal settings for Stippers.
+ * This file contains global settings for Stippers.
  */
 
 abstract class GlobalConfig {

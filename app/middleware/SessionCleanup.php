@@ -27,6 +27,11 @@ abstract class SessionCleanup implements IMiddleware {
         if ($requestData['requestedPage'] != 'renewuser')
             unset($_SESSION['Stippers']['RenewUser']);
         
+        if ($requestData['requestedPage'] != 'profile')
+            unset($_SESSION['Stippers']['Profile']);
+        
+        if ($requestData['requestedPage'] != 'changepassword')
+            unset($_SESSION['Stippers']['ChangePassword']);
         
         return true;
     }

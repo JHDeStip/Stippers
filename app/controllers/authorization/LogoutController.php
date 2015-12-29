@@ -21,7 +21,6 @@ abstract class LogoutController implements IController {
         session_destroy();
         $page = new Page();
         $page->data['title'] = 'Afmelden';
-        $page->data['LogoutView']['homeUrl'] = DomainConfig::DOMAINSUFFIX.'home';
         $page->addView('authorization/LogoutView');
         $page->showBasic();
     }

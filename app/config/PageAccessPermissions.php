@@ -27,6 +27,15 @@ $_PERMISSIONS['login']['BROWSERMANAGER'] = true;
 $_PERMISSIONS['login']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['login']['CHECKINBROWSER'] = false;
 
+//Permissions for the profile page
+$_PERMISSIONS['profile']['EVERYONE'] = false;
+$_PERMISSIONS['profile']['MEMBER'] = true;
+$_PERMISSIONS['profile']['ADMIN'] = true;
+$_PERMISSIONS['profile']['USERMANAGER'] = true;
+$_PERMISSIONS['profile']['BROWSERMANAGER'] = true;
+$_PERMISSIONS['profile']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['profile']['CHECKINBROWSER'] = false;
+
 //Permissions for the add or renew user page
 $_PERMISSIONS['addorrenewuser']['EVERYONE'] = false;
 $_PERMISSIONS['addorrenewuser']['MEMBER'] = false;

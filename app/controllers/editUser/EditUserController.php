@@ -95,7 +95,7 @@ abstract class EditUserController implements IController {
                     $page->data['SuccessMessageNoDescriptionWithLinkView']['redirectUrl'] = $_SERVER['REQUEST_URI'];
                     $page->addView('success/SuccessMessageNoDescriptionWithLinkView');
                 }
-                catch (Exception $ex) {
+                catch (UserDBException $ex) {
                     //Show correct error message for errors
                     if ($ex->getCode() == UserDBException::USEROUTOFDATE) {
                         $page->data['ErrorMessageWithDescriptionWithLinkView']['errorTitle'] = 'Gebruiker niet bijgewerkt';
@@ -111,9 +111,20 @@ abstract class EditUserController implements IController {
                         else
                             $page->data['EditUserTopView']['errMsgs']['global'] = '<h2 class="error_message" id="edit_user_form_error_message">Kan gebruiker niet bijwerken, probeer het opnieuw.</h2>';
                             
-                        page->addView('editUser/EditUserEnabledFormBottomView');
+                        $page->addView('editUser/EditUserEnabledFormBottomView');
                         EditUserController::buildMembershipDetailsView($page);
                     }
+                }
+                catch (Exception $ex) {
+                    EditUserController::buildEditUserTopView($page, true, true);
+                        
+                    if($ex->getCode() == UserDBException::EMAILALREADYEXISTS)
+                        $page->data['EditUserTopView']['errMsgs']['global'] = '<h2 class="error_message" id="edit_user_form_error_message">Dit e-mailadres is al in gebruik.</h2>';
+                    else
+                        $page->data['EditUserTopView']['errMsgs']['global'] = '<h2 class="error_message" id="edit_user_form_error_message">Kan gebruiker niet bijwerken, probeer het opnieuw.</h2>';
+                        
+                    $page->addView('editUser/EditUserEnabledFormBottomView');
+                    EditUserController::buildMembershipDetailsView($page);
                 }
             }
             else {

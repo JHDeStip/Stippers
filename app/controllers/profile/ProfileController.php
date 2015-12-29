@@ -22,7 +22,7 @@ require_once __DIR__.'/../../models/membership/MembershipDBException.php';
 require_once __DIR__.'/../../models/checkIn/CheckInDB.php';
 require_once __DIR__.'/../../models/checkIn/CheckInDBException.php';
 
-require_once __DIR__.'/../../views/Profile/ProfileTopViewValidator.php';
+require_once __DIR__.'/../../views/profile/ProfileTopViewValidator.php';
 
 abstract class ProfileController implements IController {
     
@@ -90,7 +90,6 @@ abstract class ProfileController implements IController {
             else {
                 //If we had an error we show the views with enabled controls and take data from POST
                 ProfileController::buildProfileTopView($page, true, true);
-                $page->addView('profile/ProfileEnabledFormBottomView');
                 $page->addView('profile/ProfileEnabledFormBottomView');
                 $page->data['ProfileTopView']['errMsgs'] = array_merge($page->data['ProfileTopView']['errMsgs'], $errMsgs);
                 ProfileController::buildMembershipDetailsView($page);

@@ -10,13 +10,13 @@
  */
 
 //Permissions for the add or renew user page
-$_PERMISSIONS['home']['EVERYONE'] = false;
+$_PERMISSIONS['home']['EVERYONE'] = true;
 $_PERMISSIONS['home']['MEMBER'] = true;
 $_PERMISSIONS['home']['ADMIN'] = true;
 $_PERMISSIONS['home']['USERMANAGER'] = true;
 $_PERMISSIONS['home']['BROWSERMANAGER'] = true;
-$_PERMISSIONS['home']['ADDRENEWUSERBROWSER'] = false;
-$_PERMISSIONS['home']['CHECKINBROWSER'] = false;
+$_PERMISSIONS['home']['ADDRENEWUSERBROWSER'] = true;
+$_PERMISSIONS['home']['CHECKINBROWSER'] = true;
 
 //Permissions for the add or renew user page
 $_PERMISSIONS['login']['EVERYONE'] = false;
@@ -35,6 +35,15 @@ $_PERMISSIONS['profile']['USERMANAGER'] = true;
 $_PERMISSIONS['profile']['BROWSERMANAGER'] = true;
 $_PERMISSIONS['profile']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['profile']['CHECKINBROWSER'] = false;
+
+//Permissions for the profile page
+$_PERMISSIONS['changepassword']['EVERYONE'] = false;
+$_PERMISSIONS['changepassword']['MEMBER'] = true;
+$_PERMISSIONS['changepassword']['ADMIN'] = true;
+$_PERMISSIONS['changepassword']['USERMANAGER'] = true;
+$_PERMISSIONS['changepassword']['BROWSERMANAGER'] = true;
+$_PERMISSIONS['changepassword']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['changepassword']['CHECKINBROWSER'] = false;
 
 //Permissions for the add or renew user page
 $_PERMISSIONS['addorrenewuser']['EVERYONE'] = false;

@@ -40,6 +40,10 @@ switch ($requestData['requestedPage']) {
         require_once('controllers/profile/ProfileController.php');
         $controller = 'ProfileController';
         break;
+    case 'changepassword':
+        require_once('controllers/changePassword/ChangePasswordController.php');
+        $controller = 'ChangePasswordController';
+        break;
     case 'manageuser':
         require_once('controllers/manageUser/ManageUserController.php');
         $controller = 'ManageUserController';

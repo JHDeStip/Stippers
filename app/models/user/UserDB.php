@@ -403,7 +403,12 @@ abstract class UserDB {
                 $groupByPart .= ', card';
             }
             //Create the parameter list to pass to the query statement
-            $params['types'] .= 'sssssssssssss';
+            $params['types'] .= 'ssssssssssssss';
+            
+            //Set timezone for JOIN with check in
+            $timezone = GlobalConfig::TIMEZONE;
+            $params['timezoneCheckInTime'] = &$timezone;
+            
             $likeStringEmail = (isset($search['email']) ? '%'.$search['email'].'%' : '%');
             $params['email'] = &$likeStringEmail;
             $likeStringFirstName = (isset($search['firstName']) ? '%'.$search['firstName'].'%' : '%');
@@ -465,7 +470,7 @@ abstract class UserDB {
             //Here we're going to execute the query.
             $conn = Database::getConnection();
             //We paste the parts together.
-            $commString = 'SELECT ' . $selectPart . ' FROM stippers_users INNER JOIN stippers_user_card_year ON stippers_user_card_year.user = user_id LEFT JOIN stippers_check_ins ON stippers_check_ins.user = user_id AND YEAR(stippers_check_ins.time) = stippers_user_card_year.membership_year WHERE ' . $searchPart . $groupByPart . $orderPart;
+            $commString = 'SELECT ' . $selectPart . ' FROM stippers_users INNER JOIN stippers_user_card_year ON stippers_user_card_year.user = user_id LEFT JOIN stippers_check_ins ON stippers_check_ins.user = user_id AND YEAR(CONVERT_TZ(stippers_check_ins.time, @@global.time_zone, ?)) = stippers_user_card_year.membership_year WHERE ' . $searchPart . $groupByPart . $orderPart;
             $stmt = $conn->prepare($commString);
             
             //Check if statement could be prepared
@@ -605,13 +610,14 @@ abstract class UserDB {
     public static function getBasicUserByCardNumber($cardNumber) {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT user_id, email, first_name, last_name FROM stippers_users WHERE user_id = (SELECT user FROM stippers_user_card_year WHERE card = ? AND membership_year = (SELECT YEAR(NOW())))';
+            $commString = 'SELECT user_id, email, first_name, last_name FROM stippers_users WHERE user_id = (SELECT user FROM stippers_user_card_year WHERE card = ? AND membership_year = (SELECT YEAR(CONVERT_TZ(NOW(), @@global.time_zone, ?))))';
             $stmt = $conn->prepare($commString);
             
             //Check if statement could be prepared
             if ($stmt) {
                 
-                $stmt->bind_param('i', $cardNumber);
+                $timezone = GlobalConfig::TIMEZONE;
+                $stmt->bind_param('is', $cardNumber, $timezone);
                 
                 if (!$stmt->execute())
                     throw new UserDBException('Unknown error during statement execution while getting basic user by card number.', UserDBException::UNKNOWNERROR);
@@ -748,16 +754,15 @@ abstract class UserDB {
                             throw new UserDBException('Unknown error during statement execution while adding user.', UserDBException::UNKNOWNERROR);
                     }
                     $stmt->close();
-        
-                    //Inserting 0000 for the year is a dirty hack to work around a bug in MySQL < 5.7.1.
-                    //Anywhere in the code where the year should go to the default (current year) you should insert 0000 instead of NULL.
-                    $commString = 'INSERT INTO stippers_user_card_year (user, card, membership_year) VALUES (?, ?, 0000)';
+
+                    $commString = 'INSERT INTO stippers_user_card_year (user, card, membership_year) VALUES (?, ?, CONVERT_TZ(NOW(), @@global.time_zone, ?))';
                     $stmt = $conn->prepare($commString);
                     
                     //Check if statement could be prepared
                     if ($stmt) {
                     
-                        $stmt->bind_param('ii', $userId, $cardId);
+                        $timezone = GlobalConfig::TIMEZONE;
+                        $stmt->bind_param('iis', $userId, $cardId, $timezone);
                         
                         if ($stmt->execute())
                             $conn->commit();
@@ -822,15 +827,14 @@ abstract class UserDB {
                         throw new UserDBException('Unknown error during statement execution while updating user.', UserDBException::UNKNOWNERROR);
     
                 $stmt->close();
-                //Inserting 0000 for the year is a dirty hack to work around a bug in MySQL < 5.7.1.
-                //Anywhere in the code where the year should go to the default (current year) you should insert 0000 instead of NULL.
-                $commString = 'UPDATE stippers_user_card_year SET card = ? WHERE user = ? AND card = ? AND membership_year = 0000';
+                
+                $commString = 'UPDATE stippers_user_card_year SET card = ? WHERE user = ? AND card = ? AND membership_year = CONVERT_TZ(NOW(), @@global.time_zone, ?)';
                 $stmt = $conn->prepare($commString);
                 
                 //Check if statement could be prepared
                 if ($stmt) {
                     
-                    $stmt->bind_param('iii', $newCardNumber, $oldUser->userId, $oldCardNumber);
+                    $stmt->bind_param('iiis', $newCardNumber, $oldUser->userId, $oldCardNumber, $timezone);
                     
                     if ($stmt->execute())
                         $conn->commit();
@@ -1016,15 +1020,14 @@ abstract class UserDB {
                     throw new UserDBException('The user is out of date, someone else has probably already changed the user.', UserDBException::USEROUTOFDATE);
     
                 $stmt->close();
-                //Inserting 0000 for the year is a dirty hack to work around a bug in MySQL < 5.7.1.
-                //Anywhere in the code where the year should go to the default (current year) you should insert 0000 instead of NULL.
-                $commString = 'INSERT INTO stippers_user_card_year (user, card, membership_year) VALUES (?, ?, 0000)';
+                
+                $commString = 'INSERT INTO stippers_user_card_year (user, card, membership_year) VALUES (?, ?, CONVERT_TZ(NOW(), @@global.time_zone, ?))';
                 $stmt = $conn->prepare($commString);
                 
                 //Check if statement could be prepared
                 if ($stmt) {
                 
-                    $stmt->bind_param('ii', $oldUser->userId, $cardNumber);
+                    $stmt->bind_param('iis', $oldUser->userId, $cardNumber, $timezone);
                     
                     if ($stmt->execute())
                         $conn->commit();

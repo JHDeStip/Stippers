@@ -25,7 +25,7 @@ abstract class BrowserDB {
     public static function getBrowsers() {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT browser_ids, uuid, name, can_add_renew_users, can_check_in FROM stippers_browsers';
+            $commString = 'SELECT browser_id, uuid, name, can_add_renew_users, can_check_in FROM stippers_browsers';
             $stmt = $conn->prepare($commString);
             
             //Check if statement could be prepared

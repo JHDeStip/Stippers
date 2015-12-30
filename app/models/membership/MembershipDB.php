@@ -27,13 +27,14 @@ abstract class MembershipDB {
     public static function isUserMemberThisYearByUserId($userId) {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT count(*) FROM stippers_user_card_year WHERE user = ? AND membership_year = (SELECT YEAR(NOW()))';
+            $commString = 'SELECT count(*) FROM stippers_user_card_year WHERE user = ? AND membership_year = (SELECT YEAR(CONVERT_TZ(NOW(), @@global.time_zone, ?)))';
             $stmt = $conn->prepare($commString);
             
             //Check if statement could be prepared
             if ($stmt) {
-                                    
-                $stmt->bind_param('i', $userId);
+                
+                $timezone = GlobalConfig::TIMEZONE;
+                $stmt->bind_param('is', $userId, $timezone);
                 
                 if (!$stmt->execute()) {
                     $stmt->bind_result($userCardYear);
@@ -72,14 +73,15 @@ abstract class MembershipDB {
     public static function getUserMembershipDetailsByUserId($userId) {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT membership_year, card, (SELECT count(*) FROM stippers_check_ins WHERE YEAR(time) = membership_year AND user = ?)
+            $commString = 'SELECT membership_year, card, (SELECT count(*) FROM stippers_check_ins WHERE YEAR(CONVERT_TZ(time, @@global.time_zone, ?)) = membership_year AND user = ?)
             FROM stippers_user_card_year WHERE user = ? ORDER BY membership_year DESC';
             $stmt = $conn->prepare($commString);
             
             //Check if statement could be prepared
             if ($stmt) {
-                          
-                $stmt->bind_param('ii', $userId, $userId);
+                
+                $timezone = GlobalConfig::TIMEZONE;
+                $stmt->bind_param('sii', $timezone, $userId, $userId);
                 
                 if (!$stmt->execute())
                     throw new MembershipDBException('Unknown error during statement execution while getting the user\'s membership details.', MembershipDBException::UNKNOWNERROR);
@@ -117,13 +119,14 @@ abstract class MembershipDB {
     public static function getCardNumberByUserId($userId) {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT card FROM stippers_user_card_year WHERE user = @user AND year = YEAR(NOW())';
+            $commString = 'SELECT card FROM stippers_user_card_year WHERE user = ? AND year = YEAR(CONVERT_TZ(NOW(), @@global.time_zone, ?))';
             $stmt = $conn->prepare($commString);
             
             //Check if statement could be prepared
             if ($stmt) {
                 
-                $stmt->bind_param('i', $userId);
+                $timezone = GlobalConfig::TIMEZONE;
+                $stmt->bind_param('is', $userId, $timezone);
                 
                 if (!$stmt->execute())
                     throw new MembershipDBException('Unknown error during statement execution while getting the card number.', MembershipDBException::UNKNOWNERROR);
@@ -160,12 +163,15 @@ abstract class MembershipDB {
     public static function getUserIdsThisYear() {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT user FROM stippers_user_card_year WHERE membership_year = (SELECT YEAR(NOW()))';
+            $commString = 'SELECT user FROM stippers_user_card_year WHERE membership_year = (SELECT YEAR(CONVERT_TZ(NOW(), @@global.time_zone, ?)))';
             $stmt = $conn->prepare($commString);
             
             //Check if statement could be prepared
             if ($stmt) {
-                       
+                
+                $timezone = GlobalConfig::TIMEZONE;
+                $stmt->bind_param('s', $timezone);
+                
                 if (!$stmt->execute())
                     throw new MembershipDBException('Unknown error during statement execution while getting the user IDs.', MembershipDBException::UNKNOWNERROR);
                 else {

@@ -51,13 +51,13 @@ abstract class Email {
                 $replace = array(htmlentities($user->firstName, ENT_QUOTES, 'utf-8'), htmlentities($user->lastName, ENT_QUOTES, 'utf-8'));
                 
                 //Set search and replace for common extras. Also add % signs to the search strings
-                if (isset($extras['common'])) {
+                if (isset($extras['common']) && is_array($extras['common'])) {
                     $search = array_merge($search, array_map(function($key){ return '%'.$key.'%'; }, array_keys($extras['common'])));
                     $replace = array_merge($replace, array_map(function($val){ return htmlentities($val, ENT_QUOTES, 'utf-8'); }, $extras['common']));
                 }
                 
                 //Set search and replace for user specific extras. Also add % signs to the search strings
-                if (isset($extras[$user->userId])) {
+                if (isset($extras[$user->userId]) && is_array($extras[$user->userId])) {
                     $search = array_merge($search, array_map(function($key){ return '%'.$key.'%'; }, array_keys($extras[$user->userId])));
                     $replace = array_merge($replace, array_map(function($val){ return htmlentities($val, ENT_QUOTES, 'utf-8'); }, $extras[$user->userId]));
                 }

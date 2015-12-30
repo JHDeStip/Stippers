@@ -13,6 +13,7 @@ abstract class MenuBuilder {
         $page->data['MenuBarView']['showUserManagementLink'] = false;
         $page->data['MenuBarView']['showWeeklyWinnerLink'] = false;
         $page->data['MenuBarView']['showBrowserManagementLink'] = false;
+        $page->data['MenuBarView']['showMailManagementLink'] = false;
         
         if (isset($_SESSION['Stippers']['user'])) {
             $page->data['MenuBarView']['showLogoutLink'] = true;
@@ -23,6 +24,7 @@ abstract class MenuBuilder {
             if ($_SESSION['Stippers']['user']->isAdmin || $_SESSION['Stippers']['user']->isUserManager) {
                 $page->data['MenuBarView']['showUserManagementLink'] = true;
                 $page->data['MenuBarView']['showWeeklyWinnerLink'] = true;
+                $page->data['MenuBarView']['showMailManagementLink'] = true;
             }
             if ($_SESSION['Stippers']['user']->isAdmin || $_SESSION['Stippers']['user']->isBrowserManager)
                 $page->data['MenuBarView']['showBrowserManagementLink'] = true;

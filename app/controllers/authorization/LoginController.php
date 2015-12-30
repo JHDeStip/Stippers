@@ -45,26 +45,41 @@ abstract class LoginController implements IController {
                 //Get the user's password salt and calculate password hash
                 $passwordSalt = UserDB::getPasswordSaltByEmail($_POST['email']);
                 $passwordHash = hash_pbkdf2("sha256", $_POST['password'], $passwordSalt, SecurityConfig::NPASSWORDHASHITERATIONS);
-                
+            
                 //Get user from database
-                $_SESSION['Stippers']['user'] = UserDB::getBasicUserByEmailPasswordHash($_POST['email'], $passwordHash);
+                $user = UserDB::getBasicUserByEmail($_POST['email']);
                 
-                /*
-                At this point we have a POST request with data from the login form. Because of that the router will try to run 'POST'
-                on the controller of the requested page. This is incorrect and instead it should 'GET' the requested page.
-                By forcing the REQUEST_METHOD to GET we trick the router into calling 'GET' on the controller.
-                */
-                $_SERVER['REQUEST_METHOD'] = 'GET';
-                
-                /*
-                We're redirecting to another page, so we don't want the login details to be in post for that page.
-                For example the user search pages will pre populate their fields with this data if we don't clear it.
-                */
-                unset($_POST);
-                
-                //If we directly request the login page we redirect to the home page
-                if (explode('?', str_replace(DomainConfig::DOMAINSUFFIX, '', strtolower($_SERVER['REQUEST_URI'])), 2)[0] == 'login')
-                    header('Location: home', true, 303);
+                if ($user->passwordHash == $passwordHash) {
+                    //Put the user in session
+                    $_SESSION['Stippers']['user'] = $user;
+                    
+                    /*
+                    At this point we have a POST request with data from the login form. Because of that the router will try to run 'POST'
+                    on the controller of the requested page. This is incorrect and instead it should 'GET' the requested page.
+                    By forcing the REQUEST_METHOD to GET we trick the router into calling 'GET' on the controller.
+                    */
+                    $_SERVER['REQUEST_METHOD'] = 'GET';
+                    
+                    /*
+                    We're redirecting to another page, so we don't want the login details to be in post for that page.
+                    For example the user search pages will pre populate their fields with this data if we don't clear it.
+                    */
+                    unset($_POST);
+                    
+                    //If we directly request the login page we redirect to the home page
+                    if (explode('?', str_replace(DomainConfig::DOMAINSUFFIX, '', strtolower($_SERVER['REQUEST_URI'])), 2)[0] == 'login')
+                        header('Location: home', true, 303);
+                }
+                else {
+                    $page = new Page();
+                    $page->data['title'] = 'Login';
+                    $page->data['LoginView']['login_formAction'] = $_SERVER['REQUEST_URI'];
+                    $page->data['LoginView']['email'] = $_POST['email'];
+                    $page->data['LoginView']['errMsgs']['global'] = '<h2 class="error_message" id="login_form_error_message">E-mailadres en/of wachtwoord onjuist.</h2>';
+                    
+                    $page->addView('authorization/LoginView');
+                    $page->showWithMenu();
+                }
             }
             catch (Exception $ex) {
                 if (is_a($ex, 'UserDBException')) {
@@ -74,7 +89,7 @@ abstract class LoginController implements IController {
                     $page->data['LoginView']['email'] = $_POST['email'];
                     
                     // If the user doesn't exist we show the invalid credentials error, otherwise a generic error.
-                    if ($ex->getCode() == UserDBException::NOUSERFOREMAILPASSWORD || $ex->getCode() == UserDBException::NOUSERFOREMAIL)
+                    if ($ex->getCode() == UserDBException::NOUSERFOREMAIL)
                         $page->data['LoginView']['errMsgs']['global'] = '<h2 class="error_message" id="login_form_error_message">E-mailadres en/of wachtwoord onjuist.</h2>';
                     else
                         $page->data['LoginView']['errMsgs']['global'] = '<h2 class="error_message" id="login_form_error_message">Kan niet aanmelden, probeer het opnieuw.</h2>';

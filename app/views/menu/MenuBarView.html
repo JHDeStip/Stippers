@@ -27,6 +27,8 @@
                 echo '<li><a class="second_level_menu_item" href="manageuser">Gebruikers beheren</a></li>';
             if ($this->data['MenuBarView']['showWeeklyWinnerLink'])
                 echo '<li><a class="second_level_menu_item" href="weeklywinner">Winnaar van de week</a></li>';
+            if ($this->data['MenuBarView']['showMailManagementLink'])
+                echo '<li><a class="second_level_menu_item" href="manageemail">E-mails beheren</a></li>';
             if ($this->data['MenuBarView']['showBrowserManagementLink'])
                 echo '<li><a class="second_level_menu_item" href="managebrowser">Browsers beheren</a></li>';
 

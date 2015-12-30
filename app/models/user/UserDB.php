@@ -589,27 +589,26 @@ abstract class UserDB {
     }
 
     /**
-     * Gets a basic user by it's email address and password.
+     * Gets a basic user by it's email address.
      * A basic user is a user that has only basic properties
      * such as permissions set.
      * 
      * @param string $email email address of the user to get
-     * @param string $passwordHash password hash of the user to get
-     * @return User user for the given email and password hash
+     * @return User user for the given email
      * @throws Exception generic error for if something goes wrong while talking to the database
      * @throws UserDBException error for if something goes wrong while getting the user
      */
-    public static function getBasicUserByEmailPasswordHash($email, $passwordHash) {
+    public static function getBasicUserByEmail($email) {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT user_id, first_name, last_name, is_admin, is_hint_manager, is_user_manager, is_browser_manager FROM stippers_users WHERE email = ? AND password_hash = ?';
+            $commString = 'SELECT user_id, first_name, last_name, password_hash, is_admin, is_hint_manager, is_user_manager, is_browser_manager FROM stippers_users WHERE email = ?';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('ss', $email, $passwordHash);
+            $stmt->bind_param('s', $email);
             
             if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while getting basic user by email address and password.', UserDBException::UNKNOWNERROR);
+                throw new UserDBException('Unknown error during statement execution while getting basic user by email.', UserDBException::UNKNOWNERROR);
             else {
-                $stmt->bind_result($userId, $firstName, $lastName, $isAdmin, $isHintManager, $isUserManager, $isComputerManager);
+                $stmt->bind_result($userId, $firstName, $lastName, $passwordHash, $isAdmin, $isHintManager, $isUserManager, $isBrowserManager);
                 
                 if ($stmt->fetch()) {
                     $user = new User();
@@ -621,11 +620,11 @@ abstract class UserDB {
                     $user->isAdmin = $isAdmin;
                     $user->canManageHints = $isHintManager;
                     $user->isUserManager = $isUserManager;
-                    $user->isComputerManager = $isComputerManager;
+                    $user->isComputerManager = $isBrowserManager;
                     return $user;
                 }
                 else
-                    throw new UserDBException('No user was found for this email address and password.', UserDBException::NOUSERFOREMAILPASSWORD);
+                    throw new UserDBException('No user was found for this email address.', UserDBException::NOUSERFOREMAIL);
             }
         }
         catch (Exception $ex) {

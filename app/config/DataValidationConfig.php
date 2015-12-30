@@ -20,7 +20,7 @@ abstract class DataValidationConfig {
     const POSTALCODEMAXLENGTH = 6;
     const PHONEMAXLENGTH = 14;
     const DATEMAXLENGTH = 10;
-    const BALANCEMAXLENGTH = 10;
+    const BALANCEMAXLENGTH = 6;
     const YEARMAXLENGTH = 4;
     const CARDNUMBERMAXLENGTH = 8;
     

@@ -198,6 +198,67 @@ abstract class UserDB {
     }
 
     /**
+     * Gets a basic user by it's ID. A basic user is a user that has only
+     * basic properties such as permissions set.
+     * Auth means that only users that are a member this year and the admin are returned.
+     *
+     * @param int $userId ID of the user to get
+     * @return User user to get
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while getting the user
+     */
+    public static function getAuthUserById($userId) {
+        try {
+            $conn = Database::getConnection();
+            $commString = 'SELECT email, first_name, last_name, password_hash, is_admin, is_hint_manager, is_user_manager, is_browser_manager '
+                .'FROM stippers_users LEFT JOIN stippers_user_card_year ON user_id = user '
+                .'WHERE user_id = ? AND (membership_year = CONVERT_TZ(NOW(), @@global.time_zone, ?) OR user_id = ?)';
+            $stmt = $conn->prepare($commString);
+            
+            //Check if statement could be prepared
+            if ($stmt) {
+                
+                $timezone = GlobalConfig::TIMEZONE;
+                $adminId = GlobalConfig::ADMINID;
+                $stmt->bind_param('isi', $userId, $timezone, $adminId);
+    
+                if (!$stmt->execute())
+                    throw new UserDBException('Unknown error during statement execution while getting the user.', UserDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($email, $firstName, $lastName, $passwordHash, $isAdmin, $isHintManager, $isUserManager, $isBrowserManager);
+                    
+                    if ($stmt->fetch()) {
+                        $user = new User();
+                        $user->userId = $userId;
+                        $user->email = $email;
+                        $user->firstName = $firstName;
+                        $user->lastName = $lastName;
+                        $user->passwordHash = $passwordHash;
+                        $user->isAdmin = $isAdmin;
+                        $user->isHintManager = $isHintManager;
+                        $user->isUserManager = $isUserManager;
+                        $user->isBrowserManager = $isBrowserManager;
+                        return $user;
+                    }
+                    else
+                        throw new UserDBException('No user was found for this id.', UserDBException::NOUSERFORID);
+                }
+            }
+            else
+                throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
+        }
+        catch (Exception $ex) {
+            throw $ex;
+        }
+        finally {
+            if (isset($conn)) {
+                $conn->kill($conn->thread_id);
+                $conn->close();
+            }
+        }
+    }
+    
+    /**
      * Gets a user's password salt by it's email.
      * 
      * @param string $email email of the user to get the salt for
@@ -707,6 +768,68 @@ abstract class UserDB {
         } 
     } 
 
+    /**
+     * Gets a basic user by it's email address.
+     * A basic user is a user that has only basic properties
+     * such as permissions set.
+     * Auth means that only users that are a member this year and the admin are returned.
+     * 
+     * @param string $email email address of the user to get
+     * @return User user for the given email
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while getting the user
+     */
+    public static function getAuthUserByEmail($email) {
+        try {
+            $conn = Database::getConnection();
+            $commString = 'SELECT user_id, first_name, last_name, password_hash, is_admin, is_hint_manager, is_user_manager, is_browser_manager '
+                .'FROM stippers_users LEFT JOIN stippers_user_card_year ON user_id = user '
+                .'WHERE email = ? AND (membership_year = CONVERT_TZ(NOW(), @@global.time_zone, ?) OR user_id = ?)';
+            $stmt = $conn->prepare($commString);
+            
+            //Check if statement could be prepared
+            if ($stmt) {
+                
+                $timezone = GlobalConfig::TIMEZONE;
+                $adminId = GlobalConfig::ADMINID;
+                $stmt->bind_param('sss', $email, $timezone, $adminId);
+                
+                if (!$stmt->execute())
+                    throw new UserDBException('Unknown error during statement execution while getting basic user by email.', UserDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($userId, $firstName, $lastName, $passwordHash, $isAdmin, $isHintManager, $isUserManager, $isBrowserManager);
+                    
+                    if ($stmt->fetch()) {
+                        $user = new User();
+                        $user->userId = $userId;
+                        $user->email = $email;
+                        $user->firstName = $firstName;
+                        $user->lastName = $lastName;
+                        $user->passwordHash = $passwordHash;
+                        $user->isAdmin = $isAdmin;
+                        $user->canManageHints = $isHintManager;
+                        $user->isUserManager = $isUserManager;
+                        $user->isComputerManager = $isBrowserManager;
+                        return $user;
+                    }
+                    else
+                        throw new UserDBException('No user was found for this email address.', UserDBException::NOUSERFOREMAIL);
+                }
+            }
+            else
+                throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
+        }
+        catch (Exception $ex) {
+            throw $ex;
+        }
+        finally {
+            if (isset($conn)) {
+                $conn->kill($conn->thread_id);
+                $conn->close();
+            }
+        }
+    }
+    
     /**
      * Adds a user.
      * 

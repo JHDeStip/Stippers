@@ -46,8 +46,8 @@ abstract class LoginController implements IController {
                 $passwordSalt = UserDB::getPasswordSaltByEmail($_POST['email']);
                 $passwordHash = hash_pbkdf2("sha256", $_POST['password'], $passwordSalt, SecurityConfig::NPASSWORDHASHITERATIONS);
             
-                //Get user from database
-                $user = UserDB::getBasicUserByEmail($_POST['email']);
+                //Get user from database. This gets the user only if he's a member this year or if it's the admin account.
+                $user = UserDB::getAuthUserByEmail($_POST['email']);
                 
                 if ($user->passwordHash == $passwordHash) {
                     //Put the user in session
@@ -78,6 +78,7 @@ abstract class LoginController implements IController {
                     $page->data['LoginView']['errMsgs']['global'] = '<h2 class="error_message" id="login_form_error_message">E-mailadres en/of wachtwoord onjuist.</h2>';
                     
                     $page->addView('authorization/LoginView');
+                    $page->addView('authorization/UserOfPastYearView');
                     $page->showWithMenu();
                 }
             }
@@ -89,12 +90,14 @@ abstract class LoginController implements IController {
                     $page->data['LoginView']['email'] = $_POST['email'];
                     
                     // If the user doesn't exist we show the invalid credentials error, otherwise a generic error.
-                    if ($ex->getCode() == UserDBException::NOUSERFOREMAIL)
+                    if ($ex->getCode() == UserDBException::NOUSERFOREMAIL) {
                         $page->data['LoginView']['errMsgs']['global'] = '<h2 class="error_message" id="login_form_error_message">E-mailadres en/of wachtwoord onjuist.</h2>';
+                    }
                     else
                         $page->data['LoginView']['errMsgs']['global'] = '<h2 class="error_message" id="login_form_error_message">Kan niet aanmelden, probeer het opnieuw.</h2>';
                     
                     $page->addView('authorization/LoginView');
+                    $page->addView('authorization/UserOfPastYearView');
                     $page->showWithMenu();
                 }
             }
@@ -107,6 +110,7 @@ abstract class LoginController implements IController {
             $page->data['LoginView']['errMsgs'] = LoginViewValidator::initErrMsgs();
             $page->data['LoginView']['errMsgs'] = array_merge($page->data['LoginView']['errMsgs'], $errMsgs);
             $page->addView("authorization/LoginView");
+            $page->addView('authorization/UserOfPastYearView');
             $page->showWithMenu();
         }
     }

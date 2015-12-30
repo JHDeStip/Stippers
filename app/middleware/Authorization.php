@@ -51,7 +51,8 @@ abstract class Authorization implements IMiddleware {
         //Also check if we're not logging in because then we already have fresh user data.
         if (isset($_SESSION['Stippers']['user']) && !isset($_POST['login'])) {
             try {
-                $newUser = UserDB::getBasicUserById($_SESSION['Stippers']['user']->userId);
+                //Gets user from database. This gets the user only if he's a member this year or if it's the admin account.
+                $newUser = UserDB::getAuthUserById($_SESSION['Stippers']['user']->userId);
                 
                 //If the user's password has changed we immediately log out!
                 if ($_SESSION['Stippers']['user']->passwordHash != $newUser->passwordHash) {
@@ -63,9 +64,9 @@ abstract class Authorization implements IMiddleware {
                     $_SESSION['Stippers']['user'] = $newUser;
             }
             catch (Exception $ex) {
-                //unset because we don't want to use old data
-                unset($_SESSION['Stippers']['user']);
-                $errorGettingUser = true;
+                session_destroy();
+                ForcedLogoutController::get();
+                return false;
             }
         }
         
@@ -131,7 +132,7 @@ abstract class Authorization implements IMiddleware {
         
         if ($everyone)
             $canDisplay = true;
-        ;
+        
         //If a browser can display the page we check if the current browser has the required permissions.
         if (!$canDisplay && ($checkInBrowser || $addRenewUserBrowser)) {
             if (isset($_SESSION['Stippers']['browser'])) {

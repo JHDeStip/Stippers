@@ -12,4 +12,7 @@
 abstract class GlobalConfig {
     //This is the timezone all times will be displayed for
     const TIMEZONE = '+01:00';
+    
+    //User ID of the admin account
+    const ADMINID = 1;
 }

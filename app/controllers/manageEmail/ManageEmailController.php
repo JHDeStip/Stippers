@@ -76,10 +76,20 @@ abstract class ManageEmailController implements IController {
      */
     private static function buildEmailListView(Page $page) {
         //Check if our directory is there and there are emails
-        if (is_dir(EmailConfig::EMAILFILESDIR) && count($fileNames =  array_slice(scandir(EmailConfig::EMAILFILESDIR), 2)) > 0) {
-            //If there are emails we show them
-            $page->data['ManageEmailEmailListView']['fileNames'] = $fileNames;
-            $page->addView('manageEmail/ManageEmailEmailListView');
+        if (is_dir(EmailConfig::EMAILFILESDIR)) {
+            $fileNames =  array_slice(scandir(EmailConfig::EMAILFILESDIR), 2);
+            //Remove .htaccess from the list (this is there so 'the outer world' cannot download files from this directory
+            unset($fileNames[array_search('.htaccess', $fileNames)]);
+            $fileNames = array_values($fileNames);
+            
+            if (count($fileNames) > 0) {
+                //If there are emails we show them
+                $page->data['ManageEmailEmailListView']['fileNames'] = $fileNames;
+                $page->addView('manageEmail/ManageEmailEmailListView');
+            }
+            else
+                //No emails -> snow no emails view
+                $page->addView('manageEmail/ManageEmailNoEmailsView');
         }
         else
             //No emails -> snow no emails view

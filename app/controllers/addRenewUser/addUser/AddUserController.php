@@ -14,6 +14,9 @@ require_once __DIR__.'/../../../helperClasses/Page.php';
 
 require_once __DIR__.'/../../../helperClasses/random/Random.php';
 
+require_once __DIR__.'/../../../helperClasses/email/Email.php';
+require_once __DIR__.'/../../../helperClasses/email/EmailException.php';
+
 require_once __DIR__.'/../../../models/user/User.php';
 require_once __DIR__.'/../../../models/user/UserDB.php';
 require_once __DIR__.'/../../../models/user/UserDBException.php';
@@ -60,6 +63,14 @@ abstract class AddUserController implements IController {
             try {
                 UserDB::addUser($user, $passwordSalt, $_POST['card_number']);
                 $page->addView('addRenewUser/addUser/SuccessfullyAddedView');
+                
+                //Send welcome mail
+                $failedEmails = Email::sendEmails('WelcomeNewMember.html', 'JH DE Stip - Welkom', 'info@stip.be', [$user], null);
+                //If failedEmails is not empty the mail was not sent
+                if (!empty($failedEmails)) {
+                    $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan welkomstmail niet verzenden.';
+                    $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
+                }
             }
             catch (UserDBException $ex) {
                 AddUserController::buildAddUserPage($page, true);
@@ -69,6 +80,10 @@ abstract class AddUserController implements IController {
                     $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Dit kaartnummer is al in gebruik.</h2>';
                 else
                     $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Kan gebruiker niet toevoegen, probeer het opnieuw.</h2>';
+            }
+            catch (EmailException $ex) {
+                $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan welkomstmail niet verzenden.';
+                $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
             }
             catch (Exception $ex) {
                 AddUserController::buildAddUserPage($page, true);

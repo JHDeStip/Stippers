@@ -12,8 +12,13 @@
 require_once __DIR__.'/../../IController.php';
 require_once __DIR__.'/../../../helperClasses/Page.php';
 
+require_once __DIR__.'/../../../config/SecurityConfig.php';
+
 require_once __DIR__.'/../../../helperClasses/random/Random.php';
 require_once __DIR__.'/../../../config/SecurityConfig.php';
+
+require_once __DIR__.'/../../../helperClasses/email/Email.php';
+require_once __DIR__.'/../../../helperClasses/email/EmailException.php';
 
 require_once __DIR__.'/../../../models/user/User.php';
 require_once __DIR__.'/../../../models/user/UserDB.php';
@@ -91,6 +96,14 @@ abstract class RenewUserController implements IController {
                 try {
                     UserDB::renewMembership($_SESSION['Stippers']['RenewUser']['user'], $newUser, $_POST['card_number']);
                     $page->addView('addRenewUser/renewUser/SuccessfullyRenewedView');
+                    
+                    //Send welcome mail
+                    $failedEmails = Email::sendEmails('WelcomeOldMember.html', 'JH DE Stip - Welkom', 'info@stip.be', [$newUser], null);
+                    //If failedEmails is not empty the mail was not sent
+                    if (!empty($failedEmails)) {
+                        $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan welkomstmail niet verzenden.';
+                        $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
+                    }
                 }
                 catch (UserDBException $ex) {
                     if ($ex->getCode() == UserDBException::USERALREADYMEMBER) {
@@ -112,6 +125,10 @@ abstract class RenewUserController implements IController {
                             $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Kan gebruiker niet hernieuwen, probeer het opnieuw.</h2>';
                     }
                 }
+                catch (EmailException $ex) {
+                    $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan welkomstmail niet verzenden.';
+                    $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
+                }
                 catch (Exception $ex) {
                     RenewUserController::buildRenewUserPage($page, true);
                     $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Kan gebruiker niet hernieuwen, probeer het opnieuw.</h2>';
@@ -120,7 +137,6 @@ abstract class RenewUserController implements IController {
             else {
                 RenewUserController::buildRenewUserPage($page, true);
                 $page->data['UserDataFormTopView']['errMsgs'] = array_merge($page->data['UserDataFormTopView']['errMsgs'], $formTopViewErrMsgs);
-                $page->data['UserDataFormPasswordView']['errMsgs'] = array_merge($page->data['UserDataFormPasswordView']['errMsgs'], $formPasswordViewErrMsgs);
                 $page->data['UserDataFormMiddleView']['errMsgs'] = array_merge($page->data['UserDataFormMiddleView']['errMsgs'], $formMiddleViewErrMsgs);
             }
             $page->showWithMenu();

@@ -64,7 +64,7 @@ abstract class ChangePasswordController implements IController {
                         $_SESSION['Stippers']['user']->passwordHash = $newPasswordHash;
                         //Show success view
                         $page->data['SuccessMessageNoDescriptionWithLinkView']['successTitle'] = 'Wachtwoord succesvol gewijzigd';
-                        $page->data['SuccessMessageNoDescriptionWithLinkView']['redirectUrl'] = $_SERVER['REQUEST_URI'];
+                        $page->data['SuccessMessageNoDescriptionWithLinkView']['redirectUrl'] = 'profile';
                         $page->addView('success/SuccessMessageNoDescriptionWithLinkView');
                     }
                 }

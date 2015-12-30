@@ -32,28 +32,35 @@ abstract class UserDB {
                 'FROM stippers_users';
             $stmt = $conn->prepare($commString);
 
-            if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while getting the user.', UserDBException::UNKNOWNERROR);
-            else {
-                $users = array();
-                $i = 0;
-                $stmt->bind_result($email, $firstName, $lastName, $passwordHash, $isAdmin, $isHintManager, $isUserManager, $isBrowserManager);
-                
-                while ($stmt->fetch()) {
-                    $users[$i] = new User();
-                    $users[$i]->email = $email;
-                    $users[$i]->firstName = $firstName;
-                    $users[$i]->lastName = $lastName;
-                    $users[$i]->passwordHash = $passwordHash;
-                    $users[$i]->isAdmin = $isAdmin;
-                    $users[$i]->isHintManager = $isHintManager;
-                    $users[$i]->isUserManager = $isUserManager;
-                    $users[$i]->isBrowserManager = $isBrowserManager;
-                    $i++;
+            //Check if statement could be prepared
+            if ($stmt) {
+                           
+                if (!$stmt->execute())
+                    throw new UserDBException('Unknown error during statement execution while getting the user.', UserDBException::UNKNOWNERROR);
+                else {
+                    $users = array();
+                    
+                    $stmt->bind_result($email, $firstName, $lastName, $passwordHash, $isAdmin, $isHintManager, $isUserManager, $isBrowserManager);
+                    
+                    while ($stmt->fetch()) {
+                        $user = new User();
+                        $user->email = $email;
+                        $user->firstName = $firstName;
+                        $user->lastName = $lastName;
+                        $user->passwordHash = $passwordHash;
+                        $user->isAdmin = $isAdmin;
+                        $user->isHintManager = $isHintManager;
+                        $user->isUserManager = $isUserManager;
+                        $user->isBrowserManager = $isBrowserManager;
+                        
+                        array_push($users, user);
+                    }
+                    
+                    return $users;
                 }
-                
-                return $users;
             }
+            else
+                throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -81,39 +88,46 @@ abstract class UserDB {
             $commString = 'SELECT email, first_name, last_name, password_hash, balance, phone, DATE_FORMAT(date_of_birth, "%d/%m/%Y") date_of_birth, street, house_number, city, postal_code, country, is_admin, is_hint_manager, is_user_manager, is_browser_manager, DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") creation_time ' .
                 'FROM stippers_users WHERE user_id = ?';
             $stmt = $conn->prepare($commString);
-            $timezone = GlobalConfig::TIMEZONE;
-            $stmt->bind_param('si', $timezone, $userId);
-
-            if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while getting the user.', UserDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($email, $firstName, $lastName, $passwordHash, $balance, $phone, $dateOfBirth, $street, $houseNumber, $city, $postalCode, $country, $isAdmin, $isHintManager, $isUserManager, $isBrowserManager, $creationTime);
+            
+            //Check if statement could be prepared
+            if ($stmt) {
                 
-                if ($stmt->fetch()) {
-                    $user = new User();
-                    $user->userId = $userId;
-                    $user->email = $email;
-                    $user->firstName = $firstName;
-                    $user->lastName = $lastName;
-                    $user->passwordHash = $passwordHash;
-                    $user->balance = $balance;
-                    $user->phone = $phone;
-                    $user->dateOfBirth = $dateOfBirth;
-                    $user->street = $street;
-                    $user->houseNumber = $houseNumber;
-                    $user->city = $city;
-                    $user->postalCode = $postalCode;
-                    $user->country = $country;
-                    $user->isAdmin = $isAdmin;
-                    $user->isHintManager = $isHintManager;
-                    $user->isUserManager = $isUserManager;
-                    $user->isBrowserManager = $isBrowserManager;
-                    $user->creationTime = $creationTime;
-                    return $user;
+                $timezone = GlobalConfig::TIMEZONE;
+                $stmt->bind_param('si', $timezone, $userId);
+    
+                if (!$stmt->execute())
+                    throw new UserDBException('Unknown error during statement execution while getting the user.', UserDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($email, $firstName, $lastName, $passwordHash, $balance, $phone, $dateOfBirth, $street, $houseNumber, $city, $postalCode, $country, $isAdmin, $isHintManager, $isUserManager, $isBrowserManager, $creationTime);
+                    
+                    if ($stmt->fetch()) {
+                        $user = new User();
+                        $user->userId = $userId;
+                        $user->email = $email;
+                        $user->firstName = $firstName;
+                        $user->lastName = $lastName;
+                        $user->passwordHash = $passwordHash;
+                        $user->balance = $balance;
+                        $user->phone = $phone;
+                        $user->dateOfBirth = $dateOfBirth;
+                        $user->street = $street;
+                        $user->houseNumber = $houseNumber;
+                        $user->city = $city;
+                        $user->postalCode = $postalCode;
+                        $user->country = $country;
+                        $user->isAdmin = $isAdmin;
+                        $user->isHintManager = $isHintManager;
+                        $user->isUserManager = $isUserManager;
+                        $user->isBrowserManager = $isBrowserManager;
+                        $user->creationTime = $creationTime;
+                        return $user;
+                    }
+                    else
+                        throw new UserDBException('No user was found for this id.', UserDBException::NOUSERFORID);
                 }
-                else
-                    throw new UserDBException('No user was found for this id.', UserDBException::NOUSERFORID);
             }
+            else
+                throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -141,29 +155,36 @@ abstract class UserDB {
             $commString = 'SELECT email, first_name, last_name, password_hash, is_admin, is_hint_manager, is_user_manager, is_browser_manager ' .
                 'FROM stippers_users WHERE user_id = ?';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('i', $userId);
-
-            if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while getting the user.', UserDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($email, $firstName, $lastName, $passwordHash, $isAdmin, $isHintManager, $isUserManager, $isBrowserManager);
+            
+            //Check if statement could be prepared
+            if ($stmt) {
                 
-                if ($stmt->fetch()) {
-                    $user = new User();
-                    $user->userId = $userId;
-                    $user->email = $email;
-                    $user->firstName = $firstName;
-                    $user->lastName = $lastName;
-                    $user->passwordHash = $passwordHash;
-                    $user->isAdmin = $isAdmin;
-                    $user->isHintManager = $isHintManager;
-                    $user->isUserManager = $isUserManager;
-                    $user->isBrowserManager = $isBrowserManager;
-                    return $user;
+                $stmt->bind_param('i', $userId);
+    
+                if (!$stmt->execute())
+                    throw new UserDBException('Unknown error during statement execution while getting the user.', UserDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($email, $firstName, $lastName, $passwordHash, $isAdmin, $isHintManager, $isUserManager, $isBrowserManager);
+                    
+                    if ($stmt->fetch()) {
+                        $user = new User();
+                        $user->userId = $userId;
+                        $user->email = $email;
+                        $user->firstName = $firstName;
+                        $user->lastName = $lastName;
+                        $user->passwordHash = $passwordHash;
+                        $user->isAdmin = $isAdmin;
+                        $user->isHintManager = $isHintManager;
+                        $user->isUserManager = $isUserManager;
+                        $user->isBrowserManager = $isBrowserManager;
+                        return $user;
+                    }
+                    else
+                        throw new UserDBException('No user was found for this id.', UserDBException::NOUSERFORID);
                 }
-                else
-                    throw new UserDBException('No user was found for this id.', UserDBException::NOUSERFORID);
             }
+            else
+                throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -189,18 +210,25 @@ abstract class UserDB {
             $conn = Database::getConnection();
             $commString = 'SELECT password_salt FROM stippers_users WHERE email = ?';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('s', $email);
             
-            if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while getting the user\'s password salt.', UserDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($passwordSalt);
+            //Check if statement could be prepared
+            if ($stmt) {
+                    
+                $stmt->bind_param('s', $email);
                 
-                if ($stmt->fetch())
-                    return $passwordSalt;
-                else
-                    throw new UserDBException('No user was found for this is email.', UserDBException::NOUSERFOREMAIL);
+                if (!$stmt->execute())
+                    throw new UserDBException('Unknown error during statement execution while getting the user\'s password salt.', UserDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($passwordSalt);
+                    
+                    if ($stmt->fetch())
+                        return $passwordSalt;
+                    else
+                        throw new UserDBException('No user was found for this is email.', UserDBException::NOUSERFOREMAIL);
+                }
             }
+            else
+                throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -226,18 +254,25 @@ abstract class UserDB {
             $conn = Database::getConnection();
             $commString = 'SELECT password_salt FROM stippers_users WHERE user_id = ?';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('i', $userId);
             
-            if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while getting the user\'s password salt.', UserDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($passwordSalt);
+            //Check if statement could be prepared
+            if ($stmt) {
                 
-                if ($stmt->fetch())
-                    return $passwordSalt;
-                else
-                    throw new UserDBException('No user was found for this is user id.', UserDBException::NOUSERFORID);
+                $stmt->bind_param('i', $userId);
+                
+                if (!$stmt->execute())
+                    throw new UserDBException('Unknown error during statement execution while getting the user\'s password salt.', UserDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($passwordSalt);
+                    
+                    if ($stmt->fetch())
+                        return $passwordSalt;
+                    else
+                        throw new UserDBException('No user was found for this is user id.', UserDBException::NOUSERFORID);
+                }
             }
+            else
+                throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -368,7 +403,12 @@ abstract class UserDB {
                 $groupByPart .= ', card';
             }
             //Create the parameter list to pass to the query statement
-            $params['types'] .= 'sssssssssssss';
+            $params['types'] .= 'ssssssssssssss';
+            
+            //Set timezone for JOIN with check in
+            $timezone = GlobalConfig::TIMEZONE;
+            $params['timezoneCheckInTime'] = &$timezone;
+            
             $likeStringEmail = (isset($search['email']) ? '%'.$search['email'].'%' : '%');
             $params['email'] = &$likeStringEmail;
             $likeStringFirstName = (isset($search['firstName']) ? '%'.$search['firstName'].'%' : '%');
@@ -430,67 +470,74 @@ abstract class UserDB {
             //Here we're going to execute the query.
             $conn = Database::getConnection();
             //We paste the parts together.
-            $commString = 'SELECT ' . $selectPart . ' FROM stippers_users INNER JOIN stippers_user_card_year ON stippers_user_card_year.user = user_id LEFT JOIN stippers_check_ins ON stippers_check_ins.user = user_id AND YEAR(stippers_check_ins.time) = stippers_user_card_year.membership_year WHERE ' . $searchPart . $groupByPart . $orderPart;
+            $commString = 'SELECT ' . $selectPart . ' FROM stippers_users INNER JOIN stippers_user_card_year ON stippers_user_card_year.user = user_id LEFT JOIN stippers_check_ins ON stippers_check_ins.user = user_id AND YEAR(CONVERT_TZ(stippers_check_ins.time, @@global.time_zone, ?)) = stippers_user_card_year.membership_year WHERE ' . $searchPart . $groupByPart . $orderPart;
             $stmt = $conn->prepare($commString);
-            //Because we want to bind an array with parameters we use call_user_func_array
-            call_user_func_array(array($stmt, 'bind_param'), $params);
-
-            if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while getting search users.', UserDBException::UNKNOWNERROR);
-            else {
-                $result = $stmt->get_result();
-                $searchUsers = array();
-                $i = 0;
-                
-                while ($row = $result->fetch_assoc()) {
-                    $searchUsers[$i]['user'] = new User();
-                    $searchUsers[$i]['user']->userId = $row['user_id'];
-                    if (isset($select['email']) && $select['email'])
-                        $searchUsers[$i]['user']->email = $row['email'];
-                    if (isset($select['firstName']) && $select['firstName'])
-                        $searchUsers[$i]['user']->firstName = $row['first_name'];
-                    if (isset($select['lastName']) && $select['lastName'])
-                        $searchUsers[$i]['user']->lastName = $row['last_name'];
-                    if (isset($select['balance']) && $select['balance'])
-                        $searchUsers[$i]['user']->balance = $row['balance'];
-                    if (isset($select['phone']) && $select['phone'])
-                        $searchUsers[$i]['user']->phone = $row['phone'];
-                    if (isset($select['dateofBrith']) && $select['dateOfBirth'])
-                        $searchUsers[$i]['user']->dateOfBirth = $row['date_of_birth'];
-                    if (isset($select['street']) && $select['street'])
-                        $searchUsers[$i]['user']->street = $row['street'];
-                    if (isset($select['houseNumber']) && $select['houseNumber'])
-                        $searchUsers[$i]['user']->houseNumber = $row['house_number'];
-                    if (isset($select['city']) && $select['city'])
-                        $searchUsers[$i]['user']->city = $row['city'];
-                    if (isset($select['postalCode']) && $select['postalCode'])
-                        $searchUsers[$i]['user']->postalCode = $row['postal_code'];
-                    if (isset($select['country']) && $select['country'])
-                        $searchUsers[$i]['user']->country = $row['country'];
-                    if (isset($select['isAdmin']) && $select['isAdmin'])
-                        $searchUsers[$i]['user']->isAdmin = $row['is_admin'];
-                    /*
-                    This is for a future feature.
-                    if ($select['isHintManager'])
-                        $searchUsers[$i]['user']->isHintManager = $row['is_hint_manager'];
-                    */
-                    if (isset($select['isUserManager']) && $select['isUserManager'])
-                        $searchUsers[$i]['user']->isUserManager = $row['is_user_manager'];
-                    if (isset($select['isBrowserManager']) && $select['isBrowserManager'])
-                        $searchUsers[$i]['user']->isBrowserManager = $row['is_browser_manager'];
-                    if (isset($select['creationTime']) && $select['creationTime'])
-                        $searchUsers[$i]['user']->creationTime = $row['creation_time'];
-                    if (isset($select['membershipYear']) && $select['membershipYear'])
-                        $searchUsers[$i]['membershipYear'] = $row['membership_year'];
-                    if (isset($select['cardNumber']) && $select['cardNumber'])
-                        $searchUsers[$i]['cardNumber'] = $row['card'];
-                    if (isset($select['nCheckInsPerYear']) && $select['nCheckInsPerYear'])
-                        $searchUsers[$i]['nCheckIns'] = $row['n_check_ins'];
+            
+            //Check if statement could be prepared
+            if ($stmt) {
                     
-                    $i++;
+                //Because we want to bind an array with parameters we use call_user_func_array
+                call_user_func_array(array($stmt, 'bind_param'), $params);
+    
+                if (!$stmt->execute())
+                    throw new UserDBException('Unknown error during statement execution while getting search users.', UserDBException::UNKNOWNERROR);
+                else {
+                    $result = $stmt->get_result();
+                    $searchUsers = array();
+                    $i = 0;
+                    
+                    while ($row = $result->fetch_assoc()) {
+                        $searchUsers[$i]['user'] = new User();
+                        $searchUsers[$i]['user']->userId = $row['user_id'];
+                        if (isset($select['email']) && $select['email'])
+                            $searchUsers[$i]['user']->email = $row['email'];
+                        if (isset($select['firstName']) && $select['firstName'])
+                            $searchUsers[$i]['user']->firstName = $row['first_name'];
+                        if (isset($select['lastName']) && $select['lastName'])
+                            $searchUsers[$i]['user']->lastName = $row['last_name'];
+                        if (isset($select['balance']) && $select['balance'])
+                            $searchUsers[$i]['user']->balance = $row['balance'];
+                        if (isset($select['phone']) && $select['phone'])
+                            $searchUsers[$i]['user']->phone = $row['phone'];
+                        if (isset($select['dateofBrith']) && $select['dateOfBirth'])
+                            $searchUsers[$i]['user']->dateOfBirth = $row['date_of_birth'];
+                        if (isset($select['street']) && $select['street'])
+                            $searchUsers[$i]['user']->street = $row['street'];
+                        if (isset($select['houseNumber']) && $select['houseNumber'])
+                            $searchUsers[$i]['user']->houseNumber = $row['house_number'];
+                        if (isset($select['city']) && $select['city'])
+                            $searchUsers[$i]['user']->city = $row['city'];
+                        if (isset($select['postalCode']) && $select['postalCode'])
+                            $searchUsers[$i]['user']->postalCode = $row['postal_code'];
+                        if (isset($select['country']) && $select['country'])
+                            $searchUsers[$i]['user']->country = $row['country'];
+                        if (isset($select['isAdmin']) && $select['isAdmin'])
+                            $searchUsers[$i]['user']->isAdmin = $row['is_admin'];
+                        /*
+                        This is for a future feature.
+                        if ($select['isHintManager'])
+                            $searchUsers[$i]['user']->isHintManager = $row['is_hint_manager'];
+                        */
+                        if (isset($select['isUserManager']) && $select['isUserManager'])
+                            $searchUsers[$i]['user']->isUserManager = $row['is_user_manager'];
+                        if (isset($select['isBrowserManager']) && $select['isBrowserManager'])
+                            $searchUsers[$i]['user']->isBrowserManager = $row['is_browser_manager'];
+                        if (isset($select['creationTime']) && $select['creationTime'])
+                            $searchUsers[$i]['user']->creationTime = $row['creation_time'];
+                        if (isset($select['membershipYear']) && $select['membershipYear'])
+                            $searchUsers[$i]['membershipYear'] = $row['membership_year'];
+                        if (isset($select['cardNumber']) && $select['cardNumber'])
+                            $searchUsers[$i]['cardNumber'] = $row['card'];
+                        if (isset($select['nCheckInsPerYear']) && $select['nCheckInsPerYear'])
+                            $searchUsers[$i]['nCheckIns'] = $row['n_check_ins'];
+                        
+                        $i++;
+                    }
+                    return $searchUsers;
                 }
-                return $searchUsers;
             }
+            else
+                throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -517,21 +564,28 @@ abstract class UserDB {
             $conn = Database::getConnection();
             $commString = 'SELECT COUNT(*) FROM stippers_users WHERE user_id = ? AND password_hash = ?';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('is', $userId, $passwordHash);
             
-            if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while checking the user\'s password.', UserDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($nResults);
+            //Check if statement could be prepared
+            if ($stmt) {
                 
-                if ($stmt->fetch())
-                    if ($nResults == 0)
-                        return false;
+                $stmt->bind_param('is', $userId, $passwordHash);
+                
+                if (!$stmt->execute())
+                    throw new UserDBException('Unknown error during statement execution while checking the user\'s password.', UserDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($nResults);
+                    
+                    if ($stmt->fetch())
+                        if ($nResults == 0)
+                            return false;
+                        else
+                            return true;
                     else
-                        return true;
-                else
-                    throw new UserDBException('Unknown error during statement execution while checking the user\'s password.', CheckInDBException::UNKNOWNERROR);
+                        throw new UserDBException('Unknown error during statement execution while checking the user\'s password.', CheckInDBException::UNKNOWNERROR);
+                }
             }
+            else
+                throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -556,26 +610,34 @@ abstract class UserDB {
     public static function getBasicUserByCardNumber($cardNumber) {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT user_id, email, first_name, last_name FROM stippers_users WHERE user_id = (SELECT user FROM stippers_user_card_year WHERE card = ? AND membership_year = (SELECT YEAR(NOW())))';
+            $commString = 'SELECT user_id, email, first_name, last_name FROM stippers_users WHERE user_id = (SELECT user FROM stippers_user_card_year WHERE card = ? AND membership_year = (SELECT YEAR(CONVERT_TZ(NOW(), @@global.time_zone, ?))))';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('i', $cardNumber);
             
-            if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while getting basic user by card number.', UserDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($userId, $email, $firstName, $lastName);
+            //Check if statement could be prepared
+            if ($stmt) {
                 
-                if ($stmt->fetch()) {
-                    $user = new User();
-                    $user->userId = $userId;
-                    $user->email = $email;
-                    $user->firstName = $firstName;
-                    $user->lastName = $lastName;
-                    return $user;
+                $timezone = GlobalConfig::TIMEZONE;
+                $stmt->bind_param('is', $cardNumber, $timezone);
+                
+                if (!$stmt->execute())
+                    throw new UserDBException('Unknown error during statement execution while getting basic user by card number.', UserDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($userId, $email, $firstName, $lastName);
+                    
+                    if ($stmt->fetch()) {
+                        $user = new User();
+                        $user->userId = $userId;
+                        $user->email = $email;
+                        $user->firstName = $firstName;
+                        $user->lastName = $lastName;
+                        return $user;
+                    }
+                    else
+                        throw new UserDBException('No user was found for this card number and year.', UserDBException::NOUSERFORCARDNUMER);
                 }
-                else
-                    throw new UserDBException('No user was found for this card number and year.', UserDBException::NOUSERFORCARDNUMER);
             }
+            else
+                throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -588,108 +650,62 @@ abstract class UserDB {
         }
     }
 
-    /**
-     * Gets a basic user by it's email address.
-     * A basic user is a user that has only basic properties
-     * such as permissions set.
-     * 
-     * @param string $email email address of the user to get
-     * @return User user for the given email
-     * @throws Exception generic error for if something goes wrong while talking to the database
-     * @throws UserDBException error for if something goes wrong while getting the user
-     */
-    public static function getBasicUserByEmail($email) {
-        try {
-            $conn = Database::getConnection();
-            $commString = 'SELECT user_id, first_name, last_name, password_hash, is_admin, is_hint_manager, is_user_manager, is_browser_manager FROM stippers_users WHERE email = ?';
-            $stmt = $conn->prepare($commString);
-            $stmt->bind_param('s', $email);
+    /** 
+     * Gets a basic user by it's email address. 
+     * A basic user is a user that has only basic properties 
+     * such as permissions set. 
+     *  
+     * @param string $email email address of the user to get 
+     * @return User user for the given email 
+     * @throws Exception generic error for if something goes wrong while talking to the database 
+     * @throws UserDBException error for if something goes wrong while getting the user 
+     */ 
+    public static function getBasicUserByEmail($email) { 
+        try { 
+            $conn = Database::getConnection(); 
+            $commString = 'SELECT user_id, first_name, last_name, password_hash, is_admin, is_hint_manager, is_user_manager, is_browser_manager FROM stippers_users WHERE email = ?'; 
+            $stmt = $conn->prepare($commString); 
             
-            if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while getting basic user by email.', UserDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($userId, $firstName, $lastName, $passwordHash, $isAdmin, $isHintManager, $isUserManager, $isBrowserManager);
+            //Check if statement could be prepared
+            if ($stmt) {
                 
-                if ($stmt->fetch()) {
-                    $user = new User();
-                    $user->userId = $userId;
-                    $user->email = $email;
-                    $user->firstName = $firstName;
-                    $user->lastName = $lastName;
-                    $user->passwordHash = $passwordHash;
-                    $user->isAdmin = $isAdmin;
-                    $user->canManageHints = $isHintManager;
-                    $user->isUserManager = $isUserManager;
-                    $user->isComputerManager = $isBrowserManager;
-                    return $user;
+                $stmt->bind_param('s', $email); 
+                 
+                if (!$stmt->execute()) 
+                    throw new UserDBException('Unknown error during statement execution while getting basic user by email.', UserDBException::UNKNOWNERROR); 
+                else { 
+                    $stmt->bind_result($userId, $firstName, $lastName, $passwordHash, $isAdmin, $isHintManager, $isUserManager, $isBrowserManager); 
+                     
+                    if ($stmt->fetch()) { 
+                        $user = new User(); 
+                        $user->userId = $userId; 
+                        $user->email = $email; 
+                        $user->firstName = $firstName; 
+                        $user->lastName = $lastName; 
+                        $user->passwordHash = $passwordHash; 
+                        $user->isAdmin = $isAdmin; 
+                        $user->canManageHints = $isHintManager; 
+                        $user->isUserManager = $isUserManager; 
+                        $user->isComputerManager = $isBrowserManager; 
+                        return $user; 
+                    } 
+                    else 
+                        throw new UserDBException('No user was found for this email address.', UserDBException::NOUSERFOREMAIL); 
                 }
-                else
-                    throw new UserDBException('No user was found for this email address.', UserDBException::NOUSERFOREMAIL);
             }
-        }
-        catch (Exception $ex) {
-            throw $ex;
-        }
-        finally {
-            if (isset($conn)) {
-                $conn->kill($conn->thread_id);
-                $conn->close();
-            }
-        }
-    }
-
-    /**
-     * Gets a full user by it's email address and password.
-     * A full user is a user with all properties set.
-     * 
-     * @param string $email email address of the user to get
-     * @param string $passwordHash password hash of the user to get
-     * @return User user for the given email and password hash
-     * @throws Exception generic error for if something goes wrong while talking to the database
-     * @throws UserDBException error for if something goes wrong while getting the user
-     */
-    public static function getUserByEmailPasswordHash($email, $passwordHash) {
-        $user = null;
-
-        $conn = Database::getConnection();
-        $commString = 'SELECT user_id, first_name, last_name, balance, phone, DATE_FORMAT(date_of_birth, "%d/%m/%Y"), street, house_number, city, postal_code, country, DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") creation_time, is_admin, is_hint_manager, is_user_manager, is_browser_manager ' .
-            'FROM stippers_users WHERE email = ? AND password_hash = ?';
-
-        $stmt = $conn->prepare($commString);
-        $timezone = GlobalConfig::TIMEZONE;
-        $stmt->bind_param('sss', $timezone, $email, $passwordHash);
-
-        $stmt->execute();
-        $stmt->bind_result($userId, $firstName, $lastName, $balance, $phone, $dateOfBirth, $street, $houseNumber, $city, $postalCode, $country, $creationTime, $isAdmin, $isHintManager, $isUserManager, $isBrowserManager);
-
-        if ($stmt->fetch()) {
-            $user = new User();
-            $user->userId = $userId;
-            $user->firstName = $firstName;
-            $user->lastName = $lastName;
-            $user->email = $email;
-            $user->passwordHash = $passwordHash;
-            $user->balance = $balance;
-            $user->phone = $phone;
-            $user->dateOfBirth = $dateOfBirth;
-            $user->street = $street;
-            $user->houseNumber = $houseNumber;
-            $user->city = $city;
-            $user->postalCode = $postalCode;
-            $user->country = $country;
-            $user->creationTime = $creationTime;
-            $user->isAdmin = $isAdmin;
-            $user->isHintManager = $isHintManager;
-            $user->isUserManager = $isUserManager;
-            $user->isBrowserManager = $isBrowserManager;
-        }
-
-        $stmt->close();
-        $conn->kill($conn->thread_id);
-        $conn->close();
-
-        return $user;
-    }
+            else
+                throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
+        } 
+        catch (Exception $ex) { 
+            throw $ex; 
+        } 
+        finally { 
+            if (isset($conn)) { 
+                $conn->kill($conn->thread_id); 
+                $conn->close(); 
+            } 
+        } 
+    } 
 
     /**
      * Adds a user.
@@ -709,42 +725,62 @@ abstract class UserDB {
             $commString = 'SELECT stippers_nextval("stippers_users_seq")';
             $stmt = $conn->prepare($commString);
             
-            if (!$stmt->execute())
-                throw new UserDBException('Cannot retrieve the next user id.', UserDBException::CANNOTGETNEXTUSERID);
-            
-            $stmt->bind_result($userId);
-            
-            if (!$stmt->fetch())
-                throw new UserDBException('Cannot retrieve the next user id.', UserDBException::CANNOTGETNEXTUSERID);
-            
-            $stmt->close();
+            //Check if statement could be prepared
+            if ($stmt) {
+               
+                if (!$stmt->execute())
+                    throw new UserDBException('Cannot retrieve the next user id.', UserDBException::CANNOTGETNEXTUSERID);
+                
+                $stmt->bind_result($userId);
+                
+                if (!$stmt->fetch())
+                    throw new UserDBException('Cannot retrieve the next user id.', UserDBException::CANNOTGETNEXTUSERID);
+                
+                $stmt->close();
+    
+                $commString = 'INSERT INTO stippers_users (user_id, email, first_name, last_name, password_hash, password_salt, phone, date_of_birth, street, house_number, city, postal_code, country) ' .
+                    'VALUES (?, ?, ?, ?, ?, ?, ?, STR_TO_DATE(?, "%d/%m/%Y"), ?, ?, ?, ?, ?)';
+                $stmt = $conn->prepare($commString);
+                
+                //Check if statement could be prepared
+                if ($stmt) {
+                    
+                    $stmt->bind_param('issssssssssss', $userId, $user->email, $user->firstName, $user->lastName, $user->passwordHash, $passwordSalt, $user->phone, $user->dateOfBirth, $user->street, $user->houseNumber, $user->city, $user->postalCode, $user->country);
+                    
+                    if (!$stmt->execute()) {
+                        if ($stmt->errno == 1062)
+                            throw new UserDBException('This email address is already used.', UserDBException::EMAILALREADYEXISTS);
+                        else
+                            throw new UserDBException('Unknown error during statement execution while adding user.', UserDBException::UNKNOWNERROR);
+                    }
+                    $stmt->close();
 
-            $commString = 'INSERT INTO stippers_users (user_id, email, first_name, last_name, password_hash, password_salt, phone, date_of_birth, street, house_number, city, postal_code, country) ' .
-                'VALUES (?, ?, ?, ?, ?, ?, ?, STR_TO_DATE(?, "%d/%m/%Y"), ?, ?, ?, ?, ?)';
-            $stmt = $conn->prepare($commString);
-            $stmt->bind_param('issssssssssss', $userId, $user->email, $user->firstName, $user->lastName, $user->passwordHash, $passwordSalt, $user->phone, $user->dateOfBirth, $user->street, $user->houseNumber, $user->city, $user->postalCode, $user->country);
-            
-            if (!$stmt->execute())
-                if ($stmt->errno == 1062)
-                    throw new UserDBException('This email address is already used.', UserDBException::EMAILALREADYEXISTS);
+                    $commString = 'INSERT INTO stippers_user_card_year (user, card, membership_year) VALUES (?, ?, CONVERT_TZ(NOW(), @@global.time_zone, ?))';
+                    $stmt = $conn->prepare($commString);
+                    
+                    //Check if statement could be prepared
+                    if ($stmt) {
+                    
+                        $timezone = GlobalConfig::TIMEZONE;
+                        $stmt->bind_param('iis', $userId, $cardId, $timezone);
+                        
+                        if ($stmt->execute())
+                            $conn->commit();
+                        else {
+                            if ($stmt->errno == 1062)
+                                throw new UserDBException('This card is already used.', UserDBException::CARDALREADYUSED);
+                            else
+                                throw new UserDBException('Unknown error during statement execution while adding user.', UserDBException::UNKNOWNERROR);
+                        }
+                    }
+                    else
+                        throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
+                }
                 else
-                    throw new UserDBException('Unknown error during statement execution while adding user.', UserDBException::UNKNOWNERROR);
-            $stmt->close();
-
-            //Inserting 0000 for the year is a dirty hack to work around a bug in MySQL < 5.7.1.
-            //Anywhere in the code where the year should go to the default (current year) you should insert 0000 instead of NULL.
-            $commString = 'INSERT INTO stippers_user_card_year (user, card, membership_year) VALUES (?, ?, 0000)';
-            $stmt = $conn->prepare($commString);
-            $stmt->bind_param('ii', $userId, $cardId);
-            
-            if ($stmt->execute())
-                $conn->commit();
-            else {
-                if ($stmt->errno == 1062)
-                    throw new UserDBException('This card is already used.', UserDBException::CARDALREADYUSED);
-                else
-                    throw new UserDBException('Unknown error during statement execution while adding user.', UserDBException::UNKNOWNERROR);
+                        throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
             }
+            else
+                throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             if (isset($conn))
@@ -777,30 +813,43 @@ abstract class UserDB {
             $commString = 'UPDATE stippers_users SET email = ?, first_name = ?, last_name = ?, phone = ?, date_of_birth = STR_TO_DATE(?, "%d/%m/%Y"), street = ?, house_number = ?, city = ?, postal_code = ?, country = ?, is_admin = ?, is_hint_manager = ?, is_user_manager = ?, is_browser_manager = ? ' .
                 'WHERE user_id = ? AND email = ? AND first_name = ? AND last_name = ? AND password_hash = ? AND phone = ? AND date_of_birth = STR_TO_DATE(?, "%d/%m/%Y") AND street = ? AND house_number = ? AND city = ? AND postal_code = ? AND country = ? AND DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") = ? AND is_admin = ? AND is_hint_manager = ? AND is_user_manager = ? AND is_browser_manager = ?';
             $stmt = $conn->prepare($commString);
-            $timezone = GlobalConfig::TIMEZONE;
-            $stmt->bind_param('ssssssssssiiiiissssssssssssssiiii', $newUser->email, $newUser->firstName, $newUser->lastName, $newUser->phone, $newUser->dateOfBirth, $newUser->street, $newUser->houseNumber, $newUser->city, $newUser->postalCode, $newUser->country, $newUser->isAdmin, $newUser->is_hint_manager, $newUser->is_user_manager, $newUser->is_browser_manager, $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isBrowserManager);
             
-            if (!$stmt->execute())
-                if ($stmt->errno == 1062)
-                    throw new UserDBException('Cannot update user.', UserDBException::EMAILALREADYEXISTS);
+            //Check if statement could be prepared
+            if ($stmt) {
+               
+                $timezone = GlobalConfig::TIMEZONE;
+                $stmt->bind_param('ssssssssssiiiiissssssssssssssiiii', $newUser->email, $newUser->firstName, $newUser->lastName, $newUser->phone, $newUser->dateOfBirth, $newUser->street, $newUser->houseNumber, $newUser->city, $newUser->postalCode, $newUser->country, $newUser->isAdmin, $newUser->is_hint_manager, $newUser->is_user_manager, $newUser->is_browser_manager, $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isBrowserManager);
+                
+                if (!$stmt->execute())
+                    if ($stmt->errno == 1062)
+                        throw new UserDBException('Cannot update user.', UserDBException::EMAILALREADYEXISTS);
+                    else
+                        throw new UserDBException('Unknown error during statement execution while updating user.', UserDBException::UNKNOWNERROR);
+    
+                $stmt->close();
+                
+                $commString = 'UPDATE stippers_user_card_year SET card = ? WHERE user = ? AND card = ? AND membership_year = CONVERT_TZ(NOW(), @@global.time_zone, ?)';
+                $stmt = $conn->prepare($commString);
+                
+                //Check if statement could be prepared
+                if ($stmt) {
+                    
+                    $stmt->bind_param('iiis', $newCardNumber, $oldUser->userId, $oldCardNumber, $timezone);
+                    
+                    if ($stmt->execute())
+                        $conn->commit();
+                    else {
+                        if ($stmt->errno == 1062)
+                            throw new UserDBException('This card is already used.', UserDBException::CARDALREADYUSED);
+                        else
+                            throw new UserDBException('Unknown error during statement execution while adding user.', UserDBException::UNKNOWNERROR);
+                    }
+                }
                 else
-                    throw new UserDBException('Unknown error during statement execution while updating user.', UserDBException::UNKNOWNERROR);
-
-            $stmt->close();
-            //Inserting 0000 for the year is a dirty hack to work around a bug in MySQL < 5.7.1.
-            //Anywhere in the code where the year should go to the default (current year) you should insert 0000 instead of NULL.
-            $commString = 'UPDATE stippers_user_card_year SET card = ? WHERE user = ? AND card = ? AND membership_year = 0000';
-            $stmt = $conn->prepare($commString);
-            $stmt->bind_param('iii', $newCardNumber, $oldUser->userId, $oldCardNumber);
-            
-            if ($stmt->execute())
-                $conn->commit();
-            else {
-                if ($stmt->errno == 1062)
-                    throw new UserDBException('This card is already used.', UserDBException::CARDALREADYUSED);
-                else
-                    throw new UserDBException('Unknown error during statement execution while adding user.', UserDBException::UNKNOWNERROR);
+                    throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
             }
+            else
+                throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             if (isset($conn))
@@ -829,17 +878,24 @@ abstract class UserDB {
             $commString = 'UPDATE stippers_users SET email = ?, first_name = ?, last_name = ?, phone = ?, date_of_birth = STR_TO_DATE(?, "%d/%m/%Y"), street = ?, house_number = ?, city = ?, postal_code = ?, country = ?, is_admin = ?, is_hint_manager = ?, is_user_manager = ?, is_browser_manager = ? ' .
                 'WHERE user_id = ? AND email = ? AND first_name = ? AND last_name = ? AND password_hash = ? AND balance = ? AND phone = ? AND date_of_birth = STR_TO_DATE(?, "%d/%m/%Y") AND street = ? AND house_number = ? AND city = ? AND postal_code = ? AND country = ? AND DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") = ? AND is_admin = ? AND is_hint_manager = ? AND is_user_manager = ? AND is_browser_manager = ?';
             $stmt = $conn->prepare($commString);
-            $timezone = GlobalConfig::TIMEZONE;
-            $stmt->bind_param('ssssssssssiiiiissssssssssssssiiii', $newUser->email, $newUser->firstName, $newUser->lastName, $newUser->phone, $newUser->dateOfBirth, $newUser->street, $newUser->houseNumber, $newUser->city, $newUser->postalCode, $newUser->country, $newUser->isAdmin, $newUser->isHintManager, $newUser->isUserManager, $newUser->isBrowserManager, $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->balance, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isBrowserManager);
             
-            if (!$stmt->execute()) {
-                if ($stmt->errno == 1062)
-                    throw new UserDBException('Cannot update user.', UserDBException::EMAILALREADYEXISTS);
-                else
-                    throw new UserDBException('Unknown error during statement execution while updating user.', UserDBException::UNKNOWNERROR);
+            //Check if statement could be prepared
+            if ($stmt) {
+               
+                $timezone = GlobalConfig::TIMEZONE;
+                $stmt->bind_param('ssssssssssiiiiissssssssssssssiiii', $newUser->email, $newUser->firstName, $newUser->lastName, $newUser->phone, $newUser->dateOfBirth, $newUser->street, $newUser->houseNumber, $newUser->city, $newUser->postalCode, $newUser->country, $newUser->isAdmin, $newUser->isHintManager, $newUser->isUserManager, $newUser->isBrowserManager, $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->balance, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isBrowserManager);
+                
+                if (!$stmt->execute()) {
+                    if ($stmt->errno == 1062)
+                        throw new UserDBException('Cannot update user.', UserDBException::EMAILALREADYEXISTS);
+                    else
+                        throw new UserDBException('Unknown error during statement execution while updating user.', UserDBException::UNKNOWNERROR);
+                }
+                else if ($stmt->affected_rows == 0)
+                    throw new UserDBException('The user is out of date, someone else has probably already changed the user.', UserDBException::USEROUTOFDATE);
             }
-            else if ($stmt->affected_rows == 0)
-                throw new UserDBException('The user is out of date, someone else has probably already changed the user.', UserDBException::USEROUTOFDATE);
+            else
+                throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -866,13 +922,21 @@ abstract class UserDB {
             $commString = 'UPDATE stippers_users SET password_hash = ? ' .
                 'WHERE user_id = ? AND email = ? AND first_name = ? AND last_name = ? AND password_hash = ? AND balance = ? AND phone = ? AND date_of_birth = STR_TO_DATE(?, "%d/%m/%Y") AND street = ? AND house_number = ? AND city = ? AND postal_code = ? AND country = ? AND DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") = ? AND is_admin = ? AND is_hint_manager = ? AND is_user_manager = ? AND is_browser_manager = ?';
             $stmt = $conn->prepare($commString);
-            $timezone = GlobalConfig::TIMEZONE;
-            $stmt->bind_param('sissssssssssssssiiii', $newPasswordHash, $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->balance, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isBrowserManager);
             
-            if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while updating user.', UserDBException::UNKNOWNERROR);
-            else if ($stmt->affected_rows == 0)
-                throw new UserDBException('The user is out of date, someone else has probably already changed the user.', UserDBException::USEROUTOFDATE);
+            //Check if statement could be prepared
+            if ($stmt) {
+               
+               $timezone = GlobalConfig::TIMEZONE;
+               $stmt->bind_param('sissssssssssssssiiii', $newPasswordHash, $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->balance, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isBrowserManager);
+               
+               if (!$stmt->execute())
+                   throw new UserDBException('Unknown error during statement execution while updating user.', UserDBException::UNKNOWNERROR);
+               else if ($stmt->affected_rows == 0)
+                   throw new UserDBException('The user is out of date, someone else has probably already changed the user.', UserDBException::USEROUTOFDATE);
+            
+            }
+            else
+               throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -898,11 +962,19 @@ abstract class UserDB {
             $conn = Database::getConnection();
             $commString = 'UPDATE stippers_users SET password_hash = ? WHERE email = ?';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('ss', $newPasswordHash, $email);
-            if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while updating user.', UserDBException::UNKNOWNERROR);
-            else if ($stmt->affected_rows == 0)
-                throw new UserDBException('The user is out of date, someone else has probably already changed the user.', UserDBException::USEROUTOFDATE);
+            
+            //Check if statement could be prepared
+            if ($stmt) {
+               
+                $stmt->bind_param('ss', $newPasswordHash, $email);
+                if (!$stmt->execute())
+                    throw new UserDBException('Unknown error during statement execution while updating user.', UserDBException::UNKNOWNERROR);
+                else if ($stmt->affected_rows == 0)
+                    throw new UserDBException('The user is out of date, someone else has probably already changed the user.', UserDBException::USEROUTOFDATE);
+            }
+            else
+               throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
+            
         }
         catch (Exception $ex) {
             throw $ex;
@@ -931,37 +1003,50 @@ abstract class UserDB {
             $commString = 'UPDATE stippers_users SET email = ?, first_name = ?, last_name = ?, phone = ?, date_of_birth = STR_TO_DATE(?, "%d/%m/%Y"), street = ?, house_number = ?, city = ?, postal_code = ?, country = ? ' .
                 'WHERE user_id = ? AND email = ? AND first_name = ? AND last_name = ? AND password_hash = ? AND balance = ? AND phone = ? AND date_of_birth = STR_TO_DATE(?, "%d/%m/%Y") AND street = ? AND house_number = ? AND city = ? AND postal_code = ? AND country = ? AND DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") = ? AND is_admin = ? AND is_hint_manager = ? AND is_user_manager = ? AND is_browser_manager = ?';
             $stmt = $conn->prepare($commString);
-            $timezone = GlobalConfig::TIMEZONE;
-            $stmt->bind_param('ssssssssssissssdsssssssssiiii', $newUser->email, $newUser->firstName, $newUser->lastName, $newUser->phone, $newUser->dateOfBirth, $newUser->street, $newUser->houseNumber, $newUser->city, $newUser->postalCode, $newUser->country, $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->balance, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isBrowserManager);
             
-            if (!$stmt->execute()) {
-                if ($stmt->errno == 1062)
-                    throw new UserDBException('Cannot update user.', UserDBException::EMAILALREADYEXISTS);
-                else
-                    throw new UserDBException('Unknown error during statement execution while updating user.', UserDBException::UNKNOWNERROR);
-            }
-            else if ($stmt->affected_rows == 0)
-                throw new UserDBException('The user is out of date, someone else has probably already changed the user.', UserDBException::USEROUTOFDATE);
-
-            $stmt->close();
-            //Inserting 0000 for the year is a dirty hack to work around a bug in MySQL < 5.7.1.
-            //Anywhere in the code where the year should go to the default (current year) you should insert 0000 instead of NULL.
-            $commString = 'INSERT INTO stippers_user_card_year (user, card, membership_year) VALUES (?, ?, 0000)';
-            $stmt = $conn->prepare($commString);
-            $stmt->bind_param('ii', $oldUser->userId, $cardNumber);
-            
-            if ($stmt->execute())
-                $conn->commit();
-            else {
-                if ($stmt->errno == 1062) {
-                    if (substr($stmt->error, strlen($stmt->error) - 9) == '\'PRIMARY\'')
-                        throw new UserDBException('This user is already a member this year.', UserDBException::USERALREADYMEMBER);
+            //Check if statement could be prepared
+            if ($stmt) {
+                
+                $timezone = GlobalConfig::TIMEZONE;
+                $stmt->bind_param('ssssssssssissssdsssssssssiiii', $newUser->email, $newUser->firstName, $newUser->lastName, $newUser->phone, $newUser->dateOfBirth, $newUser->street, $newUser->houseNumber, $newUser->city, $newUser->postalCode, $newUser->country, $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->balance, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isBrowserManager);
+                
+                if (!$stmt->execute()) {
+                    if ($stmt->errno == 1062)
+                        throw new UserDBException('Cannot update user.', UserDBException::EMAILALREADYEXISTS);
                     else
-                        throw new UserDBException('This card is already used.', UserDBException::CARDALREADYUSED);
+                        throw new UserDBException('Unknown error during statement execution while updating user.', UserDBException::UNKNOWNERROR);
+                }
+                else if ($stmt->affected_rows == 0)
+                    throw new UserDBException('The user is out of date, someone else has probably already changed the user.', UserDBException::USEROUTOFDATE);
+    
+                $stmt->close();
+                
+                $commString = 'INSERT INTO stippers_user_card_year (user, card, membership_year) VALUES (?, ?, CONVERT_TZ(NOW(), @@global.time_zone, ?))';
+                $stmt = $conn->prepare($commString);
+                
+                //Check if statement could be prepared
+                if ($stmt) {
+                
+                    $stmt->bind_param('iis', $oldUser->userId, $cardNumber, $timezone);
+                    
+                    if ($stmt->execute())
+                        $conn->commit();
+                    else {
+                        if ($stmt->errno == 1062) {
+                            if (substr($stmt->error, strlen($stmt->error) - 9) == '\'PRIMARY\'')
+                                throw new UserDBException('This user is already a member this year.', UserDBException::USERALREADYMEMBER);
+                            else
+                                throw new UserDBException('This card is already used.', UserDBException::CARDALREADYUSED);
+                        }
+                        else
+                            throw new UserDBException('Unknown error during statement execution while renewing user.', UserDBException::UNKNOWNERROR);
+                    }
                 }
                 else
-                    throw new UserDBException('Unknown error during statement execution while renewing user.', UserDBException::UNKNOWNERROR);
+                    throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
             }
+            else
+               throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             if (isset($conn))

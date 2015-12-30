@@ -11,6 +11,8 @@
 
 class MembershipDBException extends Exception{
     const UNKNOWNERROR = 1;
+    const CANNOTPREPARESTMT = 2;
+    const NOCARDTHISYEAR = 3;
 
     public function __construct($message, $code = 0, $previous = null){
         parent::__construct($message, $code, $previous);

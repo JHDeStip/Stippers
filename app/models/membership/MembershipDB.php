@@ -27,21 +27,29 @@ abstract class MembershipDB {
     public static function isUserMemberThisYearByUserId($userId) {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT count(*) FROM stippers_user_card_year WHERE user = ? AND membership_year = (SELECT YEAR(NOW()))';
+            $commString = 'SELECT count(*) FROM stippers_user_card_year WHERE user = ? AND membership_year = (SELECT YEAR(CONVERT_TZ(NOW(), @@global.time_zone, ?)))';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('i', $userId);
             
-            if (!$stmt->execute()) {
-                $stmt->bind_result($userCardYear);
+            //Check if statement could be prepared
+            if ($stmt) {
                 
-                if ($stmt->fetch()) {
-                    if ($userCardYear == 0)
-                        return false;
-                    return true;
+                $timezone = GlobalConfig::TIMEZONE;
+                $stmt->bind_param('is', $userId, $timezone);
+                
+                if (!$stmt->execute()) {
+                    $stmt->bind_result($userCardYear);
+                    
+                    if ($stmt->fetch()) {
+                        if ($userCardYear == 0)
+                            return false;
+                        return true;
+                    }
+                    else
+                        throw new MembershipDBException('Unknown error during statement execution while checking if the user is a member this year.', MembershipDBException::UNKNOWNERROR);
                 }
-                else
-                    throw new MembershipDBException('Unknown error during statement execution while checking if the user is a member this year.', MembershipDBException::UNKNOWNERROR);
             }
+            else
+                throw new MembershipDBException('Cannot prepare statement.', MembershipDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -65,23 +73,31 @@ abstract class MembershipDB {
     public static function getUserMembershipDetailsByUserId($userId) {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT membership_year, card, (SELECT count(*) FROM stippers_check_ins WHERE YEAR(time) = membership_year AND user = ?)
+            $commString = 'SELECT membership_year, card, (SELECT count(*) FROM stippers_check_ins WHERE YEAR(CONVERT_TZ(time, @@global.time_zone, ?)) = membership_year AND user = ?)
             FROM stippers_user_card_year WHERE user = ? ORDER BY membership_year DESC';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('ii', $userId, $userId);
             
-            if (!$stmt->execute())
-                throw new MembershipDBException('Unknown error during statement execution while getting the user\'s membership details.', MembershipDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($membershipYear, $cardNumber, $nCheckIns);
-
-                $userYearsDetails = array();
+            //Check if statement could be prepared
+            if ($stmt) {
                 
-                while ($stmt->fetch())
-                    array_push($userYearsDetails, ['membershipYear' => $membershipYear, 'cardNumber' => $cardNumber, 'nCheckIns' => $nCheckIns]);
-
-                return $userYearsDetails;
+                $timezone = GlobalConfig::TIMEZONE;
+                $stmt->bind_param('sii', $timezone, $userId, $userId);
+                
+                if (!$stmt->execute())
+                    throw new MembershipDBException('Unknown error during statement execution while getting the user\'s membership details.', MembershipDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($membershipYear, $cardNumber, $nCheckIns);
+    
+                    $userYearsDetails = array();
+                    
+                    while ($stmt->fetch())
+                        array_push($userYearsDetails, ['membershipYear' => $membershipYear, 'cardNumber' => $cardNumber, 'nCheckIns' => $nCheckIns]);
+    
+                    return $userYearsDetails;
+                }
             }
+            else
+                throw new MembershipDBException('Cannot prepare statement.', MembershipDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -101,23 +117,40 @@ abstract class MembershipDB {
      * @return int card number
      */
     public static function getCardNumberByUserId($userId) {
-        $conn = Database::getConnection();
-
-        $commString = 'SELECT card FROM stippers_user_card_year WHERE user = @user AND year = YEAR(NOW())';
-        $comm = $conn->prepare($commString);
-        $comm->bind_param('i', $userId);
-
-        $comm->execute();
-        $result = $comm->get_result();
-
-        $comm->close();
-        $conn->kill($conn->thread_id);
-        $conn->close();
-
-        if ($row = $result->fetch_row())
-            return $row[0];
-        else
-            return null;
+        try {
+            $conn = Database::getConnection();
+            $commString = 'SELECT card FROM stippers_user_card_year WHERE user = ? AND year = YEAR(CONVERT_TZ(NOW(), @@global.time_zone, ?))';
+            $stmt = $conn->prepare($commString);
+            
+            //Check if statement could be prepared
+            if ($stmt) {
+                
+                $timezone = GlobalConfig::TIMEZONE;
+                $stmt->bind_param('is', $userId, $timezone);
+                
+                if (!$stmt->execute())
+                    throw new MembershipDBException('Unknown error during statement execution while getting the card number.', MembershipDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($cardNumber);
+    
+                    if ($stmt->fetch())
+                        return $cardNumber;
+                    else
+                        throw new MembershipDBException('This user is not a member this year.', MembershipDBException::NOTCARDTHISYEAR);
+                }
+            }
+            else
+                throw new MembershipDBException('Cannot prepare statement.', MembershipDBException::CANNOTPREPARESTMT);
+        }
+        catch (Exception $ex) {
+            throw $ex;
+        }
+        finally {
+            if (isset($conn)) {
+                $conn->kill($conn->thread_id);
+                $conn->close();
+            }
+        }
     }
     
     /**
@@ -130,24 +163,30 @@ abstract class MembershipDB {
     public static function getUserIdsThisYear() {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT user FROM stippers_user_card_year WHERE membership_year = (SELECT YEAR(NOW()))';
+            $commString = 'SELECT user FROM stippers_user_card_year WHERE membership_year = (SELECT YEAR(CONVERT_TZ(NOW(), @@global.time_zone, ?)))';
             $stmt = $conn->prepare($commString);
             
-            if (!$stmt->execute())
-                throw new MembershipDBException('Unknown error during statement execution while getting the user IDs.', MembershipDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($userId);
-
-                $userIds = array();
-                $i = 0;
+            //Check if statement could be prepared
+            if ($stmt) {
                 
-                while ($stmt->fetch()) {
-                    $userIds[$i] = $userId;
-                    $i++;
+                $timezone = GlobalConfig::TIMEZONE;
+                $stmt->bind_param('s', $timezone);
+                
+                if (!$stmt->execute())
+                    throw new MembershipDBException('Unknown error during statement execution while getting the user IDs.', MembershipDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($userId);
+    
+                    $userIds = array();
+                    
+                    while ($stmt->fetch())
+                        array_push($userIds, $userId);
+    
+                    return $userIds;
                 }
-
-                return $userIds;
             }
+            else
+                throw new MembershipDBException('Cannot prepare statement.', MembershipDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;

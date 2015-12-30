@@ -14,12 +14,11 @@ class UserDBException extends Exception{
     const EMAILALREADYEXISTS = 2;
     const CARDALREADYUSED = 3;
     const NOUSERFORCARDNUMER = 4;
-    const NOUSERFOREMAILPASSWORD = 5;
-    const NOUSERFORID = 6;
-    const USERALREADYMEMBER = 7;
-    const CANNOTGETNEXTUSERID = 8;
-    const NOUSERFOREMAIL = 9;
-    const USEROUTOFDATE = 10;
+    const NOUSERFORID = 5;
+    const USERALREADYMEMBER = 6;
+    const CANNOTGETNEXTUSERID = 7;
+    const NOUSERFOREMAIL = 8;
+    const USEROUTOFDATE = 9;
 
 
     public function __construct($message, $code = 0, $previous = null){

@@ -25,24 +25,30 @@ abstract class BrowserDB {
     public static function getBrowsers() {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT browser_id, uuid, name, can_add_renew_users, can_check_in FROM stippers_browsers';
+            $commString = 'SELECT browser_ids, uuid, name, can_add_renew_users, can_check_in FROM stippers_browsers';
             $stmt = $conn->prepare($commString);
             
-            if (!$stmt->execute())
-                throw new BrowserDBException('Unknown error during statement execution while getting browsers.', BrowserDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($browserId, $uuid, $name, $canAddRenewUsers, $canCheckIn);
-                $browsers = array();
+            //Check if statement could be prepared
+            if ($stmt) {
                 
-                while ($stmt->fetch()) {
-                    $canAddRenewUsersBool = ($canAddRenewUsers != 0);
-                    $canCheckInBool = ($canCheckIn != 0);
+                if (!$stmt->execute())
+                    throw new BrowserDBException('Unknown error during statement execution while getting browsers.', BrowserDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($browserId, $uuid, $name, $canAddRenewUsers, $canCheckIn);
+                    $browsers = array();
                     
-                    array_push($browsers, new Browser($browserId, $uuid, $name, $canAddRenewUsersBool, $canCheckInBool));
+                    while ($stmt->fetch()) {
+                        $canAddRenewUsersBool = ($canAddRenewUsers != 0);
+                        $canCheckInBool = ($canCheckIn != 0);
+                        
+                        array_push($browsers, new Browser($browserId, $uuid, $name, $canAddRenewUsersBool, $canCheckInBool));
+                    }
+                    
+                    return $browsers;
                 }
-                
-                return $browsers;
             }
+            else
+                throw new BrowserDBException('Cannot prepare statement.', BrowserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -68,22 +74,29 @@ abstract class BrowserDB {
             $conn = Database::getConnection();
             $commString = 'SELECT can_add_renew_users, can_check_in FROM stippers_browsers WHERE uuid = ?';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('s', $uuid);
             
-            if (!$stmt->execute())
-                throw new BrowserDBException('Unknown error during statement execution while getting browser.', BrowserDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($canAddRenewUsers, $canCheckIn);
+            //Check if statement could be prepared
+            if ($stmt) {
                 
-                if ($stmt->fetch()) {
-                    $canAddRenewUsers = ($canAddRenewUsers != 0);
-                    $canCheckIn = ($canCheckIn != 0);
-                    return new Browser(null, null, null, $canAddRenewUsers, $canCheckIn);
+                $stmt->bind_param('s', $uuid);
+                
+                if (!$stmt->execute())
+                    throw new BrowserDBException('Unknown error during statement execution while getting browser.', BrowserDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($canAddRenewUsers, $canCheckIn);
+                    
+                    if ($stmt->fetch()) {
+                        $canAddRenewUsers = ($canAddRenewUsers != 0);
+                        $canCheckIn = ($canCheckIn != 0);
+                        return new Browser(null, null, null, $canAddRenewUsers, $canCheckIn);
+                    }
+                    else
+                        throw new BrowserDBException('No browser was found for this id.', BrowserDBException::NOBROWSERFORUUID);
+                    
                 }
-                else
-                    throw new BrowserDBException('No browser was found for this id.', BrowserDBException::NOBROWSERFORUUID);
-                
             }
+            else
+                throw new BrowserDBException('Cannot prepare statement.', BrowserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -109,21 +122,28 @@ abstract class BrowserDB {
             $conn = Database::getConnection();
             $commString = 'SELECT uuid, name, can_add_renew_users, can_check_in FROM stippers_browsers WHERE browser_id = ?';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('i', $id);
             
-            if (!$stmt->execute())
-                throw new BrowserDBException('Unknown error during statement execution while getting browser.', BrowserDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($uuid, $name, $canAddRenewUsers, $canCheckIn);
+            //Check if statement could be prepared
+            if ($stmt) {
+                    
+                $stmt->bind_param('i', $id);
                 
-                if ($stmt->fetch()) {
-                    $canAddRenewUsers = ($canAddRenewUsers != 0);
-                    $canCheckIn = ($canCheckIn != 0);
-                    return new Browser($id, $uuid, $name, $canAddRenewUsers, $canCheckIn);
+                if (!$stmt->execute())
+                    throw new BrowserDBException('Unknown error during statement execution while getting browser.', BrowserDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($uuid, $name, $canAddRenewUsers, $canCheckIn);
+                    
+                    if ($stmt->fetch()) {
+                        $canAddRenewUsers = ($canAddRenewUsers != 0);
+                        $canCheckIn = ($canCheckIn != 0);
+                        return new Browser($id, $uuid, $name, $canAddRenewUsers, $canCheckIn);
+                    }
+                    else
+                        throw new BrowserDBException('No browser was found for this id.', BrowserDBException::NOBROWSERFORID);
                 }
-                else
-                    throw new BrowserDBException('No browser was found for this id.', BrowserDBException::NOBROWSERFORID);
             }
+            else
+                throw new BrowserDBException('Cannot prepare statement.', BrowserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -149,14 +169,21 @@ abstract class BrowserDB {
             
             $commString = 'INSERT INTO stippers_browsers (uuid, name, can_add_renew_users, can_check_in) VALUES (?, ?, ?, ?)';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('ssii', $browser->uuid, $browser->name, $browser->canAddRenewUsers, $browser->canCheckIn);
             
-            if (!$stmt->execute()) {
-                if ($stmt->errno == 1062)
-                    throw new BrowserDBException('A browser with this name already exists.', BrowserDBException::BROWSERNAMEEXISTS);
-                else
-                    throw new BrowserDBException('Unknown error during statement execution while setting browser.', BrowserDBException::UNKNOWNERROR);
+            //Check if statement could be prepared
+            if ($stmt) {
+                    
+                $stmt->bind_param('ssii', $browser->uuid, $browser->name, $browser->canAddRenewUsers, $browser->canCheckIn);
+                
+                if (!$stmt->execute()) {
+                    if ($stmt->errno == 1062)
+                        throw new BrowserDBException('A browser with this name already exists.', BrowserDBException::BROWSERNAMEEXISTS);
+                    else
+                        throw new BrowserDBException('Unknown error during statement execution while setting browser.', BrowserDBException::UNKNOWNERROR);
+                }
             }
+            else
+                throw new BrowserDBException('Cannot prepare statement.', BrowserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -182,17 +209,24 @@ abstract class BrowserDB {
             $conn = Database::getConnection();
             $commString = 'UPDATE stippers_browsers SET name = ?, can_add_renew_users = ?, can_check_in = ? WHERE browser_id = ? AND uuid = ? AND name = ? AND can_add_renew_users = ? AND can_check_in = ?';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('siiissii', $newBrowser->name, $newBrowser->canAddRenewUsers, $newBrowser->canCheckIn, $oldBrowser->browserId, $oldBrowser->uuid, $oldBrowser->name, $oldBrowser->canAddRenewUsers, $oldBrowser->canCheckIn);
-
-            if (!$stmt->execute()) {
-                if ($stmt->errno == 1062)
-                    throw new BrowserDBException('A browser with this name already exists.', BrowserDBException::BROWSERNAMEEXISTS);
+            
+            //Check if statement could be prepared
+            if ($stmt) {
+                        
+                $stmt->bind_param('siiissii', $newBrowser->name, $newBrowser->canAddRenewUsers, $newBrowser->canCheckIn, $oldBrowser->browserId, $oldBrowser->uuid, $oldBrowser->name, $oldBrowser->canAddRenewUsers, $oldBrowser->canCheckIn);
+    
+                if (!$stmt->execute()) {
+                    if ($stmt->errno == 1062)
+                        throw new BrowserDBException('A browser with this name already exists.', BrowserDBException::BROWSERNAMEEXISTS);
+                    else
+                        throw new BrowserDBException('Unknown error during statement execution while updating browser.', BrowserDBException::UNKNOWNERROR);
+                }
                 else
-                    throw new BrowserDBException('Unknown error during statement execution while updating browser.', BrowserDBException::UNKNOWNERROR);
+                    if ($stmt->affected_rows == 0)
+                        throw new BrowserDBException('Browser out of date.', BrowserDBException::BROWSEROUTOFDATE);
             }
             else
-                if ($stmt->affected_rows == 0)
-                    throw new BrowserDBException('Browser out of date.', BrowserDBException::BROWSEROUTOFDATE);
+                throw new BrowserDBException('Cannot prepare statement.', BrowserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -217,13 +251,20 @@ abstract class BrowserDB {
             $conn = Database::getConnection();
             $commString = 'DELETE FROM stippers_browsers WHERE uuid = ? AND name = ? AND can_add_renew_users = ? AND can_check_in = ?';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('ssii', $browser->uuid, $browser->name, $browser->canAddRenewUsers, $browser->canCheckIn);
             
-            if (!$stmt->execute())
-                throw new BrowserDBException('Unknown error during statement execution while removing browser.', BrowserDBException::UNKNOWNERROR);
+            //Check if statement could be prepared
+            if ($stmt) {
+                            
+                $stmt->bind_param('ssii', $browser->uuid, $browser->name, $browser->canAddRenewUsers, $browser->canCheckIn);
+                
+                if (!$stmt->execute())
+                    throw new BrowserDBException('Unknown error during statement execution while removing browser.', BrowserDBException::UNKNOWNERROR);
+                else
+                    if ($stmt->affected_rows == 0)
+                        throw new BrowserDBException('Browser out of date.', BrowserDBException::BROWSEROUTOFDATE);
+            }
             else
-                if ($stmt->affected_rows == 0)
-                    throw new BrowserDBException('Browser out of date.', BrowserDBException::BROWSEROUTOFDATE);
+                throw new BrowserDBException('Cannot prepare statement.', BrowserDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;

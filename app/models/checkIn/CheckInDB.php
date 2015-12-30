@@ -36,24 +36,37 @@ abstract class CheckInDB {
             $commString = 'SELECT COUNT(*) FROM stippers_check_ins WHERE user = ? AND (NOW() - INTERVAL ? HOUR < ANY (SELECT time FROM stippers_check_ins WHERE user = ?))';
             $stmt = $conn->prepare($commString);
             $minCheckInInterval = CheckInConfig::MINCHECKININTERVAL;
-            $stmt->bind_param('iii', $userId, $minCheckInInterval, $userId);
-            if (!$stmt->execute())
-                throw new CheckInDBException('Unknown error during statement execution while counting too soon check-ins.', CheckInDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($nCheckIns);
-                if (!$stmt->fetch())
+            
+            //Check if statement could be prepared
+            if ($stmt) {
+                                
+                $stmt->bind_param('iii', $userId, $minCheckInInterval, $userId);
+                if (!$stmt->execute())
                     throw new CheckInDBException('Unknown error during statement execution while counting too soon check-ins.', CheckInDBException::UNKNOWNERROR);
-                else if($nCheckIns > 0)
-                    throw new CheckInDBException('This user was checked in less than CheckInConfig::MINCHECKININTERVAL hours ago.', CheckInDBException::ALREADYCHECKEDIN);
                 else {
-                    $stmt->close();
-                    $commString = 'INSERT INTO stippers_check_ins (user) VALUES (?)';
-                    $stmt = $conn->prepare($commString);
-                    $stmt->bind_param('i', $userId);
-                    if (!$stmt->execute())
-                        throw new CheckInDBException('Unknown error during statement execution while checking in.', CheckInDBException::UNKNOWNERROR);
+                    $stmt->bind_result($nCheckIns);
+                    if (!$stmt->fetch())
+                        throw new CheckInDBException('Unknown error during statement execution while counting too soon check-ins.', CheckInDBException::UNKNOWNERROR);
+                    else if($nCheckIns > 0)
+                        throw new CheckInDBException('This user was checked in less than CheckInConfig::MINCHECKININTERVAL hours ago.', CheckInDBException::ALREADYCHECKEDIN);
+                    else {
+                        $stmt->close();
+                        $commString = 'INSERT INTO stippers_check_ins (user) VALUES (?)';
+                        $stmt = $conn->prepare($commString);
+                        
+                        //Check if statement could be prepared
+                        if ($stmt) {
+                            $stmt->bind_param('i', $userId);
+                            if (!$stmt->execute())
+                                throw new CheckInDBException('Unknown error during statement execution while checking in.', CheckInDBException::UNKNOWNERROR);
+                        }
+                        else
+                            throw new CheckInDBException('Cannot prepare statement.', CheckInDBException::CANNOTPREPARESTMT);
+                    }
                 }
             }
+            else
+                throw new CheckInDBException('Cannot prepare statement.', CheckInDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex)
         {
@@ -86,16 +99,23 @@ abstract class CheckInDB {
             $conn = Database::getConnection();
             $commString = 'SELECT count(*) FROM stippers_check_ins WHERE user = ? AND YEAR(time) = (SELECT YEAR(NOW()))';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('i', $userId);
-            if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while getting the user\'s check-ins.', CheckInDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($nCheckIns);
-                if ($stmt->fetch())
-                    return $nCheckIns;
-                else
+            
+            //Check if statement could be prepared
+            if ($stmt) {
+                                    
+                $stmt->bind_param('i', $userId);
+                if (!$stmt->execute())
                     throw new UserDBException('Unknown error during statement execution while getting the user\'s check-ins.', CheckInDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($nCheckIns);
+                    if ($stmt->fetch())
+                        return $nCheckIns;
+                    else
+                        throw new UserDBException('Unknown error during statement execution while getting the user\'s check-ins.', CheckInDBException::UNKNOWNERROR);
+                }
             }
+            else
+                throw new CheckInDBException('Cannot prepare statement.', CheckInDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -122,16 +142,23 @@ abstract class CheckInDB {
             $conn = Database::getConnection();
             $commString = 'SELECT count(*) FROM stippers_check_ins WHERE user = ?';
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param('i', $userId);
-            if (!$stmt->execute())
-                throw new UserDBException('Unknown error during statement execution while getting the user\'s check-ins.', CheckInDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($nCheckIns);
-                if ($stmt->fetch())
-                    return $nCheckIns;
-                else
+            
+            //Check if statement could be prepared
+            if ($stmt) {
+                                
+                $stmt->bind_param('i', $userId);
+                if (!$stmt->execute())
                     throw new UserDBException('Unknown error during statement execution while getting the user\'s check-ins.', CheckInDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($nCheckIns);
+                    if ($stmt->fetch())
+                        return $nCheckIns;
+                    else
+                        throw new UserDBException('Unknown error during statement execution while getting the user\'s check-ins.', CheckInDBException::UNKNOWNERROR);
+                }
             }
+            else
+                throw new CheckInDBException('Cannot prepare statement.', CheckInDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;

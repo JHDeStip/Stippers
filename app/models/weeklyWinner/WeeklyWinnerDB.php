@@ -30,13 +30,19 @@ abstract class WeeklyWinnerDB {
             
             $commString = "INSERT INTO stippers_weekly_winners (start_of_week, user) VALUES (DATE_SUB(CURRENT_DATE, INTERVAL WEEKDAY(CURRENT_DATE) DAY), ?)";
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param("i", $userId);
-            if (!$stmt->execute())
-                if ($stmt->errno == 1062)
-                    throw new WeeklyWinnerDBException("There already is a winner this week.", WeeklyWinnerDBException::WEEKALREADYHASWINNER);
-                else
-                    throw new WeeklyWinnerDBException("Unknown error during statement execution while adding weekly winner.", WeeklyWinnerDBException::UNKNOWNERROR);
-            $stmt->close();
+            
+            //Check if statement could be prepared
+            if ($stmt) {
+                
+                $stmt->bind_param("i", $userId);
+                if (!$stmt->execute())
+                    if ($stmt->errno == 1062)
+                        throw new WeeklyWinnerDBException("There already is a winner this week.", WeeklyWinnerDBException::WEEKALREADYHASWINNER);
+                    else
+                        throw new WeeklyWinnerDBException("Unknown error during statement execution while adding weekly winner.", WeeklyWinnerDBException::UNKNOWNERROR);
+            }
+            else
+               throw new WeeklyWinnerDBException('Cannot prepare statement.', WeeklyWinnerDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -63,17 +69,24 @@ abstract class WeeklyWinnerDB {
             
             $commString = "SELECT user FROM stippers_weekly_winners ORDER BY start_of_week DESC LIMIT ?";
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param("i", $nWinners);
-            if (!$stmt->execute())
-                throw new WeeklyWinnerDBException("Unknown error during statement execution while getting last winners", WeeklyWinnerDBException::UNKNOWNERROR);
-            else {
-                $userIds = array();
-                $stmt->bind_result($userId);
-                while ($stmt->fetch())
-                    array_push($userIds, $userId);
+            
+            //Check if statement could be prepared
+            if ($stmt) {
                 
-                return $userIds;
+                $stmt->bind_param("i", $nWinners);
+                if (!$stmt->execute())
+                    throw new WeeklyWinnerDBException("Unknown error during statement execution while getting last winners", WeeklyWinnerDBException::UNKNOWNERROR);
+                else {
+                    $userIds = array();
+                    $stmt->bind_result($userId);
+                    while ($stmt->fetch())
+                        array_push($userIds, $userId);
+                    
+                    return $userIds;
+                }
             }
+            else
+               throw new WeeklyWinnerDBException('Cannot prepare statement.', WeeklyWinnerDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -99,19 +112,25 @@ abstract class WeeklyWinnerDB {
             
             $commString = "SELECT DATE_FORMAT(start_of_week, '%d/%m/%Y'), user, has_collected_prize FROM stippers_weekly_winners WHERE start_of_week = (SELECT DATE_SUB(CURRENT_DATE, INTERVAL WEEKDAY(CURRENT_DATE) DAY))";
             $stmt = $conn->prepare($commString);
-
-            if (!$stmt->execute())
-                throw new WeeklyWinnerDBException("Unknown error during statement execution while getting winner", WeeklyWinnerDBException::UNKNOWNERROR);
-            else {
-                $stmt->bind_result($startOfWeek, $userId, $hasCollectedPrize);
-                $result = $stmt->fetch();
-                if ($result)
-                    return new WeeklyWinnerData($startOfWeek, $userId, $hasCollectedPrize);
-                else if ($result == null)
-                    return null;
-                else
-                    throw new WeeklyWinnerDBException("Unknown error during statement execution while getting winner.", WeeklyWinnerDBException::UNKNOWNERROR);
+            
+            //Check if statement could be prepared
+            if ($stmt) {
+                
+                if (!$stmt->execute())
+                    throw new WeeklyWinnerDBException("Unknown error during statement execution while getting winner", WeeklyWinnerDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($startOfWeek, $userId, $hasCollectedPrize);
+                    $result = $stmt->fetch();
+                    if ($result)
+                        return new WeeklyWinnerData($startOfWeek, $userId, $hasCollectedPrize);
+                    else if ($result == null)
+                        return null;
+                    else
+                        throw new WeeklyWinnerDBException("Unknown error during statement execution while getting winner.", WeeklyWinnerDBException::UNKNOWNERROR);
+                }
             }
+            else
+               throw new WeeklyWinnerDBException('Cannot prepare statement.', WeeklyWinnerDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;
@@ -137,12 +156,19 @@ abstract class WeeklyWinnerDB {
             $conn = Database::getConnection();
             $commString = "UPDATE stippers_weekly_winners SET has_collected_prize = ? WHERE start_of_week = STR_TO_DATE(?, '%d/%m/%Y') AND user = ? AND has_collected_prize = ?";
             $stmt = $conn->prepare($commString);
-            $stmt->bind_param("isii", $newWinnerData->hasCollectedPrize, $oldWinnerData->startOfWeek, $oldWinnerData->userId, $oldWinnerData->hasCollectedPrize);
-            if (!$stmt->execute())
-                throw new WeeklyWinnerDBException("Unknown error during statement execution while updating winner.", WeeklyWinnerDBException::UNKNOWNERROR);
-            else if ($stmt->affected_rows == 0) {
-                throw new WeeklyWinnerDBException("The winner is out of date, someone else has probably already changed the winner.", WeeklyWinnerDBException::WINNEROUTOFDATE);
+            
+            //Check if statement could be prepared
+            if ($stmt) {
+                
+                $stmt->bind_param("isii", $newWinnerData->hasCollectedPrize, $oldWinnerData->startOfWeek, $oldWinnerData->userId, $oldWinnerData->hasCollectedPrize);
+                if (!$stmt->execute())
+                    throw new WeeklyWinnerDBException("Unknown error during statement execution while updating winner.", WeeklyWinnerDBException::UNKNOWNERROR);
+                else if ($stmt->affected_rows == 0) {
+                    throw new WeeklyWinnerDBException("The winner is out of date, someone else has probably already changed the winner.", WeeklyWinnerDBException::WINNEROUTOFDATE);
+                }
             }
+            else
+               throw new WeeklyWinnerDBException('Cannot prepare statement.', WeeklyWinnerDBException::CANNOTPREPARESTMT);
         }
         catch (Exception $ex) {
             throw $ex;

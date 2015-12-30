@@ -9,7 +9,7 @@
  * User Database exception class.
  */
 
-class UserDBException extends Exception{
+class UserDBException extends Exception {
     const UNKNOWNERROR = 1;
     const EMAILALREADYEXISTS = 2;
     const CARDALREADYUSED = 3;
@@ -19,9 +19,10 @@ class UserDBException extends Exception{
     const CANNOTGETNEXTUSERID = 7;
     const NOUSERFOREMAIL = 8;
     const USEROUTOFDATE = 9;
+    const CANNOTPREPARESTMT = 10;
 
 
     public function __construct($message, $code = 0, $previous = null){
         parent::__construct($message, $code, $previous);
     }
-} 
+}

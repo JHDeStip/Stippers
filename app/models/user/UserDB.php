@@ -722,7 +722,7 @@ abstract class UserDB {
      * @throws UserDBException error for if something goes wrong while getting the user 
      */ 
     public static function getBasicUserByEmail($email) { 
-        try { 
+        try {
             $conn = Database::getConnection(); 
             $commString = 'SELECT user_id, first_name, last_name, password_hash, is_admin, is_hint_manager, is_user_manager, is_browser_manager FROM stippers_users WHERE email = ?'; 
             $stmt = $conn->prepare($commString); 

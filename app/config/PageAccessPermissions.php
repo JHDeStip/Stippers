@@ -207,6 +207,15 @@ $_PERMISSIONS['editemail']['BROWSERMANAGER'] = false;
 $_PERMISSIONS['editemail']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['editemail']['CHECKINBROWSER'] = false;
 
+//Permissions for the reset password page
+$_PERMISSIONS['resetpassword']['EVERYONE'] = true;
+$_PERMISSIONS['resetpassword']['MEMBER'] = true;
+$_PERMISSIONS['resetpassword']['ADMIN'] = true;
+$_PERMISSIONS['resetpassword']['USERMANAGER'] = true;
+$_PERMISSIONS['resetpassword']['BROWSERMANAGER'] = true;
+$_PERMISSIONS['resetpassword']['ADDRENEWUSERBROWSER'] = true;
+$_PERMISSIONS['resetpassword']['CHECKINBROWSER'] = true;
+
 //Permissions for the page not found page
 $_PERMISSIONS['pagenotfound']['EVERYONE'] = true;
 $_PERMISSIONS['pagenotfound']['MEMBER'] = true;

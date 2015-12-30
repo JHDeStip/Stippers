@@ -96,6 +96,10 @@ switch ($requestData['requestedPage']) {
         require_once('controllers/manageEmail/EditEmailController.php');
         $controller = 'EditEmailController';
         break;
+    case 'resetpassword':
+        require_once('controllers/resetPassword/ResetPasswordController.php');
+        $controller = 'ResetPasswordController';
+        break;
     case 'logout':
         require_once('controllers/authorization/LogoutController.php');
         $controller = 'LogoutController';

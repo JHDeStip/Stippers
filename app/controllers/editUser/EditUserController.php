@@ -22,7 +22,7 @@ require_once __DIR__.'/../../models/membership/MembershipDBException.php';
 require_once __DIR__.'/../../models/checkIn/CheckInDB.php';
 require_once __DIR__.'/../../models/checkIn/CheckInDBException.php';
 
-require_once __DIR__.'/../../views/EditUser/EditUserTopViewValidator.php';
+require_once __DIR__.'/../../views/editUser/EditUserTopViewValidator.php';
 
 abstract class EditUserController implements IController {
     
@@ -232,7 +232,7 @@ abstract class EditUserController implements IController {
         try {
             $page->data['MembershipDetailsView']['membershipYearDetails'] = MembershipDB::getUserMembershipDetailsByUserId($_SESSION['Stippers']['EditUser']['user']->userId);
             $page->data['MembershipDetailsView']['totalCheckIns'] = CheckInDB::getTotalCheckInsByUserId($_SESSION['Stippers']['EditUser']['user']->userId);
-            $page->addView('membershipDetails/MemberShipDetailsView');
+            $page->addView('membershipDetails/MembershipDetailsView');
         }
         catch (Exception $ex) {
             $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan gegevens niet ophalen uit de database.';

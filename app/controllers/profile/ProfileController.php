@@ -164,7 +164,7 @@ abstract class ProfileController implements IController {
         try {
             $page->data['MembershipDetailsView']['membershipYearDetails'] = MembershipDB::getUserMembershipDetailsByUserId($_SESSION['Stippers']['Profile']['user']->userId);
             $page->data['MembershipDetailsView']['totalCheckIns'] = CheckInDB::getTotalCheckInsByUserId($_SESSION['Stippers']['Profile']['user']->userId);
-            $page->addView('membershipDetails/MemberShipDetailsView');
+            $page->addView('membershipDetails/MembershipDetailsView');
         }
         catch (Exception $ex) {
             $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan lidkaartgegevens niet ophalen uit de database.';

@@ -92,6 +92,10 @@ switch ($requestData['requestedPage']) {
         require_once('controllers/manageEmail/ManageEmailController.php');
         $controller = 'ManageEmailController';
         break;
+    case 'sendemailtousers':
+        require_once('controllers/sendEmailToUsers/SendEmailToUsersController.php');
+        $controller = 'SendEmailToUsersController';
+        break;
     case 'editemail':
         require_once('controllers/manageEmail/EditEmailController.php');
         $controller = 'EditEmailController';

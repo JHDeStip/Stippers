@@ -198,6 +198,15 @@ $_PERMISSIONS['manageemail']['BROWSERMANAGER'] = false;
 $_PERMISSIONS['manageemail']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['manageemail']['CHECKINBROWSER'] = false;
 
+//Permissions for the send email to users page
+$_PERMISSIONS['sendemailtousers']['EVERYONE'] = false;
+$_PERMISSIONS['sendemailtousers']['MEMBER'] = false;
+$_PERMISSIONS['sendemailtousers']['ADMIN'] = true;
+$_PERMISSIONS['sendemailtousers']['USERMANAGER'] = true;
+$_PERMISSIONS['sendemailtousers']['BROWSERMANAGER'] = false;
+$_PERMISSIONS['sendemailtousers']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['sendemailtousers']['CHECKINBROWSER'] = false;
+
 //Permissions for the edit email page
 $_PERMISSIONS['editemail']['EVERYONE'] = false;
 $_PERMISSIONS['editemail']['MEMBER'] = false;

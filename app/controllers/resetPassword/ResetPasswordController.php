@@ -13,6 +13,7 @@ require_once __DIR__.'/../IController.php';
 require_once __DIR__.'/../../helperClasses/Page.php';
 
 require_once __DIR__.'/../../config/SecurityConfig.php';
+require_once __DIR__.'/../../config/EmailConfig.php';
 
 require_once __DIR__.'/../../helperClasses/random/Random.php';
 
@@ -64,7 +65,7 @@ abstract class ResetPasswordController implements IController {
                 $page->addView('resetPassword/ResetSuccessfulView');
                 
                 //Send email with password
-                $failedEmails = Email::sendEmails('ResetPassword.html', 'JH De Stip - Wachtwoord reset', 'info@stip.be', [$user], array($user->userId => array('newPassword' => $newPassword)));
+                $failedEmails = Email::sendEmails('ResetPassword.html', 'JH De Stip - Wachtwoord reset', EmailConfig::FROMADDRESS, [$user], array($user->userId => array('newPassword' => $newPassword)));
                 //If failedEmails is not empty the mail was not sent
                 if (!empty($failedEmails)) {
                     $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan e-mail met nieuwe wachtwoord niet verzenden.';

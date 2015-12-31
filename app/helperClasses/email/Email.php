@@ -13,6 +13,8 @@ require_once 'EmailException.php';
 
 require_once __DIR__.'/../../config/EmailConfig.php';
 
+require_once __DIR__.'/../../models/user/User.php';
+
 abstract class Email {
     
     /**
@@ -46,6 +48,7 @@ abstract class Email {
                 .'Content-Type: text/html; charset=utf-8'.PHP_EOL;
         
             foreach ($users as $user) {
+                
                 //Set search and replace for firstName and lastName
                 $search = array('%firstName%', '%lastName%');
                 $replace = array(htmlentities($user->firstName, ENT_QUOTES, 'utf-8'), htmlentities($user->lastName, ENT_QUOTES, 'utf-8'));
@@ -66,7 +69,7 @@ abstract class Email {
                 $message = str_replace($search, $replace, $emailString);
                 
                 //Send email, if fail add email to failedAddresses
-                if (!mail($user->email, $subject, $message, $headers))
+                if (!mail($user->email, htmlentities($subject, ENT_QUOTES, 'utf-8'), $message, $headers))
                     array_push($failedAddresses, $user->email);
                 
             }

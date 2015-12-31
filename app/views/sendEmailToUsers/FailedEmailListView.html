@@ -1,0 +1,10 @@
+<table>
+    <tr><th></th><th>E-mailadres</th></tr>
+    <?php
+    for ($i=0; $i<count($this->data['FailedEmailListView']['addresses']); $i++)
+        echo '<tr><td>'.($i+1).'</td>'
+            .'<td>'.htmlentities($this->data['FailedEmailListView']['addresses'][$i], ENT_QUOTES, 'utf-8').'</td>'
+            .'</tr>';
+    ?>
+</table>
+<p class="normal_text">Klik <a class="normal_text_anchor" href="<?php echo htmlentities($this->data['FailedEmailListView']['redirectUrl'], ENT_QUOTES, 'utf-8'); ?>" >hier</a> om terug te gaan.</p>

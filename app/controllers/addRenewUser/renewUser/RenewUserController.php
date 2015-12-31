@@ -13,6 +13,7 @@ require_once __DIR__.'/../../IController.php';
 require_once __DIR__.'/../../../helperClasses/Page.php';
 
 require_once __DIR__.'/../../../config/SecurityConfig.php';
+require_once __DIR__.'/../../../config/EmailConfig.php';
 
 require_once __DIR__.'/../../../helperClasses/random/Random.php';
 require_once __DIR__.'/../../../config/SecurityConfig.php';
@@ -98,7 +99,7 @@ abstract class RenewUserController implements IController {
                     $page->addView('addRenewUser/renewUser/SuccessfullyRenewedView');
                     
                     //Send welcome mail
-                    $failedEmails = Email::sendEmails('WelcomeOldMember.html', 'JH DE Stip - Welkom', 'info@stip.be', [$newUser], null);
+                    $failedEmails = Email::sendEmails('WelcomeOldMember.html', 'JH DE Stip - Welkom', EmailConfig::FROMADDRESS, [$newUser], null);
                     //If failedEmails is not empty the mail was not sent
                     if (!empty($failedEmails)) {
                         $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan welkomstmail niet verzenden.';

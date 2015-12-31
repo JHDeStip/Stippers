@@ -20,9 +20,12 @@ abstract class DataValidationConfig {
     const POSTALCODEMAXLENGTH = 6;
     const PHONEMAXLENGTH = 14;
     const DATEMAXLENGTH = 10;
-    const BALANCEMAXLENGTH = 6;
+    const BALANCEMAXLENGTH = 10;
     const YEARMAXLENGTH = 4;
     const CARDNUMBERMAXLENGTH = 8;
+    
+    const EMAILSUBJECTMAXLENGTH = 50;
+    const EMAILFILENAMEMAXLENGTH = 255;
     
     const ADMINPERMISSIONMIN = 0;
     const ADMINPERMISSIONMAX = 1;

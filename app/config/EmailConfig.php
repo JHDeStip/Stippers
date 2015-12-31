@@ -14,4 +14,6 @@ abstract class EmailConfig {
     const EMAILFILESDIR = 'emailFiles';
     
     const MAXFILESIZE = 1048576;
+    
+    const FROMADDRESS = 'info@stip.be';
 }

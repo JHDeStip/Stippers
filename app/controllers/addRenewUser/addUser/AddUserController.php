@@ -17,6 +17,8 @@ require_once __DIR__.'/../../../helperClasses/random/Random.php';
 require_once __DIR__.'/../../../helperClasses/email/Email.php';
 require_once __DIR__.'/../../../helperClasses/email/EmailException.php';
 
+require_once __DIR__.'/../../../config/EmailConfig.php';
+
 require_once __DIR__.'/../../../models/user/User.php';
 require_once __DIR__.'/../../../models/user/UserDB.php';
 require_once __DIR__.'/../../../models/user/UserDBException.php';
@@ -65,7 +67,7 @@ abstract class AddUserController implements IController {
                 $page->addView('addRenewUser/addUser/SuccessfullyAddedView');
                 
                 //Send welcome mail
-                $failedEmails = Email::sendEmails('WelcomeNewMember.html', 'JH DE Stip - Welkom', 'info@stip.be', [$user], null);
+                $failedEmails = Email::sendEmails('WelcomeNewMember.html', 'JH DE Stip - Welkom', EmailConfig::FROMADDRESS, [$user], null);
                 //If failedEmails is not empty the mail was not sent
                 if (!empty($failedEmails)) {
                     $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan welkomstmail niet verzenden.';

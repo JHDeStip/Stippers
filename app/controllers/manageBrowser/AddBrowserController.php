@@ -38,7 +38,7 @@ abstract class AddBrowserController implements IController {
             if (empty($errMsgs)) {
                 try {
                     //Create new browser from entered data
-                    $browser = new Browser(null, Random::getGuid(), $_POST['browser_name'], isset($_POST['can_add_renew_users']), isset($_POST['can_check_in']));
+                    $browser = new Browser(null, Random::getGuid(), $_POST['browser_name'], isset($_POST['can_add_renew_users']), isset($_POST['can_check_in']), isset($_POST['is_cash_register']));
                     BrowserDB::addBrowser($browser);
                     //Also set cookie
                     setcookie("stippersAuthorization", $browser->uuid, 2147483647);
@@ -85,11 +85,16 @@ abstract class AddBrowserController implements IController {
                 $page->data['AddEditBrowserTopView']['canCheckInChecked'] = 'checked';
             else
                 $page->data['AddEditBrowserTopView']['canCheckInChecked'] = '';
+            if (isset($_POST['is_cash_register']))
+                $page->data['AddEditBrowserTopView']['isCashRegisterChecked'] = 'checked';
+            else
+                $page->data['AddEditBrowserTopView']['isCashRegisterChecked'] = '';
         }
         else {
             $page->data['AddEditBrowserTopView']['browserName'] = '';
             $page->data['AddEditBrowserTopView']['canAddRenewUsersChecked'] = '';
             $page->data['AddEditBrowserTopView']['canCheckInChecked'] = '';
+            $page->data['AddEditBrowserTopView']['isCashRegisterChecked'] = '';
         }
         
         $page->data['AddEditBrowserTopView']['errMsgs'] = AddEditBrowserTopViewValidator::initErrMsgs();

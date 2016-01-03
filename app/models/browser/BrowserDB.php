@@ -73,7 +73,7 @@ abstract class BrowserDB {
     public static function getBasicBrowserByUuid($uuid){
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT can_add_renew_users, can_check_in, is_cash_register FROM stippers_browsers WHERE uuid = ?';
+            $commString = 'SELECT browser_id, can_add_renew_users, can_check_in, is_cash_register FROM stippers_browsers WHERE uuid = ?';
             $stmt = $conn->prepare($commString);
             
             //Check if statement could be prepared
@@ -84,13 +84,13 @@ abstract class BrowserDB {
                 if (!$stmt->execute())
                     throw new BrowserDBException('Unknown error during statement execution while getting browser.', BrowserDBException::UNKNOWNERROR);
                 else {
-                    $stmt->bind_result($canAddRenewUsers, $canCheckIn, $isCashRegister);
+                    $stmt->bind_result($browserId, $canAddRenewUsers, $canCheckIn, $isCashRegister);
                     
                     if ($stmt->fetch()) {
                         $canAddRenewUsers = ($canAddRenewUsers != 0);
                         $canCheckIn = ($canCheckIn != 0);
                         $isCashRegister = ($isCashRegister != 0);
-                        return new Browser(null, null, null, $canAddRenewUsers, $canCheckIn, $isCashRegister);
+                        return new Browser($browserId, null, null, $canAddRenewUsers, $canCheckIn, $isCashRegister);
                     }
                     else
                         throw new BrowserDBException('No browser was found for this id.', BrowserDBException::NOBROWSERFORUUID);

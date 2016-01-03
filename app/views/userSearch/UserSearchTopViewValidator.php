@@ -26,7 +26,7 @@ abstract class UserSearchTopViewValidator implements IValidator {
         if (strlen($data['email']) > DataValidationConfig::EMAILMAXLENGTH)
             $errMsgs['email'] = '<label class="form_label_error" for="email">Het e-mailadres mag maximaal uit 50 karakters bestaan.</label>';
         
-        if (strlen($data['balance']) > DataValidationConfig::BALANCEMAXLENGTH)
+        if (strlen($data['balance']) > DataValidationConfig::MONEYMAXLENGTH)
             $errMsgs['balance'] = '<label class="form_label_error" for="balance">Het saldo mag maximaal uit 6 karakters bestaan.</label>';
 
         if (strlen($data['phone']) > DataValidationConfig::PHONEMAXLENGTH)

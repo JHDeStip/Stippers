@@ -102,6 +102,7 @@ abstract class Authorization implements IMiddleware {
         $browserManager = false;
         $addRenewUserBrowser = false;
         $checkInBrowser = false;
+        $cashRegisterBrowser = false;
 
         //If permissions for the requested page are defined we override the
         //defaults with these.
@@ -124,6 +125,8 @@ abstract class Authorization implements IMiddleware {
                 $addRenewUserBrowser = $permissions['ADDRENEWUSERBROWSER'];
             if (isset($permissions['CHECKINBROWSER']))
                 $checkInBrowser = $permissions['CHECKINBROWSER'];
+            if (isset($permissions['CASHREGISTERBROWSER']))
+                $cashRegisterBrowser = $permissions['CASHREGISTERBROWSER'];
         }
         
         //Possible states
@@ -134,11 +137,13 @@ abstract class Authorization implements IMiddleware {
             $canDisplay = true;
         
         //If a browser can display the page we check if the current browser has the required permissions.
-        if (!$canDisplay && ($checkInBrowser || $addRenewUserBrowser)) {
+        if (!$canDisplay && ($checkInBrowser || $addRenewUserBrowser || $cashRegisterBrowser)) {
             if (isset($_SESSION['Stippers']['browser'])) {
                 if ($checkInBrowser && $_SESSION['Stippers']['browser']->canCheckIn)
                     $canDisplay = true;
                 elseif ($addRenewUserBrowser && $_SESSION['Stippers']['browser']->canAddRenewUsers)
+                    $canDisplay = true;
+                elseif ($cashRegisterBrowser && $_SESSION['Stippers']['browser']->isCashRegister)
                     $canDisplay = true;
             }
         }

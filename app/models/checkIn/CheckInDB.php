@@ -148,13 +148,13 @@ abstract class CheckInDB {
                                 
                 $stmt->bind_param('i', $userId);
                 if (!$stmt->execute())
-                    throw new UserDBException('Unknown error during statement execution while getting the user\'s check-ins.', CheckInDBException::UNKNOWNERROR);
+                    throw new UserDBException('Unknown error during statement execution while counting the user\'s check-ins.', CheckInDBException::UNKNOWNERROR);
                 else {
                     $stmt->bind_result($nCheckIns);
                     if ($stmt->fetch())
                         return $nCheckIns;
                     else
-                        throw new UserDBException('Unknown error during statement execution while getting the user\'s check-ins.', CheckInDBException::UNKNOWNERROR);
+                        throw new UserDBException('Unknown error during statement execution while counting the user\'s check-ins.', CheckInDBException::UNKNOWNERROR);
                 }
             }
             else

@@ -15,6 +15,7 @@ class Browser {
     public $name;
     public $canAddRenewUsers;
     public $canCheckIn;
+    public $isCashRegister;
 
     /**
      * Constructor for browser with ID. 
@@ -23,13 +24,15 @@ class Browser {
      * @param string $uuid UUID of browser
      * @param string $name name given to browser
      * @param bool $canAddRenewUsers permission for creating and updating users
-     * @param type $canCheckIn permission for checking in
+     * @param bool $canCheckIn permission for checking in
+     * @param bool $isCashRegister permission for managing cash on user accounts
      */
-    public function __construct($browserId, $uuid, $name, $canAddRenewUsers, $canCheckIn) {
+    public function __construct($browserId, $uuid, $name, $canAddRenewUsers, $canCheckIn, $isCashRegister) {
         $this->browserId = $browserId;
         $this->uuid = $uuid;
         $this->name = $name;
         $this->canAddRenewUsers = $canAddRenewUsers;
         $this->canCheckIn = $canCheckIn;
+        $this->isCashRegister = $isCashRegister;
     }
 }

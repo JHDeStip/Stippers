@@ -212,7 +212,7 @@ abstract class UserDB {
             $conn = Database::getConnection();
             $commString = 'SELECT email, first_name, last_name, password_hash, is_admin, is_hint_manager, is_user_manager, is_browser_manager '
                 .'FROM stippers_users LEFT JOIN stippers_user_card_year ON user_id = user '
-                .'WHERE user_id = ? AND (membership_year = CONVERT_TZ(NOW(), @@global.time_zone, ?) OR user_id = ?)';
+                .'WHERE user_id = ? AND (membership_year = YEAR(CONVERT_TZ(NOW(), @@global.time_zone, ?)) OR user_id = ?)';
             $stmt = $conn->prepare($commString);
             
             //Check if statement could be prepared
@@ -710,6 +710,72 @@ abstract class UserDB {
             }
         }
     }
+    
+    /**
+     * Gets a user by it's card number.
+     * 
+     * @param int $cardNumber card number of the user to get
+     * @return User user for given card number
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws UserDBException error for if something goes wrong while getting the user
+     */
+    public static function getFullUserByCardNumber($cardNumber) {
+        try {
+            $conn = Database::getConnection();
+            $commString = 'SELECT user_id, email, first_name, last_name, password_hash, balance, phone, DATE_FORMAT(date_of_birth, "%d/%m/%Y") date_of_birth, street, house_number, city, postal_code, country, is_admin, is_hint_manager, is_user_manager, is_browser_manager, DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") creation_time '
+                .'FROM stippers_users WHERE user_id = (SELECT user FROM stippers_user_card_year WHERE card = ? AND membership_year = (SELECT YEAR(CONVERT_TZ(NOW(), @@global.time_zone, ?))))';
+            $stmt = $conn->prepare($commString);
+            
+            //Check if statement could be prepared
+            if ($stmt) {
+                
+                $timezone = GlobalConfig::TIMEZONE;
+                $stmt->bind_param('sis', $timezone, $cardNumber, $timezone);
+                
+                if (!$stmt->execute())
+                    throw new UserDBException('Unknown error during statement execution while getting basic user by card number.', UserDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($userId, $email, $firstName, $lastName, $passwordHash, $balance, $phone, $dateOfBirth, $street, $houseNumber, $city, $postalCode, $country, $isAdmin, $isHintManager, $isUserManager, $isBrowserManager, $creationTime);
+                    
+                    if ($stmt->fetch()) {
+                        $user = new User();
+                        $user->userId = $userId;
+                        $user->email = $email;
+                        $user->firstName = $firstName;
+                        $user->lastName = $lastName;
+                        $user->passwordHash = $passwordHash;
+                        $user->balance = $balance;
+                        $user->phone = $phone;
+                        $user->dateOfBirth = $dateOfBirth;
+                        $user->street = $street;
+                        $user->houseNumber = $houseNumber;
+                        $user->city = $city;
+                        $user->postalCode = $postalCode;
+                        $user->country = $country;
+                        $user->isAdmin = $isAdmin;
+                        $user->isHintManager = $isHintManager;
+                        $user->isUserManager = $isUserManager;
+                        $user->isBrowserManager = $isBrowserManager;
+                        $user->creationTime = $creationTime;
+                        return $user;
+                    }
+                    else
+                        throw new UserDBException('No user was found for this card number and year.', UserDBException::NOUSERFORCARDNUMER);
+                }
+            }
+            else
+                throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
+        }
+        catch (Exception $ex) {
+            throw $ex;
+        }
+        finally {
+            if (isset($conn)) {
+                $conn->kill($conn->thread_id);
+                $conn->close();
+            }
+        }
+    }
 
     /** 
      * Gets a basic user by it's email address. 
@@ -784,7 +850,7 @@ abstract class UserDB {
             $conn = Database::getConnection();
             $commString = 'SELECT user_id, first_name, last_name, password_hash, is_admin, is_hint_manager, is_user_manager, is_browser_manager '
                 .'FROM stippers_users LEFT JOIN stippers_user_card_year ON user_id = user '
-                .'WHERE email = ? AND (membership_year = CONVERT_TZ(NOW(), @@global.time_zone, ?) OR user_id = ?)';
+                .'WHERE email = ? AND (membership_year = YEAR(CONVERT_TZ(NOW(), @@global.time_zone, ?)) OR user_id = ?)';
             $stmt = $conn->prepare($commString);
             
             //Check if statement could be prepared
@@ -878,7 +944,7 @@ abstract class UserDB {
                     }
                     $stmt->close();
 
-                    $commString = 'INSERT INTO stippers_user_card_year (user, card, membership_year) VALUES (?, ?, CONVERT_TZ(NOW(), @@global.time_zone, ?))';
+                    $commString = 'INSERT INTO stippers_user_card_year (user, card, membership_year) VALUES (?, ?, YEAR(CONVERT_TZ(NOW(), @@global.time_zone, ?))-';
                     $stmt = $conn->prepare($commString);
                     
                     //Check if statement could be prepared
@@ -951,7 +1017,7 @@ abstract class UserDB {
     
                 $stmt->close();
                 
-                $commString = 'UPDATE stippers_user_card_year SET card = ? WHERE user = ? AND card = ? AND membership_year = CONVERT_TZ(NOW(), @@global.time_zone, ?)';
+                $commString = 'UPDATE stippers_user_card_year SET card = ? WHERE user = ? AND card = ? AND membership_year = YEAR(CONVERT_TZ(NOW(), @@global.time_zone, ?))';
                 $stmt = $conn->prepare($commString);
                 
                 //Check if statement could be prepared
@@ -1144,7 +1210,7 @@ abstract class UserDB {
     
                 $stmt->close();
                 
-                $commString = 'INSERT INTO stippers_user_card_year (user, card, membership_year) VALUES (?, ?, CONVERT_TZ(NOW(), @@global.time_zone, ?))';
+                $commString = 'INSERT INTO stippers_user_card_year (user, card, membership_year) VALUES (?, ?, YEAR(CONVERT_TZ(NOW(), @@global.time_zone, ?)))';
                 $stmt = $conn->prepare($commString);
                 
                 //Check if statement could be prepared

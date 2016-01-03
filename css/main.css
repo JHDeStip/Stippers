@@ -56,7 +56,23 @@ h1{
 }
 
 .success_message {
-        color: #29e730;
+    color: #29e730;
+}
+
+p.money_big, input.money_big, label.money_big {
+    font-size: 500%;
+}
+
+input.money_big {
+    width: 280px;
+}
+
+.money_green {
+    color: #29e730;
+}
+
+.money_red {
+    color: #e73029;
 }
 
 label{

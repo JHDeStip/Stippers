@@ -247,6 +247,16 @@ $_PERMISSIONS['resetpassword']['ADDRENEWUSERBROWSER'] = true;
 $_PERMISSIONS['resetpassword']['CHECKINBROWSER'] = true;
 $_PERMISSIONS['resetpassword']['CASHREGISTERBROWSER'] = false;
 
+//Permissions for the cash register page
+$_PERMISSIONS['cashregister']['EVERYONE'] = false;
+$_PERMISSIONS['cashregister']['MEMBER'] = false;
+$_PERMISSIONS['cashregister']['ADMIN'] = false;
+$_PERMISSIONS['cashregister']['USERMANAGER'] = false;
+$_PERMISSIONS['cashregister']['BROWSERMANAGER'] = false;
+$_PERMISSIONS['cashregister']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['cashregister']['CHECKINBROWSER'] = false;
+$_PERMISSIONS['cashregister']['CASHREGISTERBROWSER'] = true;
+
 //Permissions for the page not found page
 $_PERMISSIONS['pagenotfound']['EVERYONE'] = true;
 $_PERMISSIONS['pagenotfound']['MEMBER'] = true;

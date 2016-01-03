@@ -104,6 +104,10 @@ switch ($requestData['requestedPage']) {
         require_once('controllers/resetPassword/ResetPasswordController.php');
         $controller = 'ResetPasswordController';
         break;
+    case 'cashregister':
+        require_once('controllers/cashRegister/CashRegisterController.php');
+        $controller = 'CashRegisterController';
+        break;
     case 'logout':
         require_once('controllers/authorization/LogoutController.php');
         $controller = 'LogoutController';

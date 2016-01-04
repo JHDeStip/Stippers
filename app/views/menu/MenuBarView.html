@@ -11,6 +11,8 @@
             echo '<li><a class="top_level_menu_item" href="addorrenewuser" title="Lid toevoegen">Lid toevoegen</a></li>';
         if ($this->data['MenuBarView']['showCheckInLink'])
             echo '<li><a class="top_level_menu_item" href="checkin" title="Inchecken">Inchecken</a></li>';
+if ($this->data['MenuBarView']['showCashRegisterLink'])
+            echo '<li><a class="top_level_menu_item" href="cashregister" title="Kassa">Kassa</a></li>';
         if ($this->data['MenuBarView']['showLogoutLink'])
             echo '<li><a class="top_level_menu_item" href="logout" title="Afmelden">Afmelden</a></li>';
         if ($this->data['MenuBarView']['showLoginLink'])

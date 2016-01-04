@@ -10,6 +10,7 @@ abstract class MenuBuilder {
         $page->data['MenuBarView']['showManagementLink'] = false;
         $page->data['MenuBarView']['showAddRenewUsersLink'] = false;
         $page->data['MenuBarView']['showCheckInLink'] = false;
+        $page->data['MenuBarView']['showCashRegisterLink'] = false;
         $page->data['MenuBarView']['showUserManagementLink'] = false;
         $page->data['MenuBarView']['showWeeklyWinnerLink'] = false;
         $page->data['MenuBarView']['showBrowserManagementLink'] = false;
@@ -37,6 +38,8 @@ abstract class MenuBuilder {
                 $page->data['MenuBarView']['showAddRenewUsersLink'] = true;
             if ($_SESSION['Stippers']['browser']->canCheckIn)
                 $page->data['MenuBarView']['showCheckInLink'] = true;
+            if ($_SESSION['Stippers']['browser']->isCashRegister)
+                $page->data['MenuBarView']['showCashRegisterLink'] = true;
         }
     }
 }

@@ -14,6 +14,8 @@ require_once __DIR__.'/../../helperClasses/Page.php';
 
 require_once __DIR__.'/../../helperClasses/safeMath/SafeMath.php';
 
+require_once __DIR__.'/../../config/MoneyTransactionConfig.php';
+
 require_once __DIR__.'/../../models/user/User.php';
 require_once __DIR__.'/../../models/user/UserDB.php';
 require_once __DIR__.'/../../models/user/UserDBException.php';
@@ -80,7 +82,7 @@ abstract class CashRegisterController implements IController {
                     $decrMoney = ($_POST['decrease_money'] == '' ? 0 : SafeMath::getCentsFromString($_POST['decrease_money']));
                     $browser = BrowserDB::getBrowserById($_SESSION['Stippers']['browser']->browserId);
                     
-                    $trans = new MoneyTransaction(null, $_SESSION['Stippers']['CashRegister']['user']->userId, $_SESSION['Stippers']['CashRegister']['user']->balance, $incrMoney, $decrMoney, 0, null, $browser->name);
+                    $trans = new MoneyTransaction(null, $_SESSION['Stippers']['CashRegister']['user']->userId, $_SESSION['Stippers']['CashRegister']['user']->balance, $incrMoney, $decrMoney, MoneyTransactionConfig::DEFAULTDISCOUNTPERC, null, $browser->name);
                     
                     if ($trans->getBalAfter() < 0) {
                         $page->data['ErrorMessageWithDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];

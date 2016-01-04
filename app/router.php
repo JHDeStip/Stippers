@@ -44,6 +44,10 @@ switch ($requestData['requestedPage']) {
         require_once('controllers/changePassword/ChangePasswordController.php');
         $controller = 'ChangePasswordController';
         break;
+    case 'mytransactions':
+        require_once('controllers/myTransactions/MyTransactionsController.php');
+        $controller = 'MyTransactionsController';
+        break;
     case 'manageuser':
         require_once('controllers/manageUser/ManageUserController.php');
         $controller = 'ManageUserController';
@@ -51,6 +55,14 @@ switch ($requestData['requestedPage']) {
     case 'edituser':
         require_once('controllers/editUser/EditUserController.php');
         $controller = 'EditUserController';
+        break;
+    case 'usertransactions':
+        require_once('controllers/userTransactions/UserTransactionsController.php');
+        $controller = 'UserTransactionsController';
+        break;
+    case 'alltransactions':
+        require_once('controllers/allTransactions/AllTransactionsController.php');
+        $controller = 'AllTransactionsController';
         break;
     case 'weeklywinner':
         require_once('controllers/weeklyWinner/WeeklyWinnerController.php');

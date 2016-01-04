@@ -37,6 +37,7 @@ $_PERMISSIONS['profile']['USERMANAGER'] = true;
 $_PERMISSIONS['profile']['BROWSERMANAGER'] = true;
 $_PERMISSIONS['profile']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['profile']['CHECKINBROWSER'] = false;
+$_PERMISSIONS['profile']['CASHREGISTERBROWSER'] = false;
 
 //Permissions for the profile page
 $_PERMISSIONS['changepassword']['EVERYONE'] = false;
@@ -47,6 +48,16 @@ $_PERMISSIONS['changepassword']['BROWSERMANAGER'] = true;
 $_PERMISSIONS['changepassword']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['changepassword']['CHECKINBROWSER'] = false;
 $_PERMISSIONS['changepassword']['CASHREGISTERBROWSER'] = false;
+
+//Permissions for the my transactions page
+$_PERMISSIONS['mytransactions']['EVERYONE'] = false;
+$_PERMISSIONS['mytransactions']['MEMBER'] = true;
+$_PERMISSIONS['mytransactions']['ADMIN'] = true;
+$_PERMISSIONS['mytransactions']['USERMANAGER'] = true;
+$_PERMISSIONS['mytransactions']['BROWSERMANAGER'] = true;
+$_PERMISSIONS['mytransactions']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['mytransactions']['CHECKINBROWSER'] = false;
+$_PERMISSIONS['mytransactions']['CASHREGISTERBROWSER'] = false;
 
 //Permissions for the add or renew user page
 $_PERMISSIONS['addorrenewuser']['EVERYONE'] = false;
@@ -186,6 +197,26 @@ $_PERMISSIONS['edituser']['BROWSERMANAGER'] = false;
 $_PERMISSIONS['edituser']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['edituser']['CHECKINBROWSER'] = false;
 $_PERMISSIONS['edituser']['CASHREGISTERBROWSER'] = false;
+
+//Permissions for the user transactions page
+$_PERMISSIONS['usertransactions']['EVERYONE'] = false;
+$_PERMISSIONS['usertransactions']['MEMBER'] = false;
+$_PERMISSIONS['usertransactions']['ADMIN'] = true;
+$_PERMISSIONS['usertransactions']['USERMANAGER'] = true;
+$_PERMISSIONS['usertransactions']['BROWSERMANAGER'] = false;
+$_PERMISSIONS['usertransactions']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['usertransactions']['CHECKINBROWSER'] = false;
+$_PERMISSIONS['usertransactions']['CASHREGISTERBROWSER'] = false;
+
+//Permissions for the all transactions page
+$_PERMISSIONS['alltransactions']['EVERYONE'] = false;
+$_PERMISSIONS['alltransactions']['MEMBER'] = false;
+$_PERMISSIONS['alltransactions']['ADMIN'] = true;
+$_PERMISSIONS['alltransactions']['USERMANAGER'] = true;
+$_PERMISSIONS['alltransactions']['BROWSERMANAGER'] = false;
+$_PERMISSIONS['alltransactions']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['alltransactions']['CHECKINBROWSER'] = false;
+$_PERMISSIONS['alltransactions']['CASHREGISTERBROWSER'] = false;
 
 //Permissions for the weekly winner page
 $_PERMISSIONS['weeklywinner']['EVERYONE'] = false;

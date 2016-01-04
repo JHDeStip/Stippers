@@ -6,9 +6,9 @@
  * 
  * @author Stan Wijckmans
  * 
- * This file contains settings for money transactions.
+ * This file contains settings for money transactions views.
  */
 
-abstract class MoneyTransactionConfig {
-    const DEFAULTDISCOUNTPERC = 0;
+abstract class MoneyTransactionsViewConfig {
+    const DEFAULTAMOUNT = 200;
 }

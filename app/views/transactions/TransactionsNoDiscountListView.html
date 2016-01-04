@@ -1,0 +1,9 @@
+<table>
+    <tr><th></th><th>Beginsaldo</th><th>Toegevoegd</th><th>Afgenomen</th><th>Eindsaldo</th><th>Tijdstip</th></tr>
+    <?php
+        $nTransactions = count($this->data['TransactionsNoDiscountListView']['transactions']);
+        for ($i=0; $i<$nTransactions; $i++) {
+            echo '<tr><td>'.($this->data['TransactionsNoDiscountListView']['totalAmount'] - $i).'</td><td>&euro;'.($this->data['TransactionsNoDiscountListView']['transactions'][$i]->getBalBefore()/100).'</td><td class="money_green">&euro;'.($this->data['TransactionsNoDiscountListView']['transactions'][$i]->getIncrMoney()/100).'</td><td class="money_red">&euro;'.($this->data['TransactionsNoDiscountListView']['transactions'][$i]->getDecrMoney()/100).'</td><td>&euro;'.($this->data['TransactionsNoDiscountListView']['transactions'][$i]->getBalAfter()/100).'</td><td>'.$this->data['TransactionsNoDiscountListView']['transactions'][$i]->getTime().'</td></tr>';
+        }
+    ?>
+</table>

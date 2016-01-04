@@ -18,19 +18,21 @@ abstract class MoneyTransactionDB {
     /**
      * Gets all money transactions.
      * 
+     * @param int $limit the max amount of transactions to return
      * @return array money trancactions
      * @throws Exception generic error for if something goes wrong while talking to the database
      * @throws MoneyTransactionDBException error for if something goes wrong while getting the transactions
      */
-    public static function getTransactions() {
+    public static function getTransactions($limit) {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT transaction_id, user, bal_before, incr_money, decr_money, discount_perc, time, browser_name FROM stippers_money_transactions';
+            $commString = 'SELECT transaction_id, user, bal_before, incr_money, decr_money, discount_perc, time, browser_name FROM stippers_money_transactions LIMIT ?';
             $stmt = $conn->prepare($commString);
             
             //Check if statement could be prepared
             if ($stmt) {
                 
+                $stmt->bind_param('i', $limit);
                 if (!$stmt->execute())
                     throw new BrowserDBException('Unknown error during statement execution while getting transactions.', MoneyTransactionDBException::UNKNOWNERROR);
                 else {
@@ -38,7 +40,7 @@ abstract class MoneyTransactionDB {
                     $transactions = array();
                     
                     while ($stmt->fetch())
-                        array_push($transactions, new MoneyTransaction($transactionId, $user, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $rowserName));
+                        array_push($transactions, new MoneyTransaction($transactionId, $user, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $browserName));
                     
                     return $transactions;
                 }
@@ -72,13 +74,14 @@ abstract class MoneyTransactionDB {
             $commString = 'SELECT transaction_id, user, bal_before, incr_money, decr_money, discount_perc, time, browser_name '
                     .'FROM stippers_money_transactions '
                     .'WHERE user = ? '
+                    .'ORDER BY time DESC '
                     .'LIMIT ?';
             $stmt = $conn->prepare($commString);
             
             //Check if statement could be prepared
             if ($stmt) {
                 
-                $stmt->bindParam('ii', $userId, $limit);
+                $stmt->bind_param('ii', $userId, $limit);
                 
                 if (!$stmt->execute())
                     throw new BrowserDBException('Unknown error during statement execution while getting transactions.', MoneyTransactionDBException::UNKNOWNERROR);
@@ -87,7 +90,7 @@ abstract class MoneyTransactionDB {
                     $transactions = array();
                     
                     while ($stmt->fetch())
-                        array_push($transactions, new MoneyTransaction($transactionId, $user, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $rowserName));
+                        array_push($transactions, new MoneyTransaction($transactionId, $user, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $browserName));
                     
                     return $transactions;
                 }
@@ -107,7 +110,7 @@ abstract class MoneyTransactionDB {
     }
     
     /**
-     * Get the total number of transactions for a user who's ID is given.
+     * Gest the total number of transactions for a user who's ID is given.
      * 
      * @param int $userId ID of user to get number of transactions for
      * @return int number of transactions
@@ -132,6 +135,47 @@ abstract class MoneyTransactionDB {
                         return $nTransactions;
                     else
                         throw new MoneyTransactionDBException('Unknown error during statement execution while counting the user\'s transactions.', MoneyTransactionDBException::UNKNOWNERROR);
+                }
+            }
+            else
+                throw new MoneyTransactionDBException('Cannot prepare statement.', MoneyTransactionDBException::CANNOTPREPARESTMT);
+        }
+        catch (Exception $ex) {
+            throw $ex;
+        }
+        finally
+        {
+            if (isset($conn)){
+                $conn->kill($conn->thread_id);
+                $conn->close();
+            }
+        }
+    }
+    
+    /**
+     * Gets the total number of transactions.
+     * 
+     * @return int number of transactions
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws MoneyTransactionDBException error for if something goes wrong while getting the number of transactions
+     */
+    public static function getTotalTransactions(){
+        try {
+            $conn = Database::getConnection();
+            $commString = 'SELECT count(*) FROM stippers_money_transactions';
+            $stmt = $conn->prepare($commString);
+            
+            //Check if statement could be prepared
+            if ($stmt) {
+                
+                if (!$stmt->execute())
+                    throw new MoneyTransactionDBException('Unknown error during statement execution while counting the transactions.', MoneyTransactionDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($nTransactions);
+                    if ($stmt->fetch())
+                        return $nTransactions;
+                    else
+                        throw new MoneyTransactionDBException('Unknown error during statement execution while counting the transactions.', MoneyTransactionDBException::UNKNOWNERROR);
                 }
             }
             else

@@ -43,4 +43,4 @@
 <input class="textbox" type="text" id="creation_time" name="creation_time" value="<?php echo htmlentities($this->data['EditUserTopView']['creationTime'], ENT_QUOTES, 'utf-8'); ?>" disabled><div class="clearfix"></div>
     
 <label class="form_label" for="balance">Saldo:</label>
-<input class="textbox" type="text" id="balance" name="balance" value="<?php echo htmlentities($this->data['EditUserTopView']['balance'], ENT_QUOTES, 'utf-8'); ?>" disabled><div class="clearfix"></div>
+<input class="textbox" type="text" id="balance" name="balance" value="<?php echo htmlentities($this->data['EditUserTopView']['balance'], ENT_QUOTES, 'utf-8'); ?>" disabled><a class="normal_text_anchor" href="usertransactions?user=<?php echo $this->data['EditUserTopView']['userId']; ?>&amount=200">Laatste 200 transacties bekijken</a><div class="clearfix"></div>

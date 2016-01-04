@@ -162,8 +162,6 @@ abstract class EditUserController implements IController {
             $page->data['EditUserTopView']['country'] = $_POST['country'];
             $page->data['EditUserTopView']['phone'] = $_POST['phone'];
             $page->data['EditUserTopView']['dateOfBirth'] = $_POST['date_of_birth'];
-            $page->data['EditUserTopView']['creationTime'] = $_SESSION['Stippers']['EditUser']['user']->creationTime;
-            $page->data['EditUserTopView']['balance'] = $_SESSION['Stippers']['EditUser']['user']->balance;
         }
         //If we're not trying to save we are showing existing data
         //so we load it from the user object in session
@@ -179,14 +177,16 @@ abstract class EditUserController implements IController {
             $page->data['EditUserTopView']['country'] = $_SESSION['Stippers']['EditUser']['user']->country;
             $page->data['EditUserTopView']['phone'] = $_SESSION['Stippers']['EditUser']['user']->phone;
             $page->data['EditUserTopView']['dateOfBirth'] = $_SESSION['Stippers']['EditUser']['user']->dateOfBirth;
-            $page->data['EditUserTopView']['creationTime'] = $_SESSION['Stippers']['EditUser']['user']->creationTime;
-            $page->data['EditUserTopView']['balance'] = $_SESSION['Stippers']['EditUser']['user']->balance;
         }
             
         if ($enabled)
             $page->data['EditUserTopView']['disabled'] = '';
         else
             $page->data['EditUserTopView']['disabled'] = 'disabled';
+        
+        $page->data['EditUserTopView']['creationTime'] = $_SESSION['Stippers']['EditUser']['user']->creationTime;
+        $page->data['EditUserTopView']['balance'] = $_SESSION['Stippers']['EditUser']['user']->balance;
+        $page->data['EditUserTopView']['userId'] = $_SESSION['Stippers']['EditUser']['user']->userId;
         
         $page->addView('editUser/EditUserTopView');
         $page->data['EditUserTopView']['errMsgs'] = EditUserTopViewValidator::initErrMsgs();

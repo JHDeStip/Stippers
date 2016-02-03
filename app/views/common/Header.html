@@ -7,6 +7,14 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/subnav.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
+    <?php
+        foreach ($this->data['viewJsFiles'] as $viewJsFile)
+            echo '<script type="text/javascript" src="app/js/views/'.$viewJsFile.'.js"></script>';
+    ?>
+    <?php
+        foreach ($this->data['extraJsFiles'] as $extraJsFile)
+            echo '<script type="text/javascript" src="app/js/'.$extraJsFile.'"></script>';
+    ?>
     <title><?php echo $this->data['title']; ?></title>
 </head>
 <body>

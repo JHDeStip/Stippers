@@ -56,6 +56,10 @@ switch ($requestData['requestedPage']) {
         require_once('controllers/editUser/EditUserController.php');
         $controller = 'EditUserController';
         break;
+    case 'manageusermoney':
+        require_once('controllers/manageUserMoney/ManageUserMoneyController.php');
+        $controller = 'ManageUserMoneyController';
+        break;
     case 'usertransactions':
         require_once('controllers/userTransactions/UserTransactionsController.php');
         $controller = 'UserTransactionsController';

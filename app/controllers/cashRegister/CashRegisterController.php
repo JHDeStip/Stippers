@@ -6,7 +6,7 @@
  * 
  * @author Stan Wijckmans
  * 
- * Controller for the check-in page.
+ * Controller for the cash register page.
  */
 
 require_once __DIR__.'/../IController.php';
@@ -78,11 +78,10 @@ abstract class CashRegisterController implements IController {
                     
             if (empty($errMsgs)) {
                 try {
-                    $incrMoney = ($_POST['increase_money'] == '' ? 0 : SafeMath::getCentsFromString($_POST['increase_money']));
                     $decrMoney = ($_POST['decrease_money'] == '' ? 0 : SafeMath::getCentsFromString($_POST['decrease_money']));
-                    $browser = BrowserDB::getBrowserById($_SESSION['Stippers']['browser']->browserId);
+                    $executingBrowserName = BrowserDB::getBrowserById($_SESSION['Stippers']['browser']->browserId)->name;
                     
-                    $trans = new MoneyTransaction(null, $_SESSION['Stippers']['CashRegister']['user']->userId, $_SESSION['Stippers']['CashRegister']['user']->balance, $incrMoney, $decrMoney, MoneyTransactionConfig::DEFAULTDISCOUNTPERC, null, $browser->name);
+                    $trans = new MoneyTransaction(null, $_SESSION['Stippers']['CashRegister']['user']->userId, $_SESSION['Stippers']['CashRegister']['user']->balance, 0, $decrMoney, MoneyTransactionConfig::DEFAULTDISCOUNTPERC, null, $executingBrowserName, null);
                     
                     if ($trans->getBalAfter() < 0) {
                         $page->data['ErrorMessageWithDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
@@ -95,7 +94,6 @@ abstract class CashRegisterController implements IController {
                         $page->data['CashRegisterTransactionResultView']['balBefore'] = $trans->getBalBefore() / 100;
                         $page->data['CashRegisterTransactionResultView']['balAfter'] = $trans->getBalAfter() / 100;
                         $page->data['CashRegisterTransactionResultView']['discount'] = $trans->getDiscount() / 100;
-                        $page->data['CashRegisterTransactionResultView']['incrMoney'] = $trans->getIncrMoney() / 100;
                         $page->data['CashRegisterTransactionResultView']['decrMoney'] = $trans->getDecrMoney() / 100;
                         $page->addView('cashRegister/CashRegisterTransactionResultView');
                     }
@@ -125,14 +123,10 @@ abstract class CashRegisterController implements IController {
         $page->data['CashRegisterEnterTransactionView']['enter_transaction_formAction'] = $_SERVER['REQUEST_URI'];
         $page->data['CashRegisterEnterTransactionView']['fullName'] = $_SESSION['Stippers']['CashRegister']['user']->getFullName();
         $page->data['CashRegisterEnterTransactionView']['currentBalance'] = $_SESSION['Stippers']['CashRegister']['user']->balance;
-        if ($enterMode) {
-            $page->data['CashRegisterEnterTransactionView']['increaseMoney'] = $_POST['increase_money'];
+        if ($enterMode)
             $page->data['CashRegisterEnterTransactionView']['decreaseMoney'] = $_POST['decrease_money'];
-        }
-        else {
-            $page->data['CashRegisterEnterTransactionView']['increaseMoney'] = '';
+        else
             $page->data['CashRegisterEnterTransactionView']['decreaseMoney'] = '';
-        }
         
         $page->addView('cashRegister/CashRegisterEnterTransactionView');
     }

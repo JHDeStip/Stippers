@@ -28,6 +28,7 @@ class User {
     public $isHintManager;
     public $isUserManager;
     public $isBrowserManager;
+    public $isMoneyManager;
 
     /**
      * Gets the full name of the user.

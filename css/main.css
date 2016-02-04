@@ -59,7 +59,7 @@ h1{
     color: #29e730;
 }
 
-p.money_big, input.money_big, label.money_big {
+.money_big {
     font-size: 500%;
 }
 

@@ -40,4 +40,4 @@
 <label class="form_label_example" for="date_of_birth"> Voorbeeld: 01/01/1995</label><?php echo $this->data['ProfileTopView']['errMsgs']['dateOfBirth']; ?><div class="clearfix"></div>
 
 <label class="form_label" for="balance">Saldo:</label>
-<input class="textbox" type="text" id="balance" name="balance" value="<?php echo htmlentities($this->data['ProfileTopView']['balance'], ENT_QUOTES, 'utf-8'); ?>" disabled><a class="normal_text_anchor" href="mytransactions?amount=200">Laatste 200 transacties bekijken</a><div class="clearfix"></div>
+<input class="textbox" type="text" id="balance" name="balance" value="<?php echo htmlentities(number_format($this->data['ProfileTopView']['balance'], 2, ',', '.'), ENT_QUOTES, 'utf-8'); ?>" disabled><a class="normal_text_anchor" href="mytransactions?amount=200">Laatste 200 transacties bekijken</a><div class="clearfix"></div>

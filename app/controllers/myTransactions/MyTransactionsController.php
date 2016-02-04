@@ -33,16 +33,17 @@ abstract class MyTransactionsController implements IController {
             $amount = MoneyTransactionsViewConfig::DEFAULTAMOUNT;
         
         try {
-            //Get total transactions for user
-            $totalAmount = MoneyTransactionDB::getTotalTransactionsByUserId($_SESSION['Stippers']['user']->userId);
-            
+            //Get user for his name
             $page->data['TransactionsNameView']['fullName'] = $_SESSION['Stippers']['user']->getFullName();
             
+            //Get transactions for user
+            $transactions = MoneyTransactionDB::getTransactionsByUserId($_SESSION['Stippers']['user']->userId, $amount);
+            $transactionCount = count($transactions);
+            
             //If no transactions show no transactions view, otherwise show list with transactions
-            if ($totalAmount > 0) {
-                $transactions = MoneyTransactionDB::getTransactionsByUserId($_SESSION['Stippers']['user']->userId, $amount);
+            if ($transactionCount > 0) {
                 $page->data['TransactionsNoDiscountListView']['transactions'] = $transactions;
-                $page->data['TransactionsNoDiscountListView']['totalAmount'] = $totalAmount;
+                $page->data['TransactionsNoDiscountListView']['totalAmount'] = $transactionCount;
                 $page->addView('transactions/TransactionsTitleView');
                 $page->addView('transactions/TransactionsNameView');
                 $page->addView('transactions/TransactionsBackToProfileLinkView');

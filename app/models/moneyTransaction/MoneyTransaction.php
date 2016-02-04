@@ -11,44 +11,56 @@
 
 class MoneyTransaction {
     private $transactionId;
-    private $user;
+    private $affectedUser;
     private $balBefore;
     private $incrMoney;
     private $decrMoney;
     private $discountPerc;
     private $time;
-    private $browserName;
+    private $executingBrowserName;
+    private $executingUser;
     
     /**
      * Constructor for money transaction
      * 
      * @param int $transactionId id of the transaction
-     * @param int $user user the transaction applies to
+     * @param int $affectedUser the id of the user the transaction applies to
      * @param int $balBefore the balance in cents before the transaction
      * @param int $incrMoney the amount of money in cents added
      * @param int $decrMoney the amount of money in cents taken off
      * @param int $discountPerc the discount percentage times 100
      * @param string $time the time of the transaction
-     * @param string $browserName the name of the browser that did the transaction
+     * @param string $executingBrowserName the name of the browser that did the transaction
+     * @param string $executingUser the id of the user that did the transaction
      */
-    public function __construct($transactionId, $user, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $browserName) {
+    public function __construct($transactionId, $affectedUser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $executingBrowserName, $executingUser) {
         $this->tranactionId = $transactionId;
-        $this->user = $user;
+        $this->affectedUser = $affectedUser;
         $this->balBefore = $balBefore;
         $this->incrMoney = $incrMoney;
         $this->decrMoney = $decrMoney;
         $this->discountPerc = $discountPerc;
         $this->time = $time;
-        $this->browserName = $browserName;
+        $this->executingBrowserName = $executingBrowserName;
+        $this->executingUser = $executingUser;
     }
     
     /**
-     * Gets the user ID associated with the transaction.
+     * Gets the ID of the tranaction.
+     * 
+     * @return int ID of transaction
+     */
+    public function getTransactionId() {
+        return $this->transactionId;
+    }
+    
+    /**
+     * Gets the ID of the user that this transaction applies to.
      * 
      * @return int ID of user
      */
-    public function getUser() {
-        return $this->user;
+    public function getAffectedUser() {
+        return $this->affectedUser;
     }
     
     /**
@@ -97,12 +109,21 @@ class MoneyTransaction {
     }
     
     /**
-     * Gets the name of the browser that d the transaction.
+     * Gets the name of the browser that did the transaction.
      * 
      * @return string name of browser that did the transaction
      */
-    public function getBrowserName() {
-        return $this->browserName;
+    public function getExecutingBrowserName() {
+        return $this->executingBrowserName;
+    }
+    
+    /**
+     * Gets the ID of the user that did the transaction.
+     * 
+     * @return int ID of the user that did the transaction
+     */
+    public function getExecutingUser() {
+        return $this->executingUser;
     }
     
     /**

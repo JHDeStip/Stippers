@@ -100,6 +100,7 @@ abstract class Authorization implements IMiddleware {
         $userManager = false;
         $hintManager = false;
         $browserManager = false;
+        $moneyManager = false;
         $addRenewUserBrowser = false;
         $checkInBrowser = false;
         $cashRegisterBrowser = false;
@@ -121,6 +122,8 @@ abstract class Authorization implements IMiddleware {
                 $hintManager = $permissions['HINTMANAGER'];
             if (isset($permissions['BROWSERMANAGER']))
                 $browserManager = $permissions['BROWSERMANAGER'];
+            if (isset($permissions['MONEYMANAGER']))
+                $moneyManager = $permissions['MONEYMANAGER'];
             if (isset($permissions['ADDRENEWUSERBROWSER']))
                 $addRenewUserBrowser = $permissions['ADDRENEWUSERBROWSER'];
             if (isset($permissions['CHECKINBROWSER']))
@@ -149,7 +152,7 @@ abstract class Authorization implements IMiddleware {
         }
         
         //If certain users can display the page and someone is logged in we check if the logged in user has the required permissions.
-        if (!$canDisplay && ($member || $userManager || $hintManager || $browserManager || $admin)) {
+        if (!$canDisplay && ($member || $userManager || $hintManager || $browserManager || $moneyManager || $admin)) {
             //No access yet and no user in session? Let user login!
             if (!isset($_SESSION['Stippers']['user']))
                 $hasToLogIn = true;
@@ -161,6 +164,8 @@ abstract class Authorization implements IMiddleware {
                 else if ($hintManager && $_SESSION['Stippers']['user']->isHintManager)
                     $canDisplay = true;
                 else if ($browserManager && $_SESSION['Stippers']['user']->isBrowserManager)
+                    $canDisplay = true;
+                else if ($browserManager && $_SESSION['Stippers']['user']->isMoneyManager)
                     $canDisplay = true;
                 else if ($admin && $_SESSION['Stippers']['user']->isAdmin)
                     $canDisplay = true;

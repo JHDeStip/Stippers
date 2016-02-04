@@ -26,7 +26,7 @@ abstract class MoneyTransactionDB {
     public static function getTransactions($limit) {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT transaction_id, user, bal_before, incr_money, decr_money, discount_perc, time, browser_name FROM stippers_money_transactions LIMIT ?';
+            $commString = 'SELECT transaction_id, affected_user, bal_before, incr_money, decr_money, discount_perc, time, executing_browser_name, executing_user FROM stippers_money_transactions ORDER BY time DESC LIMIT ?';
             $stmt = $conn->prepare($commString);
             
             //Check if statement could be prepared
@@ -36,11 +36,11 @@ abstract class MoneyTransactionDB {
                 if (!$stmt->execute())
                     throw new BrowserDBException('Unknown error during statement execution while getting transactions.', MoneyTransactionDBException::UNKNOWNERROR);
                 else {
-                    $stmt->bind_result($transactionId, $user, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $browserName);
+                    $stmt->bind_result($transactionId, $affectedUser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $executingBrowserName, $executingUser);
                     $transactions = array();
                     
                     while ($stmt->fetch())
-                        array_push($transactions, new MoneyTransaction($transactionId, $user, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $browserName));
+                        array_push($transactions, new MoneyTransaction($transactionId, $affectedUser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $executingBrowserName, $executingUser));
                     
                     return $transactions;
                 }
@@ -71,13 +71,12 @@ abstract class MoneyTransactionDB {
     public static function getTransactionsByUserId($userId, $limit) {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT transaction_id, user, bal_before, incr_money, decr_money, discount_perc, time, browser_name '
+            $commString = 'SELECT transaction_id, affected_user, bal_before, incr_money, decr_money, discount_perc, time, executing_browser_name, executing_user '
                     .'FROM stippers_money_transactions '
-                    .'WHERE user = ? '
+                    .'WHERE affected_user = ? '
                     .'ORDER BY time DESC '
                     .'LIMIT ?';
             $stmt = $conn->prepare($commString);
-            
             //Check if statement could be prepared
             if ($stmt) {
                 
@@ -86,11 +85,11 @@ abstract class MoneyTransactionDB {
                 if (!$stmt->execute())
                     throw new BrowserDBException('Unknown error during statement execution while getting transactions.', MoneyTransactionDBException::UNKNOWNERROR);
                 else {
-                    $stmt->bind_result($transactionId, $user, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $browserName);
+                    $stmt->bind_result($transactionId, $affecteduser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $executingBrowserName, $executingUser);
                     $transactions = array();
                     
                     while ($stmt->fetch())
-                        array_push($transactions, new MoneyTransaction($transactionId, $user, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $browserName));
+                        array_push($transactions, new MoneyTransaction($transactionId, $affecteduser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $executingBrowserName, $executingUser));
                     
                     return $transactions;
                 }
@@ -120,14 +119,13 @@ abstract class MoneyTransactionDB {
     public static function getTotalTransactionsByUserId($userId){
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT count(*) FROM stippers_money_transactions WHERE user = ?';
+            $commString = 'SELECT count(*) FROM stippers_money_transactions WHERE affected_user = ?';
             $stmt = $conn->prepare($commString);
-            
             //Check if statement could be prepared
             if ($stmt) {
                                 
                 $stmt->bind_param('i', $userId);
-                if (!$stmt->execute())
+                if (!$stmt->execute()) 
                     throw new MoneyTransactionDBException('Unknown error during statement execution while counting the user\'s transactions.', MoneyTransactionDBException::UNKNOWNERROR);
                 else {
                     $stmt->bind_result($nTransactions);
@@ -208,7 +206,7 @@ abstract class MoneyTransactionDB {
             $conn->autocommit(false);
             
             $commString = 'UPDATE stippers_users SET balance = ? '
-                    .'WHERE user_id = ? AND email = ? AND first_name = ? AND last_name = ? AND password_hash = ? AND balance = ? AND phone = ? AND date_of_birth = STR_TO_DATE(?, "%d/%m/%Y") AND street = ? AND house_number = ? AND city = ? AND postal_code = ? AND country = ? AND DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") = ? AND is_admin = ? AND is_hint_manager = ? AND is_user_manager = ? AND is_browser_manager = ?';
+                    .'WHERE user_id = ? AND email = ? AND first_name = ? AND last_name = ? AND password_hash = ? AND balance = ? AND phone = ? AND date_of_birth = STR_TO_DATE(?, "%d/%m/%Y") AND street = ? AND house_number = ? AND city = ? AND postal_code = ? AND country = ? AND DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") = ? AND is_admin = ? AND is_hint_manager = ? AND is_user_manager = ? AND is_browser_manager = ? AND is_money_manager = ?';
             $stmt = $conn->prepare($commString);
             
             //Check if statement could be prepared
@@ -216,7 +214,7 @@ abstract class MoneyTransactionDB {
                 
                 $timezone = GlobalConfig::TIMEZONE;
                 $balAfter = $transaction->getBalAfter();
-                $stmt->bind_param('iissssisssssssssiiii', $balAfter, $user->userId, $user->email, $user->firstName, $user->lastName, $user->passwordHash, $user->balance, $user->phone, $user->dateOfBirth, $user->street, $user->houseNumber, $user->city, $user->postalCode, $user->country, $timezone, $user->creationTime, $user->isAdmin, $user->isHintManager, $user->isUserManager, $user->isBrowserManager);
+                $stmt->bind_param('iissssisssssssssiiiii', $balAfter, $user->userId, $user->email, $user->firstName, $user->lastName, $user->passwordHash, $user->balance, $user->phone, $user->dateOfBirth, $user->street, $user->houseNumber, $user->city, $user->postalCode, $user->country, $timezone, $user->creationTime, $user->isAdmin, $user->isHintManager, $user->isUserManager, $user->isBrowserManager, $user->isMoneyManager);
                 
                 if (!$stmt->execute())
                     throw new MoneyTransactionDBException('Unknown error during statement execution while updating user.', MoneyTransactionDBException::UNKNOWNERROR);
@@ -225,7 +223,7 @@ abstract class MoneyTransactionDB {
     
                 $stmt->close();
                 
-                $commString = 'INSERT INTO stippers_money_transactions (user, bal_before, incr_money, decr_money, discount_perc, browser_name) VALUES (?, ?, ?, ?, ?, ?)';
+                $commString = 'INSERT INTO stippers_money_transactions (affected_user, bal_before, incr_money, decr_money, discount_perc, executing_browser_name, executing_user) VALUES (?, ?, ?, ?, ?, ?, ?)';
                 $stmt = $conn->prepare($commString);
                 
                 //Check if statement could be prepared
@@ -235,8 +233,9 @@ abstract class MoneyTransactionDB {
                     $incrMoney = $transaction->getIncrMoney();
                     $decrMoney = $transaction->getDecrMoney();
                     $discountPerc = $transaction->getDiscountPerc();
-                    $browserName = $transaction->getBrowserName();
-                    $stmt->bind_param('iiiiis', $user->userId, $balBefore, $incrMoney, $decrMoney, $discountPerc, $browserName);
+                    $executingBrowserName = $transaction->getExecutingBrowserName();
+                    $executingUser = $transaction->getExecutingUser();
+                    $stmt->bind_param('iiiiisi', $user->userId, $balBefore, $incrMoney, $decrMoney, $discountPerc, $executingBrowserName, $executingUser);
                     
                     if (!$stmt->execute())
                         throw new MoneyTransactionDBException('Unknown error during statement execution while adding the transaction.', MoneyTransactionDBException::UNKNOWNERROR);
@@ -262,5 +261,3 @@ abstract class MoneyTransactionDB {
         }
     }
 }
-
-    

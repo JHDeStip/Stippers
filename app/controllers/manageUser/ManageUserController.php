@@ -200,6 +200,12 @@ abstract class ManageUserController implements IController {
         $page->data['UserSearchAdminView']['isBrowserManagerSelected']['1'] = '';
         $page->data['UserSearchAdminView']['isBrowserManagerSelected'][$_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isBrowserManager']] = 'selected';
         
+        $page->data['UserSearchAdminView']['isMoneyManager'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isMoneyManager'];
+        $page->data['UserSearchAdminView']['isMoneyManagerSelected'][''] = '';
+        $page->data['UserSearchAdminView']['isMoneyManagerSelected']['0'] = '';
+        $page->data['UserSearchAdminView']['isMoneyManagerSelected']['1'] = '';
+        $page->data['UserSearchAdminView']['isMoneyManagerSelected'][$_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isMoneyManager']] = 'selected';
+        
         if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isAdmin'])
             $page->data['UserSearchAdminView']['showIsAdminChecked'] = 'checked';
         else
@@ -214,6 +220,11 @@ abstract class ManageUserController implements IController {
             $page->data['UserSearchAdminView']['showIsBrowserManagerChecked'] = 'checked';
         else
             $page->data['UserSearchAdminView']['showIsBrowserManagerChecked'] = '';
+        
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isMoneyManager'])
+            $page->data['UserSearchAdminView']['showIsMoneyManagerChecked'] = 'checked';
+        else
+            $page->data['UserSearchAdminView']['showIsMoneyManagerChecked'] = '';
         
         $page->data['UserSearchAdminView']['errMsgs'] = UserSearchAdminViewValidator::initErrMsgs();
     }
@@ -328,6 +339,10 @@ abstract class ManageUserController implements IController {
             $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isBrowserManager'] = $_POST['is_browser_manager'];
         else
             $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isBrowserManager'] = '';
+        if (isset($_POST['is_money_manager']))
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isMoneyManager'] = $_POST['is_money_manager'];
+        else
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['isMoneyManager'] = '';
         
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['firstName'] = isset($_POST['show_first_name']);
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['lastName'] = isset($_POST['show_last_name']);
@@ -347,6 +362,7 @@ abstract class ManageUserController implements IController {
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isAdmin'] = isset($_POST['show_is_admin']);
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isUserManager'] = isset($_POST['show_is_user_manager']);
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isBrowserManager'] = isset($_POST['show_is_browser_manager']);
+        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['isMoneyManager'] = isset($_POST['show_is_money_manager']);
         
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['options']['orderByBirthday'] = isset($_POST['order_by_birthday']);
     }

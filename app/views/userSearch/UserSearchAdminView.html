@@ -31,3 +31,14 @@
     </td>
     <td><input type="checkbox" class="checkbox" id="show_is_browser_manager" name="show_is_browser_manager" <?php echo $this->data['UserSearchAdminView']['showIsBrowserManagerChecked']; ?>></td>
 </tr>
+<tr>
+    <td>
+        <label class="form_label" for="is_money_manager">Geldbeheerder:</label>
+        <select name="is_money_manager" id="is_money_manager">
+            <option value="" <?php echo $this->data['UserSearchAdminView']['isMoneyManagerSelected']['']; ?>>Alles</option>
+            <option value="0" <?php echo $this->data['UserSearchAdminView']['isMoneyManagerSelected']['0']; ?>>Nee</option>
+            <option value="1" <?php echo $this->data['UserSearchAdminView']['isMoneyManagerSelected']['1']; ?>>Ja</option>
+        </select>
+    </td>
+    <td><input type="checkbox" class="checkbox" id="show_is_money_manager" name="show_is_money_manager" <?php echo $this->data['UserSearchAdminView']['showIsMoneyManagerChecked']; ?>></td>
+</tr>

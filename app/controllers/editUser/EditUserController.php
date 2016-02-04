@@ -42,6 +42,8 @@ abstract class EditUserController implements IController {
                 EditUserController::buildEditUserTopView($page, false, false);
                 if ($_SESSION['Stippers']['user']->isAdmin)
                     EditUserController::buildEditUserAdminView($page, false, false);
+                if ($_SESSION['Stippers']['user']->isAdmin || $_SESSION['Stippers']['user']->isMoneyManager)
+                    EditUserController::buildEditUserMoneyManagerView($page);
                 $page->addView('editUser/EditUserDisabledFormBottomView');
                 EditUserController::buildMembershipDetailsView($page);
             }
@@ -77,6 +79,8 @@ abstract class EditUserController implements IController {
             EditUserController::buildEditUserTopView($page, true, false);
             if ($_SESSION['Stippers']['user']->isAdmin)
                 EditUserController::buildEditUserAdminView($page, true, false);
+            if ($_SESSION['Stippers']['user']->isAdmin || $_SESSION['Stippers']['user']->isMoneyManager)
+                EditUserController::buildEditUserMoneyManagerView($page);
             $page->addView('editUser/EditUserEnabledFormBottomView');
             EditUserController::buildMembershipDetailsView($page);
             $page->showWithMenu();
@@ -113,6 +117,10 @@ abstract class EditUserController implements IController {
                             
                         $page->addView('editUser/EditUserEnabledFormBottomView');
                         EditUserController::buildMembershipDetailsView($page);
+                        if ($_SESSION['Stippers']['user']->isAdmin)
+                            EditUserController::buildEditUserAdminView($page, true, true);
+                        if ($_SESSION['Stippers']['user']->isAdmin || $_SESSION['Stippers']['user']->isMoneyManager)
+                            EditUserController::buildEditUserMoneyManagerView($page);
                     }
                 }
                 catch (Exception $ex) {
@@ -125,6 +133,10 @@ abstract class EditUserController implements IController {
                         
                     $page->addView('editUser/EditUserEnabledFormBottomView');
                     EditUserController::buildMembershipDetailsView($page);
+                    if ($_SESSION['Stippers']['user']->isAdmin)
+                        EditUserController::buildEditUserAdminView($page, true, true);
+                    if ($_SESSION['Stippers']['user']->isAdmin || $_SESSION['Stippers']['user']->isMoneyManager)
+                        EditUserController::buildEditUserMoneyManagerView($page);
                 }
             }
             else {
@@ -133,6 +145,10 @@ abstract class EditUserController implements IController {
                 $page->addView('editUser/EditUserEnabledFormBottomView');
                 $page->data['EditUserTopView']['errMsgs'] = array_merge($page->data['EditUserTopView']['errMsgs'], $errMsgs);
                 EditUserController::buildMembershipDetailsView($page);
+                if ($_SESSION['Stippers']['user']->isAdmin)
+                    EditUserController::buildEditUserAdminView($page, true, true);
+                if ($_SESSION['Stippers']['user']->isAdmin || $_SESSION['Stippers']['user']->isMoneyManager)
+                    EditUserController::buildEditUserMoneyManagerView($page);
             }
             $page->showWithMenu();
         }
@@ -185,7 +201,7 @@ abstract class EditUserController implements IController {
             $page->data['EditUserTopView']['disabled'] = 'disabled';
         
         $page->data['EditUserTopView']['creationTime'] = $_SESSION['Stippers']['EditUser']['user']->creationTime;
-        $page->data['EditUserTopView']['balance'] = $_SESSION['Stippers']['EditUser']['user']->balance;
+        $page->data['EditUserTopView']['balance'] = $_SESSION['Stippers']['EditUser']['user']->balance/100;
         $page->data['EditUserTopView']['userId'] = $_SESSION['Stippers']['EditUser']['user']->userId;
         
         $page->addView('editUser/EditUserTopView');
@@ -205,6 +221,7 @@ abstract class EditUserController implements IController {
             $page->data['EditUserAdminView']['isAdminChecked'] = (isset($_POST['is_admin_checked']) ? 'checked' : '');
             $page->data['EditUserAdminView']['isUserManagerChecked'] = (isset($_POST['is_user_manager_checked']) ? 'checked' : '');
             $page->data['EditUserAdminView']['isBrowserManagerChecked'] = (isset($_POST['is_browser_manager_checked']) ? 'checked' : '');
+            $page->data['EditUserAdminView']['isMoneyManagerChecked'] = (isset($_POST['is_money_manager_checked']) ? 'checked' : '');
         }
         //If we're not trying to save we are showing existing data
         //so we load it from the user object in session
@@ -212,6 +229,7 @@ abstract class EditUserController implements IController {
             $page->data['EditUserAdminView']['isAdminChecked'] = ($_SESSION['Stippers']['EditUser']['user']->isAdmin ? 'checked' : '');
             $page->data['EditUserAdminView']['isUserManagerChecked'] = ($_SESSION['Stippers']['EditUser']['user']->isUserManager ? 'checked' : '');
             $page->data['EditUserAdminView']['isBrowserManagerChecked'] = ($_SESSION['Stippers']['EditUser']['user']->isBrowserManager ? 'checked' : '');
+            $page->data['EditUserAdminView']['isMoneyManagerChecked'] = ($_SESSION['Stippers']['EditUser']['user']->isMoneyManager ? 'checked' : '');
         }
         
         if ($enabled)
@@ -220,6 +238,16 @@ abstract class EditUserController implements IController {
             $page->data['EditUserAdminView']['disabled'] = 'disabled';
         
         $page->addView('editUser/EditUserAdminView');
+    }
+    
+    /**
+     * Builds the view for the edit balance link.
+     * 
+     * @param Page $page page object to load data into
+     */
+    private static function buildEditUserMoneyManagerView($page) {
+        $page->addView('editUser/EditUserMoneyManagerView');
+        $page->data['EditUserMoneyManagerView']['userId'] = $_SESSION['Stippers']['EditUser']['user']->userId;
     }
         
     /**
@@ -248,6 +276,7 @@ abstract class EditUserController implements IController {
      */
     private static function createUserFromPost() {
         $user = new User();
+        $user->userId = $_SESSION['Stippers']['EditUser']['user']->userId;
         $user->email = $_POST['email'];
         $user->firstName = $_POST['first_name'];
         $user->lastName = $_POST['last_name'];
@@ -266,6 +295,7 @@ abstract class EditUserController implements IController {
             $user->isAdmin = isset($_POST['is_admin']);
             $user->isUserManager = isset($_POST['is_user_manager']);
             $user->isBrowserManager = isset($_POST['is_browser_manager']);
+            $user->isMoneyManager = isset($_POST['is_money_manager']);
         }
         //If you're not an admin, don't take permission data from post
         //but keep the data that was already in the session
@@ -273,6 +303,7 @@ abstract class EditUserController implements IController {
             $user->isAdmin = $_SESSION['Stippers']['EditUser']['user']->isAdmin;
             $user->isUserManager = $_SESSION['Stippers']['EditUser']['user']->isUserManager;
             $user->isBrowserManager = $_SESSION['Stippers']['EditUser']['user']->isBrowserManager;
+            $user->isMoneyManager = $_SESSION['Stippers']['EditUser']['user']->isMoneyManager;
         }
         
         return $user;

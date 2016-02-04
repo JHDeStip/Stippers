@@ -26,6 +26,9 @@ abstract class UserSearchAdminViewValidator implements IValidator {
         if ($data['isBrowserManager'] != '' && (!ctype_digit($data['isBrowserManager']) || $data['isBrowserManager'] < DataValidationConfig::BROWSERMANAGERPERMISSIONMIN || $data['isBrowserManager'] > DataValidationConfig::BROWSERMANAGERPERMISSIONMAX))
             $errMsgs['isBrowserManager'] = '<label class="form_label_error" for="is_browser_manager">Selecteer een geldige optie.</label>';
         
+        if ($data['isMoneyManager'] != '' && (!ctype_digit($data['isMoneyManager']) || $data['isMoneyManager'] < DataValidationConfig::MONEYMANAGERPERMISSIONMIN || $data['isMoneyManager'] > DataValidationConfig::MONEYMANAGERPERMISSIONMAX))
+            $errMsgs['isMoneyManager'] = '<label class="form_label_error" for="is_money_manager">Selecteer een geldige optie.</label>';
+        
         return $errMsgs;
     }
     
@@ -33,6 +36,7 @@ abstract class UserSearchAdminViewValidator implements IValidator {
         $errMsgs['isAdmin'] = '';
         $errMsgs['isUserManager'] = '';
         $errMsgs['isBrowserManager'] = '';
+        $errMsgs['isMoneyManager'] = '';
         
         return $errMsgs;
     }

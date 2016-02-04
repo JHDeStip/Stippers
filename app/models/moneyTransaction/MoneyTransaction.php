@@ -34,7 +34,7 @@ class MoneyTransaction {
      * @param string $executingUser the id of the user that did the transaction
      */
     public function __construct($transactionId, $affectedUser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $executingBrowserName, $executingUser) {
-        $this->tranactionId = $transactionId;
+        $this->transactionId = $transactionId;
         $this->affectedUser = $affectedUser;
         $this->balBefore = $balBefore;
         $this->incrMoney = $incrMoney;

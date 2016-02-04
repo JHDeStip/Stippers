@@ -921,13 +921,14 @@ abstract class UserDB {
      * @param User $user user to add
      * @param string $passwordSalt password salt for the user
      * @param int $cardId card number for the user
+     * @return ID of inserted user
      * @throws Exception generic error for if something goes wrong while talking to the database
      * @throws UserDBException error for if something goes wrong while adding the user
      */
     public static function addUser($user, $passwordSalt, $cardId) {
         try {
             $conn = Database::getConnection();
-
+            
             $conn->autocommit(false);
 
             $commString = 'SELECT stippers_nextval("stippers_users_seq")';
@@ -945,7 +946,7 @@ abstract class UserDB {
                     throw new UserDBException('Cannot retrieve the next user id.', UserDBException::CANNOTGETNEXTUSERID);
                 
                 $stmt->close();
-    
+                
                 $commString = 'INSERT INTO stippers_users (user_id, email, first_name, last_name, password_hash, password_salt, phone, date_of_birth, street, house_number, city, postal_code, country) ' .
                     'VALUES (?, ?, ?, ?, ?, ?, ?, STR_TO_DATE(?, "%d/%m/%Y"), ?, ?, ?, ?, ?)';
                 $stmt = $conn->prepare($commString);
@@ -961,14 +962,15 @@ abstract class UserDB {
                         else
                             throw new UserDBException('Unknown error during statement execution while adding user.', UserDBException::UNKNOWNERROR);
                     }
+                    
                     $stmt->close();
 
-                    $commString = 'INSERT INTO stippers_user_card_year (user, card, membership_year) VALUES (?, ?, YEAR(CONVERT_TZ(NOW(), @@global.time_zone, ?))-';
+                    $commString = 'INSERT INTO stippers_user_card_year (user, card, membership_year) VALUES (?, ?, YEAR(CONVERT_TZ(NOW(), @@global.time_zone, ?)))';
                     $stmt = $conn->prepare($commString);
                     
                     //Check if statement could be prepared
                     if ($stmt) {
-                    
+                        
                         $timezone = GlobalConfig::TIMEZONE;
                         $stmt->bind_param('iis', $userId, $cardId, $timezone);
                         
@@ -989,6 +991,8 @@ abstract class UserDB {
             }
             else
                 throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
+            
+            return $userId;
         }
         catch (Exception $ex) {
             if (isset($conn))

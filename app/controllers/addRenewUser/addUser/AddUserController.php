@@ -19,9 +19,15 @@ require_once __DIR__.'/../../../helperClasses/email/EmailException.php';
 
 require_once __DIR__.'/../../../config/EmailConfig.php';
 
+require_once __DIR__.'/../../../config/AddOrRenewUserConfig.php';
+
 require_once __DIR__.'/../../../models/user/User.php';
 require_once __DIR__.'/../../../models/user/UserDB.php';
 require_once __DIR__.'/../../../models/user/UserDBException.php';
+
+require_once __DIR__.'/../../../models/moneyTransaction/MoneyTransaction.php';
+require_once __DIR__.'/../../../models/moneyTransaction/MoneyTransactionDB.php';
+require_once __DIR__.'/../../../models/moneyTransaction/MoneyTransactionDBException.php';
 
 require_once __DIR__.'/../../../views/addRenewUser/UserDataFormTopViewValidator.php';
 require_once __DIR__.'/../../../views/addRenewUser/UserDataFormPasswordViewValidator.php';
@@ -63,14 +69,36 @@ abstract class AddUserController implements IController {
             
             //Add the user
             try {
-                UserDB::addUser($user, $passwordSalt, $_POST['card_number']);
+                $userId = UserDB::addUser($user, $passwordSalt, $_POST['card_number']);
+
                 $page->addView('addRenewUser/addUser/SuccessfullyAddedView');
-                
                 //Send welcome mail
-                $failedEmails = Email::sendEmails('WelcomeNewMember.html', 'JH DE Stip - Welkom', EmailConfig::FROMADDRESS, [$user], null);
-                //If failedEmails is not empty the mail was not sent
-                if (!empty($failedEmails)) {
+                try {
+                    
+                    $failedEmails = Email::sendEmails('WelcomeNewMember.html', 'JH DE Stip - Welkom', EmailConfig::FROMADDRESS, [$user], null);
+                    //If failedEmails is not empty the mail was not sent
+                    if (!empty($failedEmails)) {
+                        $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan welkomstmail niet verzenden.';
+                        $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
+                    }
+                }
+                catch (Exception $ex) {
                     $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan welkomstmail niet verzenden.';
+                    $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
+                }
+                
+                //Add money to user's card
+                try {
+                    $user = UserDB::getFullUserById($userId);
+                    $executingBrowserName = BrowserDB::getBrowserById($_SESSION['Stippers']['browser']->browserId)->name;
+                    $trans = new MoneyTransaction(null, $user->userId, 0, AddOrRenewUserConfig::NEWORRENEWEDUSERBONUS, 0, 0, null, $executingBrowserName, null);
+                    MoneyTransactionDB::addTransaction($user, $trans);
+                }
+                catch (Exception $ex) {
+                    if (isset($page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle']))
+                        $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] .= ' Kan het saldo van het account niet verhogen, probeer dit handmatig te doen.';
+                    else
+                        $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan het saldo van het account niet verhogen, probeer dit handmatig te doen.';
                     $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
                 }
             }
@@ -82,10 +110,6 @@ abstract class AddUserController implements IController {
                     $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Dit kaartnummer is al in gebruik.</h2>';
                 else
                     $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Kan gebruiker niet toevoegen, probeer het opnieuw.</h2>';
-            }
-            catch (EmailException $ex) {
-                $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan welkomstmail niet verzenden.';
-                $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
             }
             catch (Exception $ex) {
                 AddUserController::buildAddUserPage($page, true);

@@ -12,11 +12,11 @@
 require_once __DIR__.'/../../IController.php';
 require_once __DIR__.'/../../../helperClasses/Page.php';
 
-require_once __DIR__.'/../../../config/SecurityConfig.php';
 require_once __DIR__.'/../../../config/EmailConfig.php';
 
 require_once __DIR__.'/../../../helperClasses/random/Random.php';
-require_once __DIR__.'/../../../config/SecurityConfig.php';
+
+require_once __DIR__.'/../../../config/AddOrRenewUserConfig.php';
 
 require_once __DIR__.'/../../../helperClasses/email/Email.php';
 require_once __DIR__.'/../../../helperClasses/email/EmailException.php';
@@ -24,6 +24,10 @@ require_once __DIR__.'/../../../helperClasses/email/EmailException.php';
 require_once __DIR__.'/../../../models/user/User.php';
 require_once __DIR__.'/../../../models/user/UserDB.php';
 require_once __DIR__.'/../../../models/user/UserDBException.php';
+
+require_once __DIR__.'/../../../models/moneyTransaction/MoneyTransaction.php';
+require_once __DIR__.'/../../../models/moneyTransaction/MoneyTransactionDB.php';
+require_once __DIR__.'/../../../models/moneyTransaction/MoneyTransactionDBException.php';
 
 require_once __DIR__.'/../../../views/addRenewUser/UserDataFormTopViewValidator.php';
 require_once __DIR__.'/../../../views/addRenewUser/UserDataFormPasswordViewValidator.php';
@@ -91,6 +95,7 @@ abstract class RenewUserController implements IController {
                 $newUser->isHintManager = $_SESSION['Stippers']['RenewUser']['user']->isHintManager;
                 $newUser->isUserManager = $_SESSION['Stippers']['RenewUser']['user']->isUserManager;
                 $newUser->isBrowserManager = $_SESSION['Stippers']['RenewUser']['user']->isBrowserManager;
+                $newUser->isMoneyManager = $_SESSION['Stippers']['RenewUser']['user']->isBrowserManager;
                 $newUser->creationTime = $_SESSION['Stippers']['RenewUser']['user']->creationTime;
                 
                 //Renew the user
@@ -99,10 +104,30 @@ abstract class RenewUserController implements IController {
                     $page->addView('addRenewUser/renewUser/SuccessfullyRenewedView');
                     
                     //Send welcome mail
-                    $failedEmails = Email::sendEmails('WelcomeOldMember.html', 'JH DE Stip - Welkom', EmailConfig::FROMADDRESS, [$newUser], null);
-                    //If failedEmails is not empty the mail was not sent
-                    if (!empty($failedEmails)) {
+                    try {
+                        $failedEmails = Email::sendEmails('WelcomeOldMember.html', 'JH DE Stip - Welkom', EmailConfig::FROMADDRESS, [$newUser], null);
+                        //If failedEmails is not empty the mail was not sent
+                        if (!empty($failedEmails)) {
+                            $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan welkomstmail niet verzenden.';
+                            $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
+                        }
+                    }
+                    catch (Exception $ex) {
                         $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan welkomstmail niet verzenden.';
+                        $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
+                    }
+                    
+                    //Add money to user's card
+                    try {
+                        $executingBrowserName = BrowserDB::getBrowserById($_SESSION['Stippers']['browser']->browserId)->name;
+                        $trans = new MoneyTransaction(null, $newUser->userId, $newUser->balance, AddOrRenewUserConfig::NEWORRENEWEDUSERBONUS, 0, 0, null, $executingBrowserName, null);
+                        MoneyTransactionDB::addTransaction($newUser, $trans);
+                    }
+                    catch (Exception $ex) {
+                        if (isset($page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle']))
+                            $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] .= ' Kan het saldo van het account niet verhogen, probeer dit handmatig te doen.';
+                        else
+                            $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan het saldo van het account niet verhogen, probeer dit handmatig te doen.';
                         $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
                     }
                 }
@@ -125,10 +150,6 @@ abstract class RenewUserController implements IController {
                         else
                             $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Kan gebruiker niet hernieuwen, probeer het opnieuw.</h2>';
                     }
-                }
-                catch (EmailException $ex) {
-                    $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan welkomstmail niet verzenden.';
-                    $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
                 }
                 catch (Exception $ex) {
                     RenewUserController::buildRenewUserPage($page, true);

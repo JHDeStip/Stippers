@@ -150,14 +150,14 @@ $_PERMISSIONS['changepassword']['CHECKINBROWSER'] = false;
 $_PERMISSIONS['changepassword']['CASHREGISTERBROWSER'] = false;
 
 //Permissions for the check in page
-$_PERMISSIONS['check-in']['EVERYONE'] = false;
-$_PERMISSIONS['check-in']['MEMBER'] = false;
-$_PERMISSIONS['check-in']['ADMIN'] = true;
-$_PERMISSIONS['check-in']['USERMANAGER'] = false;
-$_PERMISSIONS['check-in']['BROWSERMANAGER'] = false;
-$_PERMISSIONS['check-in']['MONEYMANAGER'] = false;
-$_PERMISSIONS['check-in']['ADDRENEWUSERBROWSER'] = false;
-$_PERMISSIONS['check-in']['CHECKINBROWSER'] = true;
+$_PERMISSIONS['checkin']['EVERYONE'] = false;
+$_PERMISSIONS['checkin']['MEMBER'] = false;
+$_PERMISSIONS['checkin']['ADMIN'] = true;
+$_PERMISSIONS['checkin']['USERMANAGER'] = false;
+$_PERMISSIONS['checkin']['BROWSERMANAGER'] = false;
+$_PERMISSIONS['checkin']['MONEYMANAGER'] = false;
+$_PERMISSIONS['checkin']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['checkin']['CHECKINBROWSER'] = true;
 
 //Permissions for the logout page
 $_PERMISSIONS['logout']['EVERYONE'] = true;
@@ -301,6 +301,17 @@ $_PERMISSIONS['cashregister']['MONEYMANAGER'] = false;
 $_PERMISSIONS['cashregister']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['cashregister']['CHECKINBROWSER'] = false;
 $_PERMISSIONS['cashregister']['CASHREGISTERBROWSER'] = true;
+
+//Permissions for the meat wheel page
+$_PERMISSIONS['meatwheel']['EVERYONE'] = false;
+$_PERMISSIONS['meatwheel']['MEMBER'] = true;
+$_PERMISSIONS['meatwheel']['ADMIN'] = true;
+$_PERMISSIONS['meatwheel']['USERMANAGER'] = true;
+$_PERMISSIONS['meatwheel']['BROWSERMANAGER'] = true;
+$_PERMISSIONS['meatwheel']['MONEYMANAGER'] = true;
+$_PERMISSIONS['meatwheel']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['meatwheel']['CHECKINBROWSER'] = false;
+$_PERMISSIONS['meatwheel']['CASHREGISTERBROWSER'] = false;
 
 //Permissions for the page not found page
 $_PERMISSIONS['pagenotfound']['EVERYONE'] = true;

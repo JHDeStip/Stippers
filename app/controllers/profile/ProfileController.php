@@ -125,7 +125,7 @@ abstract class ProfileController implements IController {
             $page->data['ProfileTopView']['country'] = $_POST['country'];
             $page->data['ProfileTopView']['phone'] = $_POST['phone'];
             $page->data['ProfileTopView']['dateOfBirth'] = $_POST['date_of_birth'];
-            $page->data['ProfileTopView']['balance'] = $_SESSION['Stippers']['Profile']['user']->balance;
+            $page->data['ProfileTopView']['balance'] = $_SESSION['Stippers']['Profile']['user']->balance/100;
         }
         //If we're not trying to save we are showing existing data
         //so we load it from the user object in session
@@ -141,7 +141,7 @@ abstract class ProfileController implements IController {
             $page->data['ProfileTopView']['country'] = $_SESSION['Stippers']['Profile']['user']->country;
             $page->data['ProfileTopView']['phone'] = $_SESSION['Stippers']['Profile']['user']->phone;
             $page->data['ProfileTopView']['dateOfBirth'] = $_SESSION['Stippers']['Profile']['user']->dateOfBirth;
-            $page->data['ProfileTopView']['balance'] = $_SESSION['Stippers']['Profile']['user']->balance;
+            $page->data['ProfileTopView']['balance'] = $_SESSION['Stippers']['Profile']['user']->balance/100;
         }
             
         if ($enabled)

@@ -302,6 +302,17 @@ $_PERMISSIONS['cashregister']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['cashregister']['CHECKINBROWSER'] = false;
 $_PERMISSIONS['cashregister']['CASHREGISTERBROWSER'] = true;
 
+//Permissions for the meat wheel page
+$_PERMISSIONS['meatwheel']['EVERYONE'] = false;
+$_PERMISSIONS['meatwheel']['MEMBER'] = true;
+$_PERMISSIONS['meatwheel']['ADMIN'] = true;
+$_PERMISSIONS['meatwheel']['USERMANAGER'] = true;
+$_PERMISSIONS['meatwheel']['BROWSERMANAGER'] = true;
+$_PERMISSIONS['meatwheel']['MONEYMANAGER'] = true;
+$_PERMISSIONS['meatwheel']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['meatwheel']['CHECKINBROWSER'] = false;
+$_PERMISSIONS['meatwheel']['CASHREGISTERBROWSER'] = false;
+
 //Permissions for the page not found page
 $_PERMISSIONS['pagenotfound']['EVERYONE'] = true;
 $_PERMISSIONS['pagenotfound']['MEMBER'] = true;

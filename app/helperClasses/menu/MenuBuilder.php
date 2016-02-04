@@ -11,14 +11,18 @@ abstract class MenuBuilder {
         $page->data['MenuBarView']['showAddRenewUsersLink'] = false;
         $page->data['MenuBarView']['showCheckInLink'] = false;
         $page->data['MenuBarView']['showCashRegisterLink'] = false;
+        $page->data['MenuBarView']['showRandomAndFunLink'] = false;
         $page->data['MenuBarView']['showUserManagementLink'] = false;
         $page->data['MenuBarView']['showWeeklyWinnerLink'] = false;
         $page->data['MenuBarView']['showBrowserManagementLink'] = false;
         $page->data['MenuBarView']['showMailManagementLink'] = false;
+        $page->data['MenuBarView']['showMeatWheelLink'] = false;
         
         if (isset($_SESSION['Stippers']['user'])) {
             $page->data['MenuBarView']['showLogoutLink'] = true;
             $page->data['MenuBarView']['showProfileLink'] = true;
+            $page->data['MenuBarView']['showRandomAndFunLink'] = true;
+            $page->data['MenuBarView']['showMeatWheelLink'] = true;
             if ($_SESSION['Stippers']['user']->isAdmin || $_SESSION['Stippers']['user']->isUserManager || $_SESSION['Stippers']['user']->isBrowserManager)
                 $page->data['MenuBarView']['showManagementLink'] = true;
             

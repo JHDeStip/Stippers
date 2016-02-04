@@ -11,8 +11,10 @@
             echo '<li><a class="top_level_menu_item" href="addorrenewuser" title="Lid toevoegen">Lid toevoegen</a></li>';
         if ($this->data['MenuBarView']['showCheckInLink'])
             echo '<li><a class="top_level_menu_item" href="checkin" title="Inchecken">Inchecken</a></li>';
-if ($this->data['MenuBarView']['showCashRegisterLink'])
+        if ($this->data['MenuBarView']['showCashRegisterLink'])
             echo '<li><a class="top_level_menu_item" href="cashregister" title="Kassa">Kassa</a></li>';
+        if ($this->data['MenuBarView']['showRandomAndFunLink'])
+            echo '<li><a class="top_level_menu_item" href="#" title="Plezier_en_vertier">Plezier en vertier</a></li>';
         if ($this->data['MenuBarView']['showLogoutLink'])
             echo '<li><a class="top_level_menu_item" href="logout" title="Afmelden">Afmelden</a></li>';
         if ($this->data['MenuBarView']['showLoginLink'])
@@ -33,7 +35,16 @@ if ($this->data['MenuBarView']['showCashRegisterLink'])
                 echo '<li><a class="second_level_menu_item" href="manageemail">E-mails beheren</a></li>';
             if ($this->data['MenuBarView']['showBrowserManagementLink'])
                 echo '<li><a class="second_level_menu_item" href="managebrowser">Browsers beheren</a></li>';
+            
 
+            echo '</ul></div></div>';
+        }
+        if ($this->data['MenuBarView']['showRandomAndFunLink']) {
+            echo '<div class="container_nav_info"><div class="subnav" id="Plezier_en_vertier"><ul>';
+
+            if ($this->data['MenuBarView']['showMeatWheelLink'])
+                echo '<li><a class="second_level_menu_item" href="meatwheel">Het vleeswiel</a></li>';
+            
             echo '</ul></div></div>';
         }
     ?>

@@ -150,14 +150,14 @@ $_PERMISSIONS['changepassword']['CHECKINBROWSER'] = false;
 $_PERMISSIONS['changepassword']['CASHREGISTERBROWSER'] = false;
 
 //Permissions for the check in page
-$_PERMISSIONS['check-in']['EVERYONE'] = false;
-$_PERMISSIONS['check-in']['MEMBER'] = false;
-$_PERMISSIONS['check-in']['ADMIN'] = true;
-$_PERMISSIONS['check-in']['USERMANAGER'] = false;
-$_PERMISSIONS['check-in']['BROWSERMANAGER'] = false;
-$_PERMISSIONS['check-in']['MONEYMANAGER'] = false;
-$_PERMISSIONS['check-in']['ADDRENEWUSERBROWSER'] = false;
-$_PERMISSIONS['check-in']['CHECKINBROWSER'] = true;
+$_PERMISSIONS['checkin']['EVERYONE'] = false;
+$_PERMISSIONS['checkin']['MEMBER'] = false;
+$_PERMISSIONS['checkin']['ADMIN'] = true;
+$_PERMISSIONS['checkin']['USERMANAGER'] = false;
+$_PERMISSIONS['checkin']['BROWSERMANAGER'] = false;
+$_PERMISSIONS['checkin']['MONEYMANAGER'] = false;
+$_PERMISSIONS['checkin']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['checkin']['CHECKINBROWSER'] = true;
 
 //Permissions for the logout page
 $_PERMISSIONS['logout']['EVERYONE'] = true;

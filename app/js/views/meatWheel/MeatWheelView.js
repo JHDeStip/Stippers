@@ -7,7 +7,7 @@ var lastRotations = 0;
 var controlled = false;
 var angularFriction = 0.2;
 var target, activeWedge, stage, layer, wheel, pointer;
-var items = ['Servela', 'Curryworst', 'Berenhap', 'Bitterballen', 'Picknicker', 'Boulet', 'Chickenfingers', 'Sitostick', 'Saté', 'Mexicano'];
+var items = ['Servela', 'Curryworst', 'Berenhap', 'Bitterballen', 'Picknicker', 'Boulet', 'Chickenfingers', 'Sitostick', 'Saté', 'Mexicano', 'Viandel'];
 
 function getAverageAngularVelocity() {
     var total = 0;

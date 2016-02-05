@@ -105,15 +105,15 @@ abstract class AddUserController implements IController {
             catch (UserDBException $ex) {
                 AddUserController::buildAddUserPage($page, true);
                 if ($ex->getCode() == UserDBException::EMAILALREADYEXISTS)
-                    $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Dit e-mailadres is al in gebruik.</h2>';
+                    $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="user_data_form_error_message">Dit e-mailadres is al in gebruik.</h2>';
                 elseif ($ex->getCode() == UserDBException::CARDALREADYUSED)
-                    $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Dit kaartnummer is al in gebruik.</h2>';
+                    $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="user_data_form_error_message">Dit kaartnummer is al in gebruik.</h2>';
                 else
-                    $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Kan gebruiker niet toevoegen, probeer het opnieuw.</h2>';
+                    $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="user_data_form_error_message">Kan gebruiker niet toevoegen, probeer het opnieuw.</h2>';
             }
             catch (Exception $ex) {
                 AddUserController::buildAddUserPage($page, true);
-                $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Kan gebruiker niet toevoegen, probeer het opnieuw.</h2>';
+                $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="user_data_form_error_message">Kan gebruiker niet toevoegen, probeer het opnieuw.</h2>';
             }
         }
         else {
@@ -176,5 +176,9 @@ abstract class AddUserController implements IController {
         $page->addView('addRenewUser/UserDataFormMiddleView');
         
         $page->addView('addRenewUser/addUser/UserDataFormBottomView');
+        
+        $page->addExtraJsFile('barcodeScanner/BarcodeScanner.js');
+        $page->addExtraJsFile('views/addRenewUser/UserDataFormBarcodeScanner.js');
+        $page->addExtraJsFile('views/addRenewUser/userDataFormOnLoadHandler.js');
     }
 }

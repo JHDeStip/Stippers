@@ -38,7 +38,7 @@ abstract class UserDataFormMiddleViewValidator implements IValidator {
         if ($data['country'] == '' || strlen($data['country']) > DataValidationConfig::STRINGMAXLENGTH)
             $errMsgs['country'] = '<label class="form_label_error" for="country" id="form_label_error_country">Voer een geldig land in.</label>';
 
-        if (!$data['phone'] == '' && !preg_match('/^[0-9]{9,16}$/', $data['phone']))
+        if (!$data['phone'] == '' && !preg_match('/^[0-9]{'.DataValidationConfig::PHONEMINLENGTH.','.DataValidationConfig::PHONEMAXLENGTH.'16}$/', $data['phone']))
             $errMsgs['phone'] = '<label class="form_label_error" for="phone" id="form_label_error_phone">Voer een geldig telefoonnummer in.</label>';
 
         if ($data['date_of_birth'] == '' || !preg_match('/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/', $data['date_of_birth']) || !checkdate((int)substr($data['date_of_birth'], 3, 2), (int)substr($data['date_of_birth'], 0,2), (int)substr($data['date_of_birth'], 6, 4)) || DateTime::createFromFormat("d/m/Y", $data['date_of_birth']) > new DateTime())

@@ -144,16 +144,16 @@ abstract class RenewUserController implements IController {
                     else {
                         RenewUserController::buildRenewUserPage($page, true);
                         if ($ex->getCode() == UserDBException::EMAILALREADYEXISTS)
-                            $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Dit e-mailadres is al in gebruik.</h2>';
+                            $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="user_data_form_error_message">Dit e-mailadres is al in gebruik.</h2>';
                         elseif ($ex->getCode() == UserDBException::CARDALREADYUSED)
-                            $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Dit kaartnummer is al in gebruik.</h2>';
+                            $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="user_data_form_error_message">Dit kaartnummer is al in gebruik.</h2>';
                         else
-                            $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Kan gebruiker niet hernieuwen, probeer het opnieuw.</h2>';
+                            $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="user_data_form_error_message">Kan gebruiker niet hernieuwen, probeer het opnieuw.</h2>';
                     }
                 }
                 catch (Exception $ex) {
                     RenewUserController::buildRenewUserPage($page, true);
-                    $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="add_user_form_error_message">Kan gebruiker niet hernieuwen, probeer het opnieuw.</h2>';
+                    $page->data['UserDataFormTopView']['errMsgs']['global'] = '<h2 class="error_message" id="user_data_form_error_message">Kan gebruiker niet hernieuwen, probeer het opnieuw.</h2>';
                 }
             }
             else {
@@ -209,5 +209,9 @@ abstract class RenewUserController implements IController {
         $page->data['UserDataFormMiddleView']['errMsgs'] = UserDataFormMiddleViewValidator::initErrMsgs();
         $page->addView('addRenewUser/UserDataFormMiddleView');
         $page->addView('addRenewUser/renewUser/UserDataFormBottomView');
+        
+        $page->addExtraJsFile('barcodeScanner/BarcodeScanner.js');
+        $page->addExtraJsFile('views/addRenewUser/UserDataFormBarcodeScanner.js');
+        $page->addExtraJsFile('views/addRenewUser/userDataFormOnLoadHandler.js');
     }
 }

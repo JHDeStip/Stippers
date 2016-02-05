@@ -18,6 +18,7 @@ abstract class DataValidationConfig {
     const HOUSENUMBERMAXLENGTH = 4;
     const POSTALCODEMINLENGTH = 4;
     const POSTALCODEMAXLENGTH = 6;
+    const PHONEMINLENGTH = 9;
     const PHONEMAXLENGTH = 14;
     const DATEMAXLENGTH = 10;
     const MONEYMAXLENGTH = 6;

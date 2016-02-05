@@ -11,7 +11,7 @@ var stillValid = true;
 var textBox;
 var submitButton;
 
-function barcodeScannerListener(){
+function barcodeScannerInputChanged() {
     if (stillValid){
         if (textBox.value.length === 1){
             referenceTime = (new Date()).getTime();
@@ -21,11 +21,11 @@ function barcodeScannerListener(){
             stillValid = false;
         }
         else {
-            if (textBox.value.length == barcodeLength){
-                if ((new Date()).getTime() - referenceTime <= inputDelay) {
-                    textBox.removeEventListener('input', barcodeScannerListener);
+            if (textBox.value.length == BARCODE_LENGTH){
+                if ((new Date()).getTime() - referenceTime <= INPUT_DELAY) {
+                    textBox.removeEventListener('input', barcodeScannerInputChanged);
                     textBox.value = convertInput(textBox.value);
-                    textBox.addEventListener('input', barcodeScannerListener);
+                    textBox.addEventListener('input', barcodeScannerInputChanged);
                     if (submitButton) {
                         submitButton.click();
                     }
@@ -36,7 +36,7 @@ function barcodeScannerListener(){
 }
 
 function convertInput(input) {
-    var convertedText = "";
+    var convertedText = ''
 
     for (var i=0; i<input.length; i++) {
         switch (input.substr(i, 1)) {

@@ -147,5 +147,9 @@ abstract class CashRegisterController implements IController {
             $page->data['CashRegisterEnterCardView']['cardNumber'] = '';
         
         $page->addView('cashRegister/CashRegisterEnterCardView');
+        
+        $page->addExtraJsFile('barcodeScanner/BarcodeScanner.js');
+        $page->addExtraJsFile('views/cashRegister/CashRegisterBarcodeScanner.js');
+        $page->addExtraJsFile('views/cashRegister/cashRegisterEnterCardFormOnLoadHandler.js');
     }
 }

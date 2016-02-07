@@ -42,7 +42,7 @@ abstract class ManageEmailController implements IController {
                 $page->addView('manageEmail/ManageEmailTitleView');
                 ManageEmailController::buildEmailListView($page);
                 ManageEmailController::buildEmailUploadView($page);
-                $page->data['EmailUploadView']['errMsgs']['global'] = '<h2 class="error_message" id="email_upload_form_error_info_message">Een bestand met deze naam bestaat al.</h2>';
+                $page->data['EmailUploadView']['errMsgs']['global'] = '<h2 class="error_message" id="email_upload_form_error_message">Een bestand met deze naam bestaat al.</h2>';
             }
             //Try to move the file from temp location to desired directory and show success message
             elseif (move_uploaded_file($_FILES['email_file']['tmp_name'], EmailConfig::EMAILFILESDIR.'/'.$_FILES['email_file']['name'])) {
@@ -55,7 +55,7 @@ abstract class ManageEmailController implements IController {
                 $page->addView('manageEmail/ManageEmailTitleView');
                 ManageEmailController::buildEmailListView($page);
                 ManageEmailController::buildEmailUploadView($page);
-                $page->data['EmailUploadView']['errMsgs']['global'] = '<h2 class="error_message" id="email_upload_form_error_info_message">Uploaden mislukt, probeer opnieuw.</h2>';
+                $page->data['EmailUploadView']['errMsgs']['global'] = '<h2 class="error_message" id="email_upload_form_error_message">Uploaden mislukt, probeer opnieuw.</h2>';
             }
         }
         //Show error

@@ -9,8 +9,8 @@
     for ($i = 0; $i < count($this->data['ManageEmailEmailListView']['fileNames']); $i++) {
           echo '<tr><td>'.($i+1).'</td>'
             .'<td>'.htmlentities($this->data['ManageEmailEmailListView']['fileNames'][$i], ENT_QUOTES, 'utf-8').'</td>'
-            .'<td><a href="editemail?filename='.htmlentities($this->data['ManageEmailEmailListView']['fileNames'][$i], ENT_QUOTES, 'utf-8').'">Bewerken</a></td>'
+            .'<td><a href="editemail?filename='.urlencode(htmlentities($this->data['ManageEmailEmailListView']['fileNames'][$i], ENT_QUOTES, 'utf-8')).'">Bewerken</a></td>'
             .'</tr>';
     }
     ?>
-<table>
+</table>

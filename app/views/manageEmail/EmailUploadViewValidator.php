@@ -17,22 +17,22 @@ abstract class EmailUploadViewValidator implements IValidator {
                     break;
                 case UPLOAD_ERR_INI_SIZE:
                 case UPLOAD_ERR_FORM_SIZE:
-                    $errMsgs['global'] = '<h2 class="error_message" id="email_upload_form_error_info_message">Het bestand moet kleiner zijn dan 1MB.</h2>';
+                    $errMsgs['global'] = '<h2 class="error_message" id="email_upload_form_error_message">Het bestand moet kleiner zijn dan 1MB.</h2>';
                     break;
                 case UPLOAD_ERR_NO_FILE:
-                    $errMsgs['global'] = '<h2 class="error_message" id="email_upload_form_error_info_message">Je hebt geen bestand geselecteerd.</h2>';
+                    $errMsgs['global'] = '<h2 class="error_message" id="email_upload_form_error_message">Je hebt geen bestand geselecteerd.</h2>';
                     break;
                 default:
-                    $errMsgs['global'] = '<h2 class="error_message" id="email_upload_form_error_info_message">Uploaden mislukt, probeer opnieuw.</h2>';
+                    $errMsgs['global'] = '<h2 class="error_message" id="email_upload_form_error_message">Uploaden mislukt, probeer opnieuw.</h2>';
                     break;
             }
             
             //If no error we check the filesize
-            if ($data['email_file']['error'] == UPLOAD_ERR_OK && $data['email_file']['size'] > EmailCOnfig::MAXFILESIZE)
-                $errMsgs['global'] = '<h2 class="error_message" id="email_upload_form_error_info_message">Het bestand moet kleiner zijn dan 1MB.</h2>';
+            if ($data['email_file']['error'] == UPLOAD_ERR_OK && $data['email_file']['size'] > DataValidationConfig::EMAIL_FILE_MAX_SIZE)
+                $errMsgs['global'] = '<h2 class="error_message" id="email_upload_form_error_message">Het bestand moet kleiner zijn dan 1MB.</h2>';
         }
         else
-            $errMsgs['global'] = '<h2 class="error_message" id="email_upload_form_error_info_message">Het bestand moet kleiner zijn dan 1MB.</h2>';
+            $errMsgs['global'] = '<h2 class="error_message" id="email_upload_form_error_message">Het bestand moet kleiner zijn dan 1MB.</h2>';
         
         return $errMsgs;
     }

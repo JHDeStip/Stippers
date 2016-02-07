@@ -4,14 +4,15 @@
  * 
  * @author Stan Wijckmans
  * 
- * This file contains the function to load the barcode scanner listener.
+ * This file contains code to attach the barcode detection code to the card_number input element.
  */
+
 function checkInFormLoadBarcodeScanner() {
     var cardNumberInput = document.getElementById('card_number');
     if (cardNumberInput) {
         submitButton = document.getElementById('check_in_form_submit');
         textBox = cardNumberInput;
-        cardNumberInput.addEventListener('input', barcodeScannerListener);
+        cardNumberInput.addEventListener('input', barcodeScannerInputChanged);
         cardNumberInput.focus();
     }
 };

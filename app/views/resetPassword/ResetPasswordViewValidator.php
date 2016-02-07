@@ -18,7 +18,7 @@ abstract class ResetPasswordViewValidator implements IValidator {
     public static function validate(array $data) {
         $errMsgs = array();
         
-        if ($data['email'] == '' || strlen($data['email']) > DataValidationConfig::EMAILMAXLENGTH || !filter_var($data['email'], FILTER_VALIDATE_EMAIL))
+        if (strlen($data['email']) > DataValidationConfig::EMAIL_MAX_LENGTH || !filter_var($data['email'], FILTER_VALIDATE_EMAIL))
             $errMsgs['email'] = '<label class="form_label_error" for="email">Voer een geldig e-mailadres in.</label>';
 
         return $errMsgs;

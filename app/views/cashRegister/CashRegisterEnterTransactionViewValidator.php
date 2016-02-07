@@ -13,10 +13,12 @@ abstract class CashRegisterEnterTransactionViewValidator implements IValidator {
         //Get cents with safe precision
         $decrMoney = SafeMath::getCentsFromString($data['decrease_money']);
         
-        if ($data['decrease_money'] != '' && ($decrMoney === false || $decrMoney > 99999))
-            $errMsgs['global'] = '<h2 class="error_message" id="enter_transaction_form_error_message">Voer geldige bedragen in.</h2>';
+        if ($data['decrease_money'] == '')
+            $errMsgs['global'] = '<h2 class="error_message" id="enter_transaction_form_error_message">Je hebt geen transactie ingegeven.</h2>';
+        else if ($decrMoney === false || $decrMoney > 99999)
+            $errMsgs['global'] = '<h2 class="error_message" id="enter_transaction_form_error_message">Voer een geldig bedrag in.</h2>';
         elseif ($data['decrease_money'] < 0)
-            $errMsgs['global'] = '<h2 class="error_message" id="enter_transaction_form_error_message">Je kan enkel positieve bedragen ingeven.</h2>';
+            $errMsgs['global'] = '<h2 class="error_message" id="enter_transaction_form_error_message">Je kan enkel een positief bedrag ingeven.</h2>';
         
         return $errMsgs;
     }

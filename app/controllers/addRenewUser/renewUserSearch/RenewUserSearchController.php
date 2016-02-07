@@ -61,6 +61,7 @@ abstract class RenewUserSearchController implements IController {
             $page->data['RenewUserSearchView']['email'] = '';
         }
         
+        $page->data['RenewUserSearchView']['errMsgs'] = RenewUserSearchViewValidator::initErrMsgs();
         $page->addView('addRenewUser/renewUserSearch/RenewUserSearchView');
     }
     

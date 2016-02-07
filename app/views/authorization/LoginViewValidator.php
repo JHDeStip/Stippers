@@ -18,10 +18,10 @@ abstract class LoginViewValidator implements IValidator {
     public static function validate(array $data) {
         $errMsgs = array();
         
-        if ($data['email'] == '' || strlen($data['email']) > DataValidationConfig::EMAILMAXLENGTH || !filter_var($data['email'], FILTER_VALIDATE_EMAIL))
+        if (strlen($data['email']) > DataValidationConfig::EMAIL_MAX_LENGTH || !filter_var($data['email'], FILTER_VALIDATE_EMAIL))
             $errMsgs['global'] = '<h2 class="error_message" id="login_form_error_message">E-mailadres en/of wachtwoord onjuist.</h2>';
 
-        if (strlen($data['password']) < DataValidationConfig::PASSWORDMINLENGTH || strlen($data['password']) > DataValidationConfig::PASSWORDMAXLENGTH)
+        if (strlen($data['password']) < DataValidationConfig::PASSWORD_MIN_LENGTH || strlen($data['password']) > DataValidationConfig::PASSWORD_MAX_LENGTH)
             $errMsgs['global'] = '<h2 class="error_message" id="login_form_error_message">E-mailadres en/of wachtwoord onjuist.</h2>';
 
         return $errMsgs;

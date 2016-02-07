@@ -2,7 +2,7 @@
 <h2 class="page_subtitle"><?php echo $this->data['EditEmailView']['fileName']; ?></h2>
 <?php echo $this->data['EditEmailView']['errMsgs']['global']; ?>
 <form action="<?php echo htmlentities($this->data['EditEmailView']['edit_email_formAction'], ENT_QUOTES, 'utf-8'); ?>" method="post" id="edit_email_form" onsubmit="return validateEditEmailForm(this);">
-    <input class="submit_button" type="submit" name="download" value="Download" onclick="buttonClicked = SUBMITBUTTON">
-    <input class="submit_button" type="submit" name="cancel" value="Annuleren" onclick="buttonClicked = CANCELBUTTON;">
-    <input class="submit_button" type="submit" name="delete" value="Verwijderen" onclick="buttonClicked = DELETEBUTTON;">
+    <input class="submit_button" type="submit" name="download" value="Download" onclick="buttonClicked = SUBMIT_BUTTON">
+    <input class="submit_button" type="submit" name="cancel" value="Annuleren" onclick="buttonClicked = CANCEL_BUTTON;">
+    <input class="submit_button" type="submit" name="delete" value="Verwijderen" onclick="buttonClicked = DELETE_BUTTON;">
 </form>

@@ -14,15 +14,12 @@ abstract class ManageUserMoneyEnterTransactionViewValidator implements IValidato
         $incrMoney = SafeMath::getCentsFromString($data['increase_money']);
         $decrMoney = SafeMath::getCentsFromString($data['decrease_money']);
         
-        if ($data['increase_money'] != '' && ($incrMoney === false || $incrMoney > 99999))
+        if (($data['increase_money'] != '' && ($incrMoney === false || $incrMoney > 99999)) || ($data['decrease_money'] != '' && ($decrMoney === false || $decrMoney > 99999)))
             $errMsgs['global'] = '<h2 class="error_message" id="enter_transaction_form_error_message">Voer geldige bedragen in.</h2>';
-        elseif ($data['increase_money'] < 0)
+        elseif ($data['increase_money'] < 0 || $data['decrease_money'] < 0)
             $errMsgs['global'] = '<h2 class="error_message" id="enter_transaction_form_error_message">Je kan enkel positieve bedragen ingeven.</h2>';
-        elseif ($data['decrease_money'] != '' && ($decrMoney === false || $decrMoney > 99999))
-            $errMsgs['global'] = '<h2 class="error_message" id="enter_transaction_form_error_message">Voer geldige bedragen in.</h2>';
-        elseif ($data['decrease_money'] < 0)
-            $errMsgs['global'] = '<h2 class="error_message" id="enter_transaction_form_error_message">Je kan enkel positieve bedragen ingeven.</h2>';
-        
+        elseif ($data['increase_money'] == '' && $data['decrease_money'] == '')
+            $errMsgs['global'] = '<h2 class="error_message" id="enter_transaction_form_error_message">Je hebt geen transactie ingegeven.</h2>';
         return $errMsgs;
     }
     

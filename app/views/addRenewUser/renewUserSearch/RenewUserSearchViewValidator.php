@@ -17,14 +17,14 @@ abstract class RenewUserSearchViewValidator implements IValidator {
     public static function validate(array $data) {
         $errMsgs = array();
 
-        if (strlen($data['first_name']) > DataValidationConfig::STRINGMAXLENGTH)
-            $errMsgs['firstName'] = '<label class="form_label_error" for="first_name">De voornaam mag maximaal uit 30 karakters bestaan.</label>';
+        if (strlen($data['first_name']) > DataValidationConfig::STRING_MAX_LENGTH)
+            $errMsgs['firstName'] = '<label class="form_label_error" for="first_name">De voornaam mag maximaal uit '.DataValidationConfig::STRING_MAX_LENGTH.' karakters bestaan.</label>';
 
-        if (strlen($data['last_name']) > DataValidationConfig::STRINGMAXLENGTH)
-            $errMsgs['lastName'] = '<label class="form_label_error" for="last_name">De achternaam mag maximaal uit 30 karakters bestaan.</label>';
+        if (strlen($data['last_name']) > DataValidationConfig::STRING_MAX_LENGTH)
+            $errMsgs['lastName'] = '<label class="form_label_error" for="last_name">De achternaam mag maximaal uit '.DataValidationConfig::STRING_MAX_LENGTH.' karakters bestaan.</label>';
 
-        if (strlen($data['email']) > DataValidationConfig::EMAILMAXLENGTH)
-            $errMsgs['email'] = '<label class="form_label_error" for="email">Het e-mailadres mag maximaal uit 50 karakters bestaan.</label>';
+        if (strlen($data['email']) > DataValidationConfig::EMAIL_MAX_LENGTH)
+            $errMsgs['email'] = '<label class="form_label_error" for="email">Het e-mailadres mag maximaal uit '.DataValidationConfig::EMAIL_MAX_LENGTH.' karakters bestaan.</label>';
         
         return $errMsgs;
     }

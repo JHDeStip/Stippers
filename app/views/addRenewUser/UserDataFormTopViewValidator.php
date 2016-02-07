@@ -17,10 +17,10 @@ abstract class UserDataFormTopViewValidator implements IValidator {
     public static function validate(array $data) {
         $errMsgs = array();
 
-        if (!preg_match('/^[0-9]{1,'.DataValidationConfig::CARDNUMBERMAXLENGTH.'}$/', $data['card_number']))
+        if (!preg_match('/^[0-9]{1,'.DataValidationConfig::CARD_NUMBER_MAX_LENGTH.'}$/', $data['card_number']))
             $errMsgs['cardNumber'] = '<label class="form_label_error" for="card_number" id="form_label_error_card_number">Voer een geldig kaartnummer in.</label>';
 
-        if ($data['email'] == '' || strlen($data['email']) > DataValidationConfig::EMAILMAXLENGTH || !filter_var($data['email'], FILTER_VALIDATE_EMAIL))
+        if (strlen($data['email']) > DataValidationConfig::EMAIL_MAX_LENGTH || !filter_var($data['email'], FILTER_VALIDATE_EMAIL))
             $errMsgs['email'] = '<label class="form_label_error" for="email" id="form_label_error_email">Voer een geldig e-mailadres in.</label>';
 
         if ($data['repeat_email'] != $data['email'])

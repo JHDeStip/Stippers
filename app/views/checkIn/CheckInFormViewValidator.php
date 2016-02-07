@@ -8,7 +8,7 @@ abstract class CheckInFormViewValidator implements IValidator {
     public static function validate (array $data){
         $errMsgs = array();
 
-        if (!preg_match('/^[0-9]{1,'.DataValidationConfig::CARDNUMBERMAXLENGTH.'}$/', $data['card_number']))
+        if (!preg_match('/^[0-9]{1,'.DataValidationConfig::CARD_NUMBER_MAX_LENGTH.'}$/', $data['card_number']))
             $errMsgs['cardNumber'] = '<label class="form_label_error" for="card_number" id="form_label_error_card_number">Voer een geldig kaartnummer in.</label>';
 
         return $errMsgs;

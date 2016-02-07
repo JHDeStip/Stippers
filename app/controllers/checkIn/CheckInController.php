@@ -138,6 +138,6 @@ abstract class CheckInController implements IController {
         $page->data['CheckInSuccessfulView']['redirectUrl'] = $_SERVER['REQUEST_URI'];
         $page->addView('checkIn/CheckInSuccessfulView');
         $page->addExtraJsFile('views/checkIn/CheckInRedirector.js');
-        $page->addExtraJsFile('views/checkIn/checkInSuccessFulOnLoadHandler.js');
+        $page->addExtraJsFile('views/checkIn/checkInSuccessfulOnLoadHandler.js');
     }
 }

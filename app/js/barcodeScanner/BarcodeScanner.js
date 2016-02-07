@@ -1,5 +1,10 @@
 /**
- * Created by Stan on 11/02/2015.
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * This file contains code to detect if input in an input element came from a barcode scanner.
  */
 
 var BARCODE_LENGTH = 8;
@@ -11,7 +16,7 @@ var stillValid = true;
 var textBox;
 var submitButton;
 
-function barcodeScannerListener(){
+function barcodeScannerInputChanged() {
     if (stillValid){
         if (textBox.value.length === 1){
             referenceTime = (new Date()).getTime();
@@ -21,11 +26,11 @@ function barcodeScannerListener(){
             stillValid = false;
         }
         else {
-            if (textBox.value.length == barcodeLength){
-                if ((new Date()).getTime() - referenceTime <= inputDelay) {
-                    textBox.removeEventListener('input', barcodeScannerListener);
+            if (textBox.value.length == BARCODE_LENGTH){
+                if ((new Date()).getTime() - referenceTime <= INPUT_DELAY) {
+                    textBox.removeEventListener('input', barcodeScannerInputChanged);
                     textBox.value = convertInput(textBox.value);
-                    textBox.addEventListener('input', barcodeScannerListener);
+                    textBox.addEventListener('input', barcodeScannerInputChanged);
                     if (submitButton) {
                         submitButton.click();
                     }
@@ -36,7 +41,7 @@ function barcodeScannerListener(){
 }
 
 function convertInput(input) {
-    var convertedText = "";
+    var convertedText = ''
 
     for (var i=0; i<input.length; i++) {
         switch (input.substr(i, 1)) {

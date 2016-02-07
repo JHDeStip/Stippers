@@ -4,8 +4,9 @@
  * 
  * @author Stan Wijckmans
  * 
- * This file contains the onload function for the check in page.
+ * This file contains the code to run when the window loads.
  */
+
 window.onload = function() {
     checkInFormLoadBarcodeScanner();
 }

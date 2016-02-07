@@ -13,7 +13,7 @@ abstract class EmailConfig {
     //This is the directory where email files will be stored and retreived from
     const EMAILFILESDIR = 'emailFiles';
     
-    const MAXFILESIZE = 1048576;
+    const MAX_FILE_SIZE = 1048576;
     
     const FROMADDRESS = 'info@stip.be';
 }

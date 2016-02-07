@@ -2,5 +2,5 @@
 <?php echo $this->data['CheckInFormView']['errMsgs']['global']; ?>
 <form action="<?php echo htmlentities($this->data['CheckInFormView']['check_in_formAction'], ENT_QUOTES, 'utf-8'); ?>" method="post" id="check_in_form" onsubmit="return validateCheckInForm(this);">
         <label class="form_label" for="card_number">Kaartnummer:</label><input class="textbox" type="text" maxlength="8" id="card_number" name="card_number" autocomplete="off"><?php echo $this->data['CheckInFormView']['errMsgs']['cardNumber']; ?><div class="clearfix"></div>
-        <input class="submit_button" type="submit" name="check_in" value="Inchecken" id="check_in_form_submit" onclick="buttonClicked = SUBMITBUTTON;">
+        <input class="submit_button" type="submit" name="check_in" value="Inchecken" id="check_in_form_submit" onclick="buttonClicked = SUBMIT_BUTTON;">
 </form>

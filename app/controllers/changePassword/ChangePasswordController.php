@@ -55,7 +55,7 @@ abstract class ChangePasswordController implements IController {
                     //If the old password is incorrect, show an error
                     if ($_SESSION['Stippers']['ChangePassword']['user']->passwordHash != $oldPasswordHash) {
                         ChangePasswordController::buildChangePasswordView($page);
-                        $page->data['ChangePasswordView']['errMsgs']['global'] = '<h2 class="error_message">Het oude wachtwoord is fout.</h2>';
+                        $page->data['ChangePasswordView']['errMsgs']['global'] = '<h2 class="error_message" id="change_password_form_error_message">Het oude wachtwoord is fout.</h2>';
                     }
                     //Update password
                     else {
@@ -78,12 +78,12 @@ abstract class ChangePasswordController implements IController {
                     }
                     else {
                         ChangePasswordController::buildChangePasswordView($page);
-                        $page->data['ChangePasswordView']['errMsgs']['global'] = '<h2 class="error_message" id="edit_user_form_error_message">Kan wachtwoord niet wijzigen, probeer het opnieuw.</h2>';
+                        $page->data['ChangePasswordView']['errMsgs']['global'] = '<h2 class="error_message" id="change_password_form_error_message">Kan wachtwoord niet wijzigen, probeer het opnieuw.</h2>';
                     }
                 }
                 catch (Exception $ex) {
                     ChangePasswordController::buildChangePasswordView($page);
-                        $page->data['ChangePasswordView']['errMsgs']['global'] = '<h2 class="error_message" id="edit_user_form_error_message">Kan wachtwoord niet wijzigen, probeer het opnieuw.</h2>';
+                        $page->data['ChangePasswordView']['errMsgs']['global'] = '<h2 class="error_message" id="change_password_form_error_message">Kan wachtwoord niet wijzigen, probeer het opnieuw.</h2>';
                 }
             }
             else {

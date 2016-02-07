@@ -27,7 +27,7 @@ function ShowSubNav(selectedNav){
 		
 		//Als de huidige subnav al getoond wordt, verbergen
 		//Anders alle divs met class subnav verbergen, en de huidige tonen
-		if($("div#" + title).css('display') !== 'none'){
+		if($("div#" + title).css('display') !== 'none') {
 			//alle divs met class subnav verbergen
 			$("div.subnav").hide();
 		}

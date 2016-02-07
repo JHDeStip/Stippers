@@ -115,12 +115,12 @@ abstract class EditUserController implements IController {
                         else
                             $page->data['EditUserTopView']['errMsgs']['global'] = '<h2 class="error_message" id="edit_user_form_error_message">Kan gebruiker niet bijwerken, probeer het opnieuw.</h2>';
                             
-                        $page->addView('editUser/EditUserEnabledFormBottomView');
                         EditUserController::buildMembershipDetailsView($page);
                         if ($_SESSION['Stippers']['user']->isAdmin)
                             EditUserController::buildEditUserAdminView($page, true, true);
                         if ($_SESSION['Stippers']['user']->isAdmin || $_SESSION['Stippers']['user']->isMoneyManager)
                             EditUserController::buildEditUserMoneyManagerView($page);
+                        $page->addView('editUser/EditUserEnabledFormBottomView');
                     }
                 }
                 catch (Exception $ex) {
@@ -131,24 +131,24 @@ abstract class EditUserController implements IController {
                     else
                         $page->data['EditUserTopView']['errMsgs']['global'] = '<h2 class="error_message" id="edit_user_form_error_message">Kan gebruiker niet bijwerken, probeer het opnieuw.</h2>';
                         
-                    $page->addView('editUser/EditUserEnabledFormBottomView');
                     EditUserController::buildMembershipDetailsView($page);
                     if ($_SESSION['Stippers']['user']->isAdmin)
                         EditUserController::buildEditUserAdminView($page, true, true);
                     if ($_SESSION['Stippers']['user']->isAdmin || $_SESSION['Stippers']['user']->isMoneyManager)
                         EditUserController::buildEditUserMoneyManagerView($page);
+                    $page->addView('editUser/EditUserEnabledFormBottomView');
                 }
             }
             else {
                 //If we had an error we show the views with enabled controls and take data from POST
                 EditUserController::buildEditUserTopView($page, true, true);
-                $page->addView('editUser/EditUserEnabledFormBottomView');
                 $page->data['EditUserTopView']['errMsgs'] = array_merge($page->data['EditUserTopView']['errMsgs'], $errMsgs);
                 EditUserController::buildMembershipDetailsView($page);
                 if ($_SESSION['Stippers']['user']->isAdmin)
                     EditUserController::buildEditUserAdminView($page, true, true);
                 if ($_SESSION['Stippers']['user']->isAdmin || $_SESSION['Stippers']['user']->isMoneyManager)
                     EditUserController::buildEditUserMoneyManagerView($page);
+                $page->addView('editUser/EditUserEnabledFormBottomView');
             }
             $page->showWithMenu();
         }

@@ -18,10 +18,10 @@ abstract class SendEmailToUsersViewValidator implements IValidator {
     public static function validate(array $data) {
         $errMsgs = array();
         
-        if ($data['subject'] == '' || strlen($data['subject']) > DataValidationConfig::EMAILSUBJECTMAXLENGTH)
+        if ($data['subject'] == '' || strlen($data['subject']) > DataValidationConfig::EMAIL_SUBJECT_MAX_LENGTH)
             $errMsgs['subject'] = '<label class="form_label_error" for="subject">Voer een geldig onderwerp in.</label>';
         
-        if ($data['email_file'] == '' || strlen($data['email_file']) > DataValidationConfig::EMAILFILENAMEMAXLENGTH)
+        if ($data['email_file'] == '' || strlen($data['email_file']) > DataValidationConfig::EMAIL_FILE_NAME_MAX_LENGTH)
             $errMsgs['email_file'] = '<label class="form_label_error" for="email_file">Selecteer een geldig bestand.</label>';
 
         return $errMsgs;
@@ -29,7 +29,6 @@ abstract class SendEmailToUsersViewValidator implements IValidator {
     
         
     public static function initErrMsgs() {
-        $errMsgs['global'] = '';
         $errMsgs['subject'] = '';
         $errMsgs['emailFile'] = '';
             

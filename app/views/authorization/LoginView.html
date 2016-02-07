@@ -3,6 +3,6 @@
 <form action="<?php echo htmlentities($this->data['LoginView']['login_formAction'], ENT_QUOTES, 'utf-8'); ?>" id="login_form" method="post" onsubmit="return validateLoginForm(this);">
             <label class="form_label" for="email">E-mail:</label><input class="textbox" type="text" maxlength="50" id="email" name="email" value="<?php echo htmlentities($this->data['LoginView']['email'], ENT_QUOTES, 'utf-8'); ?>"><div class="clearfix"></div>
             <label class="form_label" for="password">Wachtwoord:</label><input class="textbox" type="password" maxlength="1000" id="password" name="password" ><div class="clearfix"></div>
-            <input class="submit_button" type="submit" name="login" value="Aanmelden" onclick="buttonClicked = SUBMITBUTTON;">
+            <input class="submit_button" type="submit" name="login" value="Aanmelden" onclick="buttonClicked = SUBMIT_BUTTON;">
 </form>
 <p class="normal text"><a class="normal_text_anchor" href="resetpassword">Wachtwoord vergeten?</a></p>

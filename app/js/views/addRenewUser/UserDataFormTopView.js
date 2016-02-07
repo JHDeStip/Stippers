@@ -1,5 +1,10 @@
 /**
- * Created by Stan on 8/02/2015.
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * This file contains code to validate a form.
  */
 
 function validateUserDataFormTop(form) {
@@ -13,12 +18,12 @@ function validateUserDataFormTop(form) {
         element.parentNode.removeChild(element);
     }
 
-    if (buttonClicked !== SUBMITBUTTON) {
+    if (buttonClicked !== SUBMIT_BUTTON) {
         return true;
     }
 
     inputElement = form.card_number;
-    if (inputElement.value === '' || !(/^[0-9]{1,8}$/).exec(inputElement.value)) {
+    if (!(/^[0-9]{1,8}$/).exec(inputElement.value)) {
         element = document.getElementById('form_label_error_card_number');
         if (!element) {
             errorMessage = document.createElement('label');
@@ -41,7 +46,7 @@ function validateUserDataFormTop(form) {
     }
 
     inputElement = form.email;
-    if (inputElement.value === '' || inputElement.value.length > EMAILMAXLENGTH) {
+    if (inputElement.value === '') {
         element = document.getElementById('form_label_error_email');
         if (!element) {
             errorMessage = document.createElement('label');

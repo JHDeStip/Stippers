@@ -1,5 +1,10 @@
 /**
- * Created by Stan on 8/02/2015.
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * This file contains code to validate a form.
  */
 
 function validateUserDataFormMiddle(form) {
@@ -9,7 +14,7 @@ function validateUserDataFormMiddle(form) {
     var valid = true;
 
     inputElement = form.first_name;
-    if (inputElement.value === '' || inputElement.value.length > STRINGMAXLENGTH) {
+    if (inputElement.value === '') {
         element = document.getElementById('form_label_error_first_name');
         if (!element) {
             errorMessage = document.createElement('label');
@@ -32,7 +37,7 @@ function validateUserDataFormMiddle(form) {
     }
 
     inputElement = form.last_name;
-    if (inputElement.value === '' || inputElement.value.length > STRINGMAXLENGTH) {
+    if (inputElement.value === '') {
         element = document.getElementById('form_label_error_last_name');
         if (!element) {
             errorMessage = document.createElement('label');
@@ -55,7 +60,7 @@ function validateUserDataFormMiddle(form) {
     }
 
     inputElement = form.street;
-    if (inputElement.value === '' || inputElement.value.length > STRINGMAXLENGTH) {
+    if (inputElement.value === '') {
         element = document.getElementById('form_label_error_street');
         if (!element) {
             errorMessage = document.createElement('label');
@@ -78,7 +83,7 @@ function validateUserDataFormMiddle(form) {
     }
 
     inputElement = form.house_number;
-    if (inputElement.value === '' || inputElement.value.length > HOUSENUMBERMAXLENGTH) {
+    if (inputElement.value === '') {
         element = null;
         element = document.getElementById('form_label_error_house_number');
         if (!element) {
@@ -102,7 +107,7 @@ function validateUserDataFormMiddle(form) {
     }
 
     inputElement = form.city;
-    if (inputElement.value === '' || inputElement.value.length > STRINGMAXLENGTH) {
+    if (inputElement.value === '') {
         element = document.getElementById('form_label_error_city');
         if (!element) {
             errorMessage = document.createElement('label');
@@ -125,7 +130,7 @@ function validateUserDataFormMiddle(form) {
     }
 
     inputElement = form.postal_code;
-    if (inputElement.value.length < POSTALCODEMINLENGTH || inputElement.value.length > POSTALCODEMAXLENGTH) {
+    if (inputElement.value.length < POSTAL_CODE_MIN_LENGTH) {
         element = document.getElementById('form_label_error_postal_code');
         if (!element) {
             errorMessage = document.createElement('label');
@@ -148,7 +153,7 @@ function validateUserDataFormMiddle(form) {
     }
 
     inputElement = form.country;
-    if (inputElement.value === '' || inputElement.value.length > STRINGMAXLENGTH) {
+    if (inputElement.value === '') {
         element = document.getElementById('form_label_error_country');
         if (!element) {
             errorMessage = document.createElement('label');
@@ -194,7 +199,7 @@ function validateUserDataFormMiddle(form) {
     }
 
     inputElement = form.date_of_birth;
-    if (inputElement.value === '' || !(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/).exec(inputElement.value)) {
+    if (!(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/).exec(inputElement.value)) {
         createDateOfBirthErrorMessage();
         valid = false;
     }

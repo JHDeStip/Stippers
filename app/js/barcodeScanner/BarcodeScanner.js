@@ -1,5 +1,10 @@
 /**
- * Created by Stan on 11/02/2015.
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * This file contains code to detect if input in an input element came from a barcode scanner.
  */
 
 var BARCODE_LENGTH = 8;

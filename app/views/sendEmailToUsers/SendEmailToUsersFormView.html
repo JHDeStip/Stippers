@@ -1,4 +1,3 @@
-<?php echo $this->data['SendEmailToUsersFormView']['errMsgs']['global']; ?>
 <form action="<?php echo htmlentities($this->data['SendEmailToUsersFormView']['send_email_to_users_formAction'], ENT_QUOTES, 'utf-8'); ?>" method="post" id="send_email_to_users_form" onsubmit="return validateSendEmailToUsersForm(this);">
     <label class="form_label" for="subject">Onderwerp:</label>
     <input class="textbox" type="text" maxlength="50" id="subject" name="subject" value="<?php echo htmlentities($this->data['SendEmailToUsersFormView']['subject'], ENT_QUOTES, 'utf-8'); ?>"><?php echo $this->data['SendEmailToUsersFormView']['errMsgs']['subject']; ?><div class="clearfix"></div>
@@ -9,5 +8,5 @@
                 echo '<option value="'.htmlentities($emailFile, ENT_QUOTES, 'utf-8').'">'.htmlentities($emailFile, ENT_QUOTES, 'utf-8').'</option>';
         ?>
     </select><?php echo $this->data['SendEmailToUsersFormView']['errMsgs']['emailFile']; ?><div class="clearfix"></div>
-    <input class="submit_button" type="submit" name="send" value="Verzenden" onclick="buttonClicked = SUBMITBUTTON;">
+    <input class="submit_button" type="submit" name="send" value="Verzenden" onclick="buttonClicked = SUBMIT_BUTTON;">
 </form>

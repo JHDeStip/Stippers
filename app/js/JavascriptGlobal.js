@@ -1,47 +1,45 @@
 /**
- * Created by Stan on 11/02/2015.
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * This file contains global javascript code.
  */
-var PASSWORDMINLENGTH = 8;
-var PASSWORDMAXLENGTH = 1000;
-var EMAILMAXLENGTH = 50;
-var STRINGMAXLENGTH = 30;
-var HOUSENUMBERMAXLENGTH = 4;
-var POSTALCODEMINLENGTH = 4;
-var POSTALCODEMAXLENGTH = 6;
-var PHONEMAXLENGTH = 9;
-var PHONEMAXLENGTH = 14;
-var DATEMAXLENGTH = 10;
-var MONEYMAXLENGTH = 6;
-var YEARMAXLENGTH = 4;
-var CARDNUMBERMAXLENGTH = 8;
-var EMAILSUBJECTMAXLENGTH = 50;
-var EMAILFILENAMEMAXLENGTH = 255;
-var ADMINPERMISSIONMIN = 0;
-var ADMINPERMISSIONMAX = 1;
-var USERMANAGERPERMISSIONMIN = 0;
-var USERMANAGERPERMISSIONMAX = 1;
-var BROWSERMANAGERPERMISSIONMIN = 0;
-var BROWSERMANAGERPERMISSIONMAX = 1;
-var MONEYMANAGERPERMISSIONMIN = 0;
-var MONEYMANAGERPERMISSIONMAX = 1;
 
-var SUBMITBUTTON = 0;
-var CANCELBUTTON = 1;
-var ADDBUTTON = 2;
-var EDITBUTTON = 3;
-var DELETEBUTTON = 4;
+var PASSWORD_MIN_LENGTH = 8;
+var PASSWORD_MAX_LENGTH = 1000;
+var EMAIL_MAX_LENGTH = 50;
+var STRING_MAX_LENGTH = 30;
+var HOUSE_NUMBER_MAX_LENGTH = 4;
+var POSTAL_CODE_MIN_LENGTH = 4;
+var POSTAL_CODE_MAX_LENGTH = 6;
+var PHONE_MAX_LENGTH = 9;
+var PHONE_MAX_LENGTH = 14;
+var DATE_MAX_LENGTH = 10;
+var MONEY_MAX_LENGTH = 6;
+var YEAR_MAX_LENGTH = 4;
+var CARD_NUMBER_MAX_LENGTH = 8;
+var EMAIL_SUBJECT_MAX_LENGTH = 50;
+var EMAIL_FILE_NAME_MAX_LENGTH = 255;
+var EMAIL_FILE_MAX_SIZE = 1048576;
+var ADMIN_PERMISSION_MIN = 0;
+var ADMIN_PERMISSION_MAX = 1;
+var USER_MANAGER_PERMISSION_MIN = 0;
+var USER_MANAGER_PERMISSION_MAX = 1;
+var BROWSER_MANAGER_PERMISSION_MIN = 0;
+var BROWSER_MANAGER_PERMISSION_MAX = 1;
+var MONEY_MANAGER_PERMISSION_MIN = 0;
+var MONEY_MANAGER_PERMISSION_MAX = 1;
 
-var buttonClicked = SUBMITBUTTON;
+var SUBMIT_BUTTON = 0;
+var CANCEL_BUTTON = 1;
+var ADD_BUTTON = 2;
+var EDIT_BUTTON = 3;
+var DELETE_BUTTON = 4;
+var BACK_BUTTON = 5;
 
-function anyRadioChecked(radioName) {
-    var radios = document.getElementsByName(radioName);
-    for (var i=0; i<radios.length; i++){
-        if (radios[i].checked) {
-            return true;
-        }
-    }
-    return false;
-}
+var buttonClicked = SUBMIT_BUTTON;
 
 function checkDate(day, month, year) {
     return month > 0 && month < 13 && year > 0 && year < 32768 && day > 0 && day <= (new Date(year, month, 0)).getDate();

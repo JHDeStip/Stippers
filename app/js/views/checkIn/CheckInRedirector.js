@@ -4,13 +4,14 @@
  * 
  * @author Stan Wijckmans
  * 
- * This file contains the function to automatically redirect back to the check in page after a successful check in.
+ * This file contains the code to automatically redirect back to the check in page after a successful check in.
  */
+
 var REDIRECTION_DELAY = 1500;
 
 function checkInFormLoadRedirector() {
     var successfulCheckInElement = document.getElementById('successfulCheckIn');
     if (successfulCheckInElement) {
-        setTimeout(function(){window.location='checkin';}, REDIRECTION_DELAY);
+        setTimeout(function(){window.location.href='checkin';}, REDIRECTION_DELAY);
     }
 };

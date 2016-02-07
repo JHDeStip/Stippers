@@ -17,7 +17,7 @@ abstract class UserDataFormPasswordViewValidator implements IValidator {
     public static function validate(array $data) {
         $errMsgs = array();
 
-        if (strlen($data['password']) < DataValidationConfig::PASSWORDMINLENGTH)
+        if (strlen($data['password']) < DataValidationConfig::PASSWORD_MIN_LENGTH || strlen($data['password']) > DataValidationConfig::PASSWORD_MAX_LENGTH)
             $errMsgs['password'] = '<label class="form_label_error" for="email" id="form_label_error_password">Je wachtwoord moet minstens 8 karakters lang zijn.</label>';
 
         if ($data['repeat_password'] != $data['password'])

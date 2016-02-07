@@ -18,7 +18,7 @@ abstract class ChangePasswordViewValidator implements IValidator {
     public static function validate(array $data) {
         $errMsgs = array();
         
-        if (strlen($data['new_password']) < DataValidationConfig::PASSWORDMINLENGTH || strlen($data['new_password']) > DataValidationConfig::PASSWORDMAXLENGTH)
+        if (strlen($data['new_password']) < DataValidationConfig::PASSWORD_MIN_LENGTH || strlen($data['new_password']) > DataValidationConfig::PASSWORD_MAX_LENGTH)
             $errMsgs['newPassword'] = '<label class="form_label_error" id="form_label_error_new_password" for="new_password">Je wachtwoord moet minstens 8 karakters lang zijn.</label>';
 
         if ($data['repeat_new_password'] != $data['new_password'])

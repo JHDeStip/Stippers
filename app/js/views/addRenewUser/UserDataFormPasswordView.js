@@ -1,5 +1,10 @@
 /**
- * Created by Stan on 8/02/2015.
+ * This file is part of the Stippers project (available here: https://github.com/Stannieman/stippers/).
+ * The license and all terms en conditions that apply to Stippers also apply to this file.
+ * 
+ * @author Stan Wijckmans
+ * 
+ * This file contains code to validate a form.
  */
 
 function validateUserDataFormPassword(form) {
@@ -8,18 +13,18 @@ function validateUserDataFormPassword(form) {
     var valid = true;
 
     inputElement = form.password;
-    if (inputElement.value.length < PASSWORDMINLENGTH || inputElement.value.length > PASSWORDMAXLENGTH) {
+    if (inputElement.value.length < PASSWORD_MIN_LENGTH) {
         element = document.getElementById('form_label_error_password');
         if (!element) {
             errorMessage = document.createElement('label');
             errorMessage.setAttribute('class', 'form_label_error');
             errorMessage.setAttribute('for', 'password');
             errorMessage.setAttribute('id', 'form_label_error_password');
-            errorMessage.appendChild(document.createTextNode('Je wachtwoord moet minstens '+PASSWORDMINLENGTH+' karakters lang zijn.'));
+            errorMessage.appendChild(document.createTextNode('Je wachtwoord moet minstens '+PASSWORD_MIN_LENGTH+' karakters lang zijn.'));
             inputElement.parentNode.insertBefore(errorMessage, inputElement.nextSibling);
         }
         else {
-            element.innerHTML = 'Je wachtwoord moet minstens '+PASSWORDMINLENGTH+' karakters lang zijn.';
+            element.innerHTML = 'Je wachtwoord moet minstens '+PASSWORD_MIN_LENGTH+' karakters lang zijn.';
         }
         valid = false;
     }

@@ -95,7 +95,7 @@ abstract class RenewUserController implements IController {
                 $newUser->isHintManager = $_SESSION['Stippers']['RenewUser']['user']->isHintManager;
                 $newUser->isUserManager = $_SESSION['Stippers']['RenewUser']['user']->isUserManager;
                 $newUser->isBrowserManager = $_SESSION['Stippers']['RenewUser']['user']->isBrowserManager;
-                $newUser->isMoneyManager = $_SESSION['Stippers']['RenewUser']['user']->isBrowserManager;
+                $newUser->isMoneyManager = $_SESSION['Stippers']['RenewUser']['user']->isMoneyManager;
                 $newUser->creationTime = $_SESSION['Stippers']['RenewUser']['user']->creationTime;
                 
                 //Renew the user
@@ -116,7 +116,7 @@ abstract class RenewUserController implements IController {
                         $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan welkomstmail niet verzenden.';
                         $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
                     }
-                    
+
                     //Add money to user's card
                     try {
                         $executingBrowserName = BrowserDB::getBrowserById($_SESSION['Stippers']['browser']->browserId)->name;

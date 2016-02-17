@@ -54,7 +54,7 @@ abstract class ResetPasswordController implements IController {
                 //Get the user's password salt and calculate password hash
                 $passwordSalt = UserDB::getPasswordSaltByEmail($_POST['email']);
                 $newPassword = Random::getPassword();
-                $newPasswordHash = hash_pbkdf2("sha256", $newPassword, $passwordSalt, SecurityConfig::NPASSWORDHASHITERATIONS);
+                $newPasswordHash = hash_pbkdf2('sha256', $newPassword, $passwordSalt, SecurityConfig::NPASSWORDHASHITERATIONS);
             
                 //Get user from database and reset password.
                 $user = UserDB::getBasicUserByEmail($_POST['email']);

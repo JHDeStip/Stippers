@@ -10,6 +10,7 @@
  */
 
 require_once __DIR__.'/../../config/SecurityConfig.php';
+require_once __DIR__.'/../../config/PasswordConfig.php';
 
 abstract class Random {
 
@@ -44,7 +45,7 @@ abstract class Random {
      * @param string $characters characters that can appear in the generated password
      * @return string generated password
      */
-    public static function getPassword($length = SecurityConfig::DEFAULTPASSWORDLENGTH, $characters = SecurityConfig::PASSWORDCHARACTERS){
+    public static function getPassword($length = DataValidationConfig::PASSWORD_MIN_LENGTH, $characters = PasswordConfig::PASSWORD_CHARACTERS){
         $password = '';
         for ($i=0; $i<$length; $i++)
             $password .= substr($characters, rand(0, strlen($characters)-1), 1);

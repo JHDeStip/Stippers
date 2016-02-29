@@ -26,7 +26,7 @@ abstract class Email {
      * @param array $users user objects to send mails to.
      * Each user must at least have userId, firstName, lastName and email set.
      * 
-     * @param array $extras extra data to substityte variables in the mail text with.
+     * @param array $extras extra data to substitute variables in the mail text with.
      * $extras can contain a 'common' index, which contains an array. Each variable in the
      * email text will be substituted by the value of the correspondig key.
      * $extras can also contain arrays on keys that correspond to user IDs. These work similar

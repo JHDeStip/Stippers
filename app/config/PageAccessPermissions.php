@@ -302,6 +302,28 @@ $_PERMISSIONS['cashregister']['ADDRENEWUSERBROWSER'] = false;
 $_PERMISSIONS['cashregister']['CHECKINBROWSER'] = false;
 $_PERMISSIONS['cashregister']['CASHREGISTERBROWSER'] = true;
 
+//Permissions for the chat page
+$_PERMISSIONS['chat']['EVERYONE'] = false;
+$_PERMISSIONS['chat']['MEMBER'] = true;
+$_PERMISSIONS['chat']['ADMIN'] = true;
+$_PERMISSIONS['chat']['USERMANAGER'] = true;
+$_PERMISSIONS['chat']['BROWSERMANAGER'] = true;
+$_PERMISSIONS['chat']['MONEYMANAGER'] = true;
+$_PERMISSIONS['chat']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['chat']['CHECKINBROWSER'] = false;
+$_PERMISSIONS['chat']['CASHREGISTERBROWSER'] = false;
+
+//Permissions for the chat messages page
+$_PERMISSIONS['chatmessages']['EVERYONE'] = false;
+$_PERMISSIONS['chatmessages']['MEMBER'] = true;
+$_PERMISSIONS['chatmessages']['ADMIN'] = true;
+$_PERMISSIONS['chatmessages']['USERMANAGER'] = true;
+$_PERMISSIONS['chatmessages']['BROWSERMANAGER'] = true;
+$_PERMISSIONS['chatmessages']['MONEYMANAGER'] = true;
+$_PERMISSIONS['chatmessages']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['chatmessages']['CHECKINBROWSER'] = false;
+$_PERMISSIONS['chatmessages']['CASHREGISTERBROWSER'] = false;
+
 //Permissions for the meat wheel page
 $_PERMISSIONS['meatwheel']['EVERYONE'] = false;
 $_PERMISSIONS['meatwheel']['MEMBER'] = true;

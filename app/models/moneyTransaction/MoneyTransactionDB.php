@@ -212,7 +212,7 @@ abstract class MoneyTransactionDB {
             //Check if statement could be prepared
             if ($stmt) {
                 
-                $timezone = GlobalConfig::TIMEZONE;
+                $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $balAfter = $transaction->getBalAfter();
                 $stmt->bind_param('iissssisssssssssiiiii', $balAfter, $user->userId, $user->email, $user->firstName, $user->lastName, $user->passwordHash, $user->balance, $user->phone, $user->dateOfBirth, $user->street, $user->houseNumber, $user->city, $user->postalCode, $user->country, $timezone, $user->creationTime, $user->isAdmin, $user->isHintManager, $user->isUserManager, $user->isBrowserManager, $user->isMoneyManager);
                 

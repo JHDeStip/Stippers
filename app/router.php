@@ -124,6 +124,14 @@ switch ($requestData['requestedPage']) {
         require_once('controllers/cashRegister/CashRegisterController.php');
         $controller = 'CashRegisterController';
         break;
+    case 'chat':
+        require_once('controllers/chat/ChatController.php');
+        $controller = 'ChatController';
+        break;
+    case 'chatmessages':
+        require_once('controllers/chat/MessageListController.php');
+        $controller = 'MessageListController';
+        break;
     case 'meatwheel':
         require_once('controllers/meatWheel/MeatWheelController.php');
         $controller = 'MeatWheelController';

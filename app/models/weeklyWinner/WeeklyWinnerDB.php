@@ -36,7 +36,7 @@ abstract class WeeklyWinnerDB {
             //Check if statement could be prepared
             if ($stmt) {
                 
-                $timezone = GlobalConfig::TIMEZONE;
+                $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $stmt->bind_param('ssi', $timezone, $timezone, $userId);
                 if (!$stmt->execute())
                     if ($stmt->errno == 1062)
@@ -119,7 +119,7 @@ abstract class WeeklyWinnerDB {
             //Check if statement could be prepared
             if ($stmt) {
                 
-                $timezone = GlobalConfig::TIMEZONE;
+                $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $stmt->bind_param('ss', $timezone, $timezone);
                 if (!$stmt->execute())
                     throw new WeeklyWinnerDBException('Unknown error during statement execution while getting winner', WeeklyWinnerDBException::UNKNOWNERROR);

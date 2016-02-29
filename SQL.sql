@@ -105,12 +105,12 @@ filename CHAR(40) NOT NULL
 CHARACTER SET UTF8
 ENGINE InnoDB;
 
-CREATE TABLE stippers_chat (
-message_id BIGINT UNSIGNED PRIMARY KEY,
+CREATE TABLE stippers_chat_messages (
+message_id SERIAL,
 user BIGINT UNSIGNED NOT NULL,
 text VARCHAR(150) NOT NULL,
 message_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-CONSTRAINT chat_user_fk FOREIGN KEY (user) REFERENCES stippers_users(user_id)
+CONSTRAINT chat_messages_user_f FOREIGN KEY (user) REFERENCES stippers_users(user_id)
 )
 CHARACTER SET UTF8
 ENGINE InnoDB;
@@ -159,5 +159,4 @@ DELIMITER ;
 CALL stippers_create_sequence('stippers_users_seq');
 CALL stippers_create_sequence('stippers_hints_seq');
 CALL stippers_create_sequence('stippers_hint_images_seq');
-CALL stippers_create_sequence('stippers_chat_seq');
 CALL stippers_create_sequence('stippers_weekly_winner_seq');

@@ -33,7 +33,7 @@ abstract class MembershipDB {
             //Check if statement could be prepared
             if ($stmt) {
                 
-                $timezone = GlobalConfig::TIMEZONE;
+                $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $stmt->bind_param('is', $userId, $timezone);
                 
                 if (!$stmt->execute()) {
@@ -80,7 +80,7 @@ abstract class MembershipDB {
             //Check if statement could be prepared
             if ($stmt) {
                 
-                $timezone = GlobalConfig::TIMEZONE;
+                $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $stmt->bind_param('sii', $timezone, $userId, $userId);
                 
                 if (!$stmt->execute())
@@ -125,7 +125,7 @@ abstract class MembershipDB {
             //Check if statement could be prepared
             if ($stmt) {
                 
-                $timezone = GlobalConfig::TIMEZONE;
+                $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $stmt->bind_param('is', $userId, $timezone);
                 
                 if (!$stmt->execute())
@@ -169,7 +169,7 @@ abstract class MembershipDB {
             //Check if statement could be prepared
             if ($stmt) {
                 
-                $timezone = GlobalConfig::TIMEZONE;
+                $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $stmt->bind_param('s', $timezone);
                 
                 if (!$stmt->execute())

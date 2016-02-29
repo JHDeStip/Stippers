@@ -93,7 +93,7 @@ abstract class UserDB {
             //Check if statement could be prepared
             if ($stmt) {
                 
-                $timezone = GlobalConfig::TIMEZONE;
+                $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $stmt->bind_param('si', $timezone, $userId);
     
                 if (!$stmt->execute())
@@ -221,7 +221,7 @@ abstract class UserDB {
             //Check if statement could be prepared
             if ($stmt) {
                 
-                $timezone = GlobalConfig::TIMEZONE;
+                $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $adminId = GlobalConfig::ADMINID;
                 $stmt->bind_param('isi', $userId, $timezone, $adminId);
     
@@ -459,7 +459,7 @@ abstract class UserDB {
             if (isset($select['creationTime']) && $select['creationTime']) {
                 $selectPart .= ', DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") creation_time';
                 $params['types'] .= 's';
-                $timezone = GlobalConfig::TIMEZONE;
+                $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $params['timezone'] = &$timezone;
                 $groupByPart .= ', creation_time';
             }
@@ -475,7 +475,7 @@ abstract class UserDB {
             $params['types'] .= 'ssssssssssssss';
             
             //Set timezone for JOIN with check in
-            $timezone = GlobalConfig::TIMEZONE;
+            $timezone = GlobalConfig::MYSQL_TIME_ZONE;
             $params['timezoneCheckInTime'] = &$timezone;
             
             $likeStringEmail = (isset($search['email']) ? '%'.$search['email'].'%' : '%');
@@ -693,7 +693,7 @@ abstract class UserDB {
             //Check if statement could be prepared
             if ($stmt) {
                 
-                $timezone = GlobalConfig::TIMEZONE;
+                $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $stmt->bind_param('is', $cardNumber, $timezone);
                 
                 if (!$stmt->execute())
@@ -745,7 +745,7 @@ abstract class UserDB {
             //Check if statement could be prepared
             if ($stmt) {
                 
-                $timezone = GlobalConfig::TIMEZONE;
+                $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $stmt->bind_param('sis', $timezone, $cardNumber, $timezone);
                 
                 if (!$stmt->execute())
@@ -874,7 +874,7 @@ abstract class UserDB {
             //Check if statement could be prepared
             if ($stmt) {
                 
-                $timezone = GlobalConfig::TIMEZONE;
+                $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $adminId = GlobalConfig::ADMINID;
                 $stmt->bind_param('sss', $email, $timezone, $adminId);
                 
@@ -971,7 +971,7 @@ abstract class UserDB {
                     //Check if statement could be prepared
                     if ($stmt) {
                         
-                        $timezone = GlobalConfig::TIMEZONE;
+                        $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                         $stmt->bind_param('iis', $userId, $cardId, $timezone);
                         
                         if ($stmt->execute())
@@ -1029,7 +1029,7 @@ abstract class UserDB {
             //Check if statement could be prepared
             if ($stmt) {
                
-                $timezone = GlobalConfig::TIMEZONE;
+                $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $stmt->bind_param('ssssssssssiiiiiissssssssssssssiiiii', $newUser->email, $newUser->firstName, $newUser->lastName, $newUser->phone, $newUser->dateOfBirth, $newUser->street, $newUser->houseNumber, $newUser->city, $newUser->postalCode, $newUser->country, $newUser->isAdmin, $newUser->isHintManager, $newUser->isUserManager, $newUser->isBrowserManager, $newUser->isMoneyManager,
                 $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isBrowserManager, $oldUser->isMoneyManager);
                 
@@ -1095,7 +1095,7 @@ abstract class UserDB {
             //Check if statement could be prepared
             if ($stmt) {
                
-                $timezone = GlobalConfig::TIMEZONE;
+                $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $stmt->bind_param('ssssssssssiiiiiissssssssssssssiiiii', $newUser->email, $newUser->firstName, $newUser->lastName, $newUser->phone, $newUser->dateOfBirth, $newUser->street, $newUser->houseNumber, $newUser->city, $newUser->postalCode, $newUser->country, $newUser->isAdmin, $newUser->isHintManager, $newUser->isUserManager, $newUser->isBrowserManager, $newUser->isMoneyManager,
                 $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->balance, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isBrowserManager, $oldUser->isMoneyManager);
                 
@@ -1140,7 +1140,7 @@ abstract class UserDB {
             //Check if statement could be prepared
             if ($stmt) {
                
-               $timezone = GlobalConfig::TIMEZONE;
+               $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                $stmt->bind_param('sissssssssssssssiiiii', $newPasswordHash, $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->balance, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isBrowserManager, $oldUser->isMoneyManager);
                
                if (!$stmt->execute())
@@ -1221,7 +1221,7 @@ abstract class UserDB {
             //Check if statement could be prepared
             if ($stmt) {
                 
-                $timezone = GlobalConfig::TIMEZONE;
+                $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $stmt->bind_param('ssssssssssissssdsssssssssiiiii', $newUser->email, $newUser->firstName, $newUser->lastName, $newUser->phone, $newUser->dateOfBirth, $newUser->street, $newUser->houseNumber, $newUser->city, $newUser->postalCode, $newUser->country, $oldUser->userId, $oldUser->email, $oldUser->firstName, $oldUser->lastName, $oldUser->passwordHash, $oldUser->balance, $oldUser->phone, $oldUser->dateOfBirth, $oldUser->street, $oldUser->houseNumber, $oldUser->city, $oldUser->postalCode, $oldUser->country, $timezone, $oldUser->creationTime, $oldUser->isAdmin, $oldUser->isHintManager, $oldUser->isUserManager, $oldUser->isBrowserManager, $oldUser->isMoneyManager);
                 
                 if (!$stmt->execute()) {

@@ -11,7 +11,8 @@
 
 abstract class GlobalConfig {
     //This is the timezone all times will be displayed for
-    const TIMEZONE = '+01:00';
+    const MYSQL_TIME_ZONE = '+01:00';
+    const PHP_TIME_ZONE = 'Europe/Brussels';
     
     //User ID of the admin account
     const ADMINID = 1;

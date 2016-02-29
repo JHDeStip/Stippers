@@ -37,4 +37,6 @@ abstract class DataValidationConfig {
     const BROWSER_MANAGER_PERMISSION_MAX = 1;
     const MONEY_MANAGER_PERMISSION_MIN = 0;
     const MONEY_MANAGER_PERMISSION_MAX = 1;
+    
+    const CHAT_MESSAGE_MAX_LENGTH = 150;
 }

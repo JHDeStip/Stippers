@@ -16,6 +16,7 @@ class MoneyTransaction {
     private $incrMoney;
     private $decrMoney;
     private $discountPerc;
+    private $fromPrize;
     private $time;
     private $executingBrowserName;
     private $executingUser;
@@ -29,17 +30,19 @@ class MoneyTransaction {
      * @param int $incrMoney the amount of money in cents added
      * @param int $decrMoney the amount of money in cents taken off
      * @param int $discountPerc the discount percentage times 100
+     * @param bool $fromPrize indicates if the incrMoney comes from a prize or bonus. If this is false the money comes from real money.
      * @param string $time the time of the transaction
      * @param string $executingBrowserName the name of the browser that did the transaction
      * @param string $executingUser the id of the user that did the transaction
      */
-    public function __construct($transactionId, $affectedUser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $executingBrowserName, $executingUser) {
+    public function __construct($transactionId, $affectedUser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $fromPrize, $time, $executingBrowserName, $executingUser) {
         $this->transactionId = $transactionId;
         $this->affectedUser = $affectedUser;
         $this->balBefore = $balBefore;
         $this->incrMoney = $incrMoney;
         $this->decrMoney = $decrMoney;
         $this->discountPerc = $discountPerc;
+        $this->fromPrize = $fromPrize;
         $this->time = $time;
         $this->executingBrowserName = $executingBrowserName;
         $this->executingUser = $executingUser;
@@ -91,12 +94,30 @@ class MoneyTransaction {
     }
     
     /**
+     * Gets the money in cents that's taken off the balance with the discount taken into account.
+     * 
+     * @return int money in cents taken off
+     */
+    public function getDecrMoneyWithDiscount() {
+        return $this->decrMoney - ceil($this->decrMoney * $this->discountPerc / 100);
+    }
+    
+    /**
      * Gets the discount percentage times 100.
      * 
      * @return int discount percentage times 100
      */
     public function getDiscountPerc() {
         return $this->discountPerc;
+    }
+    
+    /**
+     * Returns whether the incrMoney comes from real money or from a prize or bonus
+     * 
+     * @return bool discount percentage times 100
+     */
+    public function isFromPrize() {
+        return $this->fromPrize;
     }
     
     /**

@@ -89,9 +89,10 @@ abstract class AddUserController implements IController {
                 
                 //Add money to user's card
                 try {
+                    $addedUser = UserDB::getFullUserById($userId);
                     $executingBrowserName = BrowserDB::getBrowserById($_SESSION['Stippers']['browser']->browserId)->name;
-                    $trans = new MoneyTransaction(null, $user->userId, 0, AddOrRenewUserConfig::NEWORRENEWEDUSERBONUS, 0, 0, null, $executingBrowserName, null);
-                    MoneyTransactionDB::addTransaction($user, $trans);
+                    $trans = new MoneyTransaction(null, $addedUser->userId, 0, AddOrRenewUserConfig::NEWORRENEWEDUSERBONUS, 0, 0, true, null, $executingBrowserName, null);
+                    MoneyTransactionDB::addTransaction($addedUser, $trans);
                 }
                 catch (Exception $ex) {
                     if (isset($page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle']))

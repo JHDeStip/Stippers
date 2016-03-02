@@ -6,10 +6,9 @@
  * 
  * @author Stan Wijckmans
  * 
- * Interface for runnables.
+ * This file contains settings the balance summary email sender.
  */
 
-interface IRunnable
-{
-    public static function run();
+abstract class BalandeSummaryEmailSenderConfig {
+    const EMAIL_ADDRESSES = ['st.stanie@hotmail.com'];
 }

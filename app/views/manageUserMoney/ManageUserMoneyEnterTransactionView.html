@@ -2,9 +2,12 @@
 <form action="<?php echo htmlentities($this->data['ManageUserMoneyEnterTransactionView']['enter_transaction_formAction'], ENT_QUOTES, 'utf-8'); ?>" method="post" id="enter_transaction_form" onsubmit="return validateEnterTransactionForm(this);">
 <h2 class="page_subtitle"><?php echo htmlentities($this->data['ManageUserMoneyEnterTransactionView']['fullName'], ENT_QUOTES, 'utf-8'); ?></h2>
 <?php echo $this->data['ManageUserMoneyEnterTransactionView']['errMsgs']['global']; ?>
-<span class="money_big" >&euro;<?php echo $this->data['ManageUserMoneyEnterTransactionView']['currentBalance']/100; ?></span><br />
+<span class="money_big" >&euro;<?php echo $this->data['ManageUserMoneyEnterTransactionView']['currentBalance']/100; ?></span><br>
 <label class="money_big money_green" for="increase_money">+€</label>
 <input class="textbox money_big money_green" type="text" maxlength="6" id="increase_money" name="increase_money" autocomplete="off" value="<?php echo htmlentities($this->data['ManageUserMoneyEnterTransactionView']['increaseMoney'], ENT_QUOTES, 'utf-8'); ?>">
+<div class="clearfix"></div>
+<input type="checkbox" name="from_prize" <?php echo $this->data['ManageUserMoneyEnterTransactionView']['fromPrizeChecked']; ?>>
+<label for="from_prize">Prijzengeld</label>
 <div class="clearfix"></div>
 <label class="money_big money_red" for="decrease_money">-€</label>
 <input class="textbox money_big money_red" type="text" maxlength="6" id="decrease_money" name="decrease_money" autocomplete="off" value="<?php echo htmlentities($this->data['ManageUserMoneyEnterTransactionView']['decreaseMoney'], ENT_QUOTES, 'utf-8'); ?>">

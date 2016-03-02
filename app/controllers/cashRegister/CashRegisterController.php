@@ -81,12 +81,12 @@ abstract class CashRegisterController implements IController {
                     $decrMoney = ($_POST['decrease_money'] == '' ? 0 : SafeMath::getCentsFromString($_POST['decrease_money']));
                     $executingBrowserName = BrowserDB::getBrowserById($_SESSION['Stippers']['browser']->browserId)->name;
                     
-                    $trans = new MoneyTransaction(null, $_SESSION['Stippers']['CashRegister']['user']->userId, $_SESSION['Stippers']['CashRegister']['user']->balance, 0, $decrMoney, MoneyTransactionConfig::DEFAULTDISCOUNTPERC, null, $executingBrowserName, null);
+                    $trans = new MoneyTransaction(null, $_SESSION['Stippers']['CashRegister']['user']->userId, $_SESSION['Stippers']['CashRegister']['user']->balance, 0, $decrMoney, MoneyTransactionConfig::DEFAULTDISCOUNTPERC, false, null, $executingBrowserName, null);
                     
                     if ($trans->getBalAfter() < 0) {
                         $page->data['ErrorMessageWithDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
                         $page->data['ErrorMessageWithDescriptionWithLinkView']['errorTitle'] = 'Saldo te laag';
-                        $page->data['ErrorMessageWithDescriptionWithLinkView']['errorDescription'] = 'Het saldo de kaart is te laag.<br/>Je komt onder nul uit.';
+                        $page->data['ErrorMessageWithDescriptionWithLinkView']['errorDescription'] = 'Het saldo de kaart is te laag.<br>Je komt onder nul uit.';
                         $page->addView('error/ErrorMessageWithDescriptionWithLinkView');
                     }
                     else {

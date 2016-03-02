@@ -40,7 +40,7 @@ abstract class Email {
         $failedAddresses = array();
         
         //Try to read the email file
-        if ($emailString = file_get_contents(EmailConfig::EMAILFILESDIR.'/'.$emailFile)) {
+        if ($emailString = file_get_contents(__DIR__.'/../../../'.EmailConfig::EMAILFILESDIR.'/'.$emailFile)) {
             
             //Set headers
             $headers = 'From: '.$fromAddress.PHP_EOL

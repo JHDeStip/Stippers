@@ -69,6 +69,8 @@ abstract class ManageUserMoneyController implements IController {
                 $incrMoney = ($_POST['increase_money'] == '' ? 0 : SafeMath::getCentsFromString($_POST['increase_money']));
                 $decrMoney = ($_POST['decrease_money'] == '' ? 0 : SafeMath::getCentsFromString($_POST['decrease_money']));
                 
+                $fromPrize = isset($_POST['from_prize']);
+                
                 if (isset($_SESSION['Stippers']['browser']))
                     $executingBrowserName = BrowserDB::getBrowserById($_SESSION['Stippers']['browser']->browserId)->name;
                 else
@@ -78,12 +80,12 @@ abstract class ManageUserMoneyController implements IController {
                 else
                     $executingUser = null;
                 
-                $trans = new MoneyTransaction(null, $_SESSION['Stippers']['ManageUserMoney']['user']->userId, $_SESSION['Stippers']['ManageUserMoney']['user']->balance, $incrMoney, $decrMoney, MoneyTransactionConfig::DEFAULTDISCOUNTPERC, null, $executingBrowserName, $executingUser);
+                $trans = new MoneyTransaction(null, $_SESSION['Stippers']['ManageUserMoney']['user']->userId, $_SESSION['Stippers']['ManageUserMoney']['user']->balance, $incrMoney, $decrMoney, MoneyTransactionConfig::DEFAULTDISCOUNTPERC, $fromPrize, null, $executingBrowserName, $executingUser);
                 
                 if ($trans->getBalAfter() < 0) {
                     $page->data['ErrorMessageWithDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
                     $page->data['ErrorMessageWithDescriptionWithLinkView']['errorTitle'] = 'Saldo te laag';
-                    $page->data['ErrorMessageWithDescriptionWithLinkView']['errorDescription'] = 'Het saldo de kaart is te laag.<br/>Je komt onder nul uit.';
+                    $page->data['ErrorMessageWithDescriptionWithLinkView']['errorDescription'] = 'Het saldo de kaart is te laag.<br>Je komt onder nul uit.';
                     $page->addView('error/ErrorMessageWithDescriptionWithLinkView');
                 }
                 else {
@@ -123,10 +125,12 @@ abstract class ManageUserMoneyController implements IController {
         if ($enterMode) {
             $page->data['ManageUserMoneyEnterTransactionView']['increaseMoney'] = $_POST['increase_money'];
             $page->data['ManageUserMoneyEnterTransactionView']['decreaseMoney'] = $_POST['decrease_money'];
+            $page->data['ManageUserMoneyEnterTransactionView']['fromPrizeChecked'] = (isset($_POST['from_prize']) ? 'checked' : '');
         }
         else {
             $page->data['ManageUserMoneyEnterTransactionView']['increaseMoney'] = '';
             $page->data['ManageUserMoneyEnterTransactionView']['decreaseMoney'] = '';
+            $page->data['ManageUserMoneyEnterTransactionView']['fromPrizeChecked'] = '';
         }
         
         $page->addView('manageUserMoney/ManageUserMoneyEnterTransactionView');

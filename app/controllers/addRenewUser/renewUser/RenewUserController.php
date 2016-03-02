@@ -120,7 +120,7 @@ abstract class RenewUserController implements IController {
                     //Add money to user's card
                     try {
                         $executingBrowserName = BrowserDB::getBrowserById($_SESSION['Stippers']['browser']->browserId)->name;
-                        $trans = new MoneyTransaction(null, $newUser->userId, $newUser->balance, AddOrRenewUserConfig::NEWORRENEWEDUSERBONUS, 0, 0, null, $executingBrowserName, null);
+                        $trans = new MoneyTransaction(null, $newUser->userId, $newUser->balance, AddOrRenewUserConfig::NEWORRENEWEDUSERBONUS, 0, 0, true, null, $executingBrowserName, null);
                         MoneyTransactionDB::addTransaction($newUser, $trans);
                     }
                     catch (Exception $ex) {

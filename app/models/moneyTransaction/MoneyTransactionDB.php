@@ -26,7 +26,7 @@ abstract class MoneyTransactionDB {
     public static function getTransactions($limit) {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT transaction_id, affected_user, bal_before, incr_money, decr_money, discount_perc, time, executing_browser_name, executing_user FROM stippers_money_transactions ORDER BY time DESC LIMIT ?';
+            $commString = 'SELECT transaction_id, affected_user, bal_before, incr_money, decr_money, discount_perc, from_prize, time, executing_browser_name, executing_user FROM stippers_money_transactions ORDER BY time DESC LIMIT ?';
             $stmt = $conn->prepare($commString);
             
             //Check if statement could be prepared
@@ -36,11 +36,56 @@ abstract class MoneyTransactionDB {
                 if (!$stmt->execute())
                     throw new BrowserDBException('Unknown error during statement execution while getting transactions.', MoneyTransactionDBException::UNKNOWNERROR);
                 else {
-                    $stmt->bind_result($transactionId, $affectedUser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $executingBrowserName, $executingUser);
+                    $stmt->bind_result($transactionId, $affectedUser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $fromPrize, $time, $executingBrowserName, $executingUser);
                     $transactions = array();
                     
                     while ($stmt->fetch())
-                        array_push($transactions, new MoneyTransaction($transactionId, $affectedUser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $executingBrowserName, $executingUser));
+                        array_push($transactions, new MoneyTransaction($transactionId, $affectedUser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $fromPrize, $time, $executingBrowserName, $executingUser));
+                    
+                    return $transactions;
+                }
+            }
+            else
+                throw new MoneyTransactionDBException('Cannot prepare statement.', MoneyTransactionDBException::CANNOTPREPARESTMT);
+        }
+        catch (Exception $ex) {
+            throw $ex;
+        }
+        finally {
+            if (isset($conn)) {
+                $conn->kill($conn->thread_id);
+                $conn->close();
+            }
+        }
+    }
+    
+    /**
+     * Gets all money transactions.
+     * 
+     * @param int $fromTimeStamp the unix timestamp from where to get transactions
+     * @param int $toTimeStamp the unix timestamp to where to get transactions
+     * @return array money trancactions
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws MoneyTransactionDBException error for if something goes wrong while getting the transactions
+     */
+    public static function getTransactionsBetween($fromTimeStamp, $toTimeStamp) {
+        try {
+            $conn = Database::getConnection();
+            $commString = 'SELECT transaction_id, affected_user, bal_before, incr_money, decr_money, discount_perc, from_prize, time, executing_browser_name, executing_user FROM stippers_money_transactions WHERE time >= FROM_UNIXTIME(?) AND time < FROM_UNIXTIME(?) ORDER BY time DESC';
+            $stmt = $conn->prepare($commString);
+            
+            //Check if statement could be prepared
+            if ($stmt) {
+                
+                $stmt->bind_param('ii', $fromTimeStamp, $toTimeStamp);
+                if (!$stmt->execute())
+                    throw new BrowserDBException('Unknown error during statement execution while getting transactions.', MoneyTransactionDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($transactionId, $affectedUser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $fromPrize, $time, $executingBrowserName, $executingUser);
+                    $transactions = array();
+                    
+                    while ($stmt->fetch())
+                        array_push($transactions, new MoneyTransaction($transactionId, $affectedUser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $fromPrize, $time, $executingBrowserName, $executingUser));
                     
                     return $transactions;
                 }
@@ -71,7 +116,7 @@ abstract class MoneyTransactionDB {
     public static function getTransactionsByUserId($userId, $limit) {
         try {
             $conn = Database::getConnection();
-            $commString = 'SELECT transaction_id, affected_user, bal_before, incr_money, decr_money, discount_perc, time, executing_browser_name, executing_user '
+            $commString = 'SELECT transaction_id, affected_user, bal_before, incr_money, decr_money, discount_perc, from_prize, time, executing_browser_name, executing_user '
                     .'FROM stippers_money_transactions '
                     .'WHERE affected_user = ? '
                     .'ORDER BY time DESC '
@@ -85,11 +130,11 @@ abstract class MoneyTransactionDB {
                 if (!$stmt->execute())
                     throw new BrowserDBException('Unknown error during statement execution while getting transactions.', MoneyTransactionDBException::UNKNOWNERROR);
                 else {
-                    $stmt->bind_result($transactionId, $affecteduser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $executingBrowserName, $executingUser);
+                    $stmt->bind_result($transactionId, $affecteduser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $fromPrize, $time, $executingBrowserName, $executingUser);
                     $transactions = array();
                     
                     while ($stmt->fetch())
-                        array_push($transactions, new MoneyTransaction($transactionId, $affecteduser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $time, $executingBrowserName, $executingUser));
+                        array_push($transactions, new MoneyTransaction($transactionId, $affecteduser, $balBefore, $incrMoney, $decrMoney, $discountPerc, $fromPrize, $time, $executingBrowserName, $executingUser));
                     
                     return $transactions;
                 }
@@ -220,10 +265,10 @@ abstract class MoneyTransactionDB {
                     throw new MoneyTransactionDBException('Unknown error during statement execution while updating user.', MoneyTransactionDBException::UNKNOWNERROR);
                 else if ($stmt->affected_rows == 0)
                     throw new MoneyTransactionDBException('The user is out of date, someone else has probably already changed the user.', MoneyTransactionDBException::USEROUTOFDATE);
-    
+                
                 $stmt->close();
                 
-                $commString = 'INSERT INTO stippers_money_transactions (affected_user, bal_before, incr_money, decr_money, discount_perc, executing_browser_name, executing_user) VALUES (?, ?, ?, ?, ?, ?, ?)';
+                $commString = 'INSERT INTO stippers_money_transactions (affected_user, bal_before, incr_money, decr_money, discount_perc, from_prize, executing_browser_name, executing_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
                 $stmt = $conn->prepare($commString);
                 
                 //Check if statement could be prepared
@@ -233,9 +278,10 @@ abstract class MoneyTransactionDB {
                     $incrMoney = $transaction->getIncrMoney();
                     $decrMoney = $transaction->getDecrMoney();
                     $discountPerc = $transaction->getDiscountPerc();
+                    $fromPrize = $transaction->isFromPrize();
                     $executingBrowserName = $transaction->getExecutingBrowserName();
                     $executingUser = $transaction->getExecutingUser();
-                    $stmt->bind_param('iiiiisi', $user->userId, $balBefore, $incrMoney, $decrMoney, $discountPerc, $executingBrowserName, $executingUser);
+                    $stmt->bind_param('iiiiiisi', $user->userId, $balBefore, $incrMoney, $decrMoney, $discountPerc, $fromPrize, $executingBrowserName, $executingUser);
                     
                     if (!$stmt->execute())
                         throw new MoneyTransactionDBException('Unknown error during statement execution while adding the transaction.', MoneyTransactionDBException::UNKNOWNERROR);
@@ -255,6 +301,46 @@ abstract class MoneyTransactionDB {
         }
         finally {
             if (isset($conn)) {
+                $conn->kill($conn->thread_id);
+                $conn->close();
+            }
+        }
+    }
+    
+    /**
+     * Gest the total amount of money that's currently in the system.
+     * 
+     * @return int total balance
+     * @throws Exception generic error for if something goes wrong while talking to the database
+     * @throws MoneyTransactionDBException error for if something goes wrong while getting the total balance
+     */
+    public static function getTotalBalance(){
+        try {
+            $conn = Database::getConnection();
+            $commString = 'SELECT SUM(balance) FROM stippers_users';
+            $stmt = $conn->prepare($commString);
+            //Check if statement could be prepared
+            if ($stmt) {
+
+                if (!$stmt->execute()) 
+                    throw new MoneyTransactionDBException('Unknown error during statement execution while getting the total balance.', MoneyTransactionDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($totalBalance);
+                    if ($stmt->fetch())
+                        return $totalBalance;
+                    else
+                        throw new MoneyTransactionDBException('Unknown error during statement execution while getting the total balance.', MoneyTransactionDBException::UNKNOWNERROR);
+                }
+            }
+            else
+                throw new MoneyTransactionDBException('Cannot prepare statement.', MoneyTransactionDBException::CANNOTPREPARESTMT);
+        }
+        catch (Exception $ex) {
+            throw $ex;
+        }
+        finally
+        {
+            if (isset($conn)){
                 $conn->kill($conn->thread_id);
                 $conn->close();
             }

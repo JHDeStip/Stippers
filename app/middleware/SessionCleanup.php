@@ -15,7 +15,7 @@ abstract class SessionCleanup implements IMiddleware {
     
     public static function run(array $requestData) {
         
-        if ($requestData['requestedPage'] != 'manageuser' && $requestData['requestedPage'] != 'edituser' && $requestData['requestedPage'] != 'sendemailtousers' && $requestData['requestedPage'] != 'usertransactions')
+        if ($requestData['requestedPage'] != 'manageuser' && $requestData['requestedPage'] != 'edituser' && $requestData['requestedPage'] != 'sendemailtousers' && $requestData['requestedPage'] != 'usertransactions' && $requestData['requestedPage'] != 'downloadsearchresults')
             unset($_SESSION['Stippers']['ManageUserSearch']);
         
         if ($requestData['requestedPage'] != 'edituser')

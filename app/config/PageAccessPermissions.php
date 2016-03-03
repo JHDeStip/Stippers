@@ -215,6 +215,17 @@ $_PERMISSIONS['edituser']['CHECKINBROWSER'] = false;
 $_PERMISSIONS['edituser']['CASHREGISTERBROWSER'] = false;
 
 //Permissions for the user manager page
+$_PERMISSIONS['downloadsearchresults']['EVERYONE'] = false;
+$_PERMISSIONS['downloadsearchresults']['MEMBER'] = false;
+$_PERMISSIONS['downloadsearchresults']['ADMIN'] = true;
+$_PERMISSIONS['downloadsearchresults']['USERMANAGER'] = true;
+$_PERMISSIONS['downloadsearchresults']['BROWSERMANAGER'] = false;
+$_PERMISSIONS['downloadsearchresults']['MONEYMANAGER'] = false;
+$_PERMISSIONS['downloadsearchresults']['ADDRENEWUSERBROWSER'] = false;
+$_PERMISSIONS['downloadsearchresults']['CHECKINBROWSER'] = false;
+$_PERMISSIONS['downloadsearchresults']['CASHREGISTERBROWSER'] = false;
+
+//Permissions for the user manager page
 $_PERMISSIONS['manageusermoney']['EVERYONE'] = false;
 $_PERMISSIONS['manageusermoney']['MEMBER'] = false;
 $_PERMISSIONS['manageusermoney']['ADMIN'] = true;

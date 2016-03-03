@@ -10,5 +10,5 @@
  */
 
 abstract class BalandeSummaryEmailSenderConfig {
-    const EMAIL_ADDRESSES = ['st.stanie@hotmail.com'];
+    const EMAIL_ADDRESSES = ['example@example.com'];
 }

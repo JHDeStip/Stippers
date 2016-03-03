@@ -12,6 +12,8 @@
 require_once __DIR__.'/../IController.php';
 require_once __DIR__.'/../../helperClasses/Page.php';
 
+require_once __DIR__.'/../../config/GlobalConfig.php';
+
 require_once __DIR__.'/../../views/userSearch/UserSearchTopViewValidator.php';
 require_once __DIR__.'/../../views/userSearch/UserSearchAdminViewValidator.php';
 
@@ -317,8 +319,12 @@ abstract class ManageUserController implements IController {
             $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['country'] = '';
         if (isset($_POST['membership_year']))
             $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['membershipYear'] = $_POST['membership_year'];
-        else
-            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['membershipYear'] = '';
+        else {
+            //Load current year in membership year field
+            $dateTime = new DateTime();
+            $dateTime->setTimeZone(new DateTimeZone(GlobalConfig::PHP_TIME_ZONE));
+            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['membershipYear'] = $dateTime->format('Y');
+        }
         if (isset($_POST['card_number']))
             $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['cardNumber'] = $_POST['card_number'];
         else

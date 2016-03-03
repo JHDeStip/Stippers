@@ -1,7 +1,7 @@
 <h1 class="page_title">Leden zoeken</h1>
 <form action="<?php echo htmlentities($this->data['UserSearchTopView']['user_search_formAction'], ENT_QUOTES, 'utf-8'); ?>" id="user_search_form" method="post" onsubmit="return validateUserSearchForm(this);">
 <table>
-    <tr><th><h2 class="page_subtitle">Zoeken op</h2></th><th><h2 class="page_subtitle">Weergeven in resultaten</h2></th></tr
+    <tr><th><h2 class="page_subtitle">Zoeken op</h2></th><th><h2 class="page_subtitle">Weergeven in resultaten</h2></th></tr>
     <tr>
         <td><label class="form_label" for="first_name">Voornaam:</label><input class="textbox" type="text" id="first_name" name="first_name" maxlength="30" value="<?php echo htmlentities($this->data['UserSearchTopView']['firstName'], ENT_QUOTES, 'utf-8'); ?>"></td>
         <td><input type="checkbox" class="checkbox" id="show_first_name" name="show_first_name" <?php echo $this->data['UserSearchTopView']['showFirstNameChecked']; ?>></td>

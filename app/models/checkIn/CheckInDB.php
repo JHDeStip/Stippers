@@ -35,7 +35,7 @@ abstract class CheckInDB {
             */
             $commString = 'SELECT COUNT(*) FROM stippers_check_ins WHERE user = ? AND (NOW() - INTERVAL ? HOUR < ANY (SELECT time FROM stippers_check_ins WHERE user = ?))';
             $stmt = $conn->prepare($commString);
-            $minCheckInInterval = CheckInConfig::MINCHECKININTERVAL;
+            $minCheckInInterval = CheckInConfig::MIN_CHECK_IN_INTERVAL;
             
             //Check if statement could be prepared
             if ($stmt) {
@@ -48,7 +48,7 @@ abstract class CheckInDB {
                     if (!$stmt->fetch())
                         throw new CheckInDBException('Unknown error during statement execution while counting too soon check-ins.', CheckInDBException::UNKNOWNERROR);
                     else if($nCheckIns > 0)
-                        throw new CheckInDBException('This user was checked in less than CheckInConfig::MINCHECKININTERVAL hours ago.', CheckInDBException::ALREADYCHECKEDIN);
+                        throw new CheckInDBException('This user was checked in less than CheckInConfig::MIN_CHECK_IN_INTERVAL hours ago.', CheckInDBException::ALREADYCHECKEDIN);
                     else {
                         $stmt->close();
                         $commString = 'INSERT INTO stippers_check_ins (user) VALUES (?)';

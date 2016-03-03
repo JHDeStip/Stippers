@@ -10,5 +10,5 @@
  */
 
 abstract class AddOrRenewUserConfig {
-    const NEWORRENEWEDUSERBONUS = 200;
+    const NEW_OR_RENEWED_USER_BONUS = 200;
 }

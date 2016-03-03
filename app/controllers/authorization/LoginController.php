@@ -44,7 +44,7 @@ abstract class LoginController implements IController {
             try {
                 //Get the user's password salt and calculate password hash
                 $passwordSalt = UserDB::getPasswordSaltByEmail($_POST['email']);
-                $passwordHash = hash_pbkdf2("sha256", $_POST['password'], $passwordSalt, SecurityConfig::NPASSWORDHASHITERATIONS);
+                $passwordHash = hash_pbkdf2("sha256", $_POST['password'], $passwordSalt, SecurityConfig::N_PASSWORD_HASH_ITERATIONS);
             
                 //Get user from database. This gets the user only if he's a member this year or if it's the admin account.
                 $user = UserDB::getAuthUserByEmail($_POST['email']);
@@ -67,7 +67,7 @@ abstract class LoginController implements IController {
                     unset($_POST);
                     
                     //If we directly request the login page we redirect to the home page
-                    if (explode('?', str_replace(DomainConfig::DOMAINSUFFIX, '', strtolower($_SERVER['REQUEST_URI'])), 2)[0] == 'login')
+                    if (explode('?', str_replace(DomainConfig::DOMAIN_SUFFIX, '', strtolower($_SERVER['REQUEST_URI'])), 2)[0] == 'login')
                         header('Location: home', true, 303);
                 }
                 else {

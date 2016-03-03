@@ -12,7 +12,7 @@
 require_once 'config/DomainConfig.php';
 
 //Isolate the URL part that says which page is requested
-$requestData['requestedPage'] = explode('?', str_replace(DomainConfig::DOMAINSUFFIX, '', strtolower($_SERVER['REQUEST_URI'])), 2)[0];
+$requestData['requestedPage'] = explode('?', str_replace(DomainConfig::DOMAIN_SUFFIX, '', strtolower($_SERVER['REQUEST_URI'])), 2)[0];
 
 //Add middleware
 //Session is started in authorization, so always run that first

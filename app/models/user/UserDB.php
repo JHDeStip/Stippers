@@ -222,7 +222,7 @@ abstract class UserDB {
             if ($stmt) {
                 
                 $timezone = GlobalConfig::MYSQL_TIME_ZONE;
-                $adminId = GlobalConfig::ADMINID;
+                $adminId = GlobalConfig::ADMIN_ID;
                 $stmt->bind_param('isi', $userId, $timezone, $adminId);
     
                 if (!$stmt->execute())
@@ -875,7 +875,7 @@ abstract class UserDB {
             if ($stmt) {
                 
                 $timezone = GlobalConfig::MYSQL_TIME_ZONE;
-                $adminId = GlobalConfig::ADMINID;
+                $adminId = GlobalConfig::ADMIN_ID;
                 $stmt->bind_param('sss', $email, $timezone, $adminId);
                 
                 if (!$stmt->execute())

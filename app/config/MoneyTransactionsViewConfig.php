@@ -10,5 +10,5 @@
  */
 
 abstract class MoneyTransactionsViewConfig {
-    const DEFAULTAMOUNT = 200;
+    const DEFAULT_AMOUNT = 200;
 }

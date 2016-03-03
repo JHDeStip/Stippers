@@ -105,7 +105,7 @@ abstract class RenewUserController implements IController {
                     
                     //Send welcome mail
                     try {
-                        $failedEmails = Email::sendEmails('WelcomeOldMember.html', 'JH DE Stip - Welkom', EmailConfig::FROMADDRESS, [$newUser], null);
+                        $failedEmails = Email::sendEmails('WelcomeOldMember.html', 'JH DE Stip - Welkom', EmailConfig::FROM_ADDRESS, [$newUser], null);
                         //If failedEmails is not empty the mail was not sent
                         if (!empty($failedEmails)) {
                             $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan welkomstmail niet verzenden.';
@@ -120,7 +120,7 @@ abstract class RenewUserController implements IController {
                     //Add money to user's card
                     try {
                         $executingBrowserName = BrowserDB::getBrowserById($_SESSION['Stippers']['browser']->browserId)->name;
-                        $trans = new MoneyTransaction(null, $newUser->userId, $newUser->balance, AddOrRenewUserConfig::NEWORRENEWEDUSERBONUS, 0, 0, true, null, $executingBrowserName, null);
+                        $trans = new MoneyTransaction(null, $newUser->userId, $newUser->balance, AddOrRenewUserConfig::NEW_OR_RENEWED_USER_BONUS, 0, 0, true, null, $executingBrowserName, null);
                         MoneyTransactionDB::addTransaction($newUser, $trans);
                     }
                     catch (Exception $ex) {

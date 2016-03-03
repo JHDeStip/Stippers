@@ -16,7 +16,7 @@
             .'<td><input type="checkbox" name="can_add_renew_users" '.($this->data['ManageBrowserBrowserListView']['browsers'][$i]->canAddRenewUsers ? 'checked' : '').' onclick="return false"></td>'
             .'<td><input type="checkbox" name="can_check_in" '.($this->data['ManageBrowserBrowserListView']['browsers'][$i]->canCheckIn ? 'checked' : '').' onclick="return false"></td>'
             .'<td><input type="checkbox" name="is_cash_register" '.($this->data['ManageBrowserBrowserListView']['browsers'][$i]->isCashRegister ? 'checked' : '').' onclick="return false"></td>'
-            .'<td><a href="'.DomainConfig::DOMAINSUFFIX.'editbrowser?browser='.$this->data['ManageBrowserBrowserListView']['browsers'][$i]->browserId.'">Bewerken</a></td>'
+            .'<td><a href="'.DomainConfig::DOMAIN_SUFFIX.'editbrowser?browser='.$this->data['ManageBrowserBrowserListView']['browsers'][$i]->browserId.'">Bewerken</a></td>'
             .'</tr>';
     }
     ?>

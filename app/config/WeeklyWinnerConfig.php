@@ -10,5 +10,5 @@
  */
 
 abstract class WeeklyWinnerConfig {
-    const MINIMUMWINNINGINTERVAL = 10;
+    const MIN_WINNING_INTERVAL = 10;
 }

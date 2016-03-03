@@ -10,5 +10,5 @@
  */
 
 abstract class MoneyTransactionConfig {
-    const DEFAULTDISCOUNTPERC = 0;
+    const DEFAULT_DISCOUNT_PERC = 0;
 }

@@ -7,12 +7,13 @@
  * This file contains code to periodically refresh the messages list in the chat view..
  */
 
-var INTERVAL = 5000;
+var REFRESH_INTERVAL = 5000;
+var REQUEST_READY_STATE_DONE = 4;
+var HTTP_OK_CODE = 200;
+
 var chatMessageListTable;
 var chatMessageListContainer;
 var refreshInterval;
-var REQUEST_READY_STATE_DONE = 4;
-var HTTP_OK_CODE = 200;
 
 /**
  * Method to load all eventhandlers and elements for the chat window to function correctly.
@@ -96,5 +97,5 @@ function stopRefreshing() {
  */
 function startRefreshing() {
     refresh();
-    refreshInterval = setInterval(refresh, INTERVAL);
+    refreshInterval = setInterval(refresh, REFRESH_INTERVAL);
 };

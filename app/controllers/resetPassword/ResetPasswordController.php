@@ -54,7 +54,7 @@ abstract class ResetPasswordController implements IController {
                 //Get the user's password salt and calculate password hash
                 $passwordSalt = UserDB::getPasswordSaltByEmail($_POST['email']);
                 $newPassword = Random::getPassword();
-                $newPasswordHash = hash_pbkdf2('sha256', $newPassword, $passwordSalt, SecurityConfig::NPASSWORDHASHITERATIONS);
+                $newPasswordHash = hash_pbkdf2('sha256', $newPassword, $passwordSalt, SecurityConfig::N_PASSWORD_HASH_ITERATIONS);
             
                 //Get user from database and reset password.
                 $user = UserDB::getBasicUserByEmail($_POST['email']);
@@ -65,7 +65,7 @@ abstract class ResetPasswordController implements IController {
                 $page->addView('resetPassword/ResetSuccessfulView');
                 
                 //Send email with password
-                $failedEmails = Email::sendEmails('ResetPassword.html', 'JH De Stip - Wachtwoord reset', EmailConfig::FROMADDRESS, [$user], array($user->userId => array('newPassword' => $newPassword)));
+                $failedEmails = Email::sendEmails('ResetPassword.html', 'JH De Stip - Wachtwoord reset', EmailConfig::FROM_ADDRESS, [$user], array($user->userId => array('newPassword' => $newPassword)));
                 //If failedEmails is not empty the mail was not sent
                 if (!empty($failedEmails)) {
                     $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan e-mail met nieuwe wachtwoord niet verzenden.';

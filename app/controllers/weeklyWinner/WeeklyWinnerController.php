@@ -60,7 +60,7 @@ abstract class WeeklyWinnerController implements IController {
             //Get list of user IDs of users that are a member this year
             $userIds = MembershipDB::getUserIdsThisYear();
             //Get list of last N winners
-            $lastWinners = WeeklyWinnerDB::getLastNWinners(WeeklyWinnerConfig::MINIMUMWINNINGINTERVAL);
+            $lastWinners = WeeklyWinnerDB::getLastNWinners(WeeklyWinnerConfig::MIN_WINNING_INTERVAL);
             
             //Get list of user IDs that have not won the last N times
             if ($lastWinners)

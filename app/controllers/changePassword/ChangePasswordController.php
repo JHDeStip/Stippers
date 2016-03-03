@@ -50,7 +50,7 @@ abstract class ChangePasswordController implements IController {
             if (empty($errMsgs)) {
                 try {
                     $passwordSalt = UserDB::getPasswordSaltByUserId($_SESSION['Stippers']['user']->userId);
-                    $oldPasswordHash = hash_pbkdf2('sha256', $_POST['old_password'], $passwordSalt, SecurityConfig::NPASSWORDHASHITERATIONS);
+                    $oldPasswordHash = hash_pbkdf2('sha256', $_POST['old_password'], $passwordSalt, SecurityConfig::N_PASSWORD_HASH_ITERATIONS);
                     
                     //If the old password is incorrect, show an error
                     if ($_SESSION['Stippers']['ChangePassword']['user']->passwordHash != $oldPasswordHash) {
@@ -59,7 +59,7 @@ abstract class ChangePasswordController implements IController {
                     }
                     //Update password
                     else {
-                        $newPasswordHash = hash_pbkdf2('sha256', $_POST['new_password'], $passwordSalt, SecurityConfig::NPASSWORDHASHITERATIONS);
+                        $newPasswordHash = hash_pbkdf2('sha256', $_POST['new_password'], $passwordSalt, SecurityConfig::N_PASSWORD_HASH_ITERATIONS);
                         UserDB::updatePassword($_SESSION['Stippers']['ChangePassword']['user'], $newPasswordHash);
                         $_SESSION['Stippers']['user']->passwordHash = $newPasswordHash;
                         //Show success view

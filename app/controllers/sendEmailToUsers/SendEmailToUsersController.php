@@ -60,7 +60,7 @@ abstract class SendEmailToUsersController implements IController {
                     $users = array_column(UserDB::getSearchUsers($select, $_SESSION['Stippers']['ManageUserSearch']['inputData']['values'], null), 'user');
                     
                     //Send email
-                    $failedAddresses = Email::sendEmails($_POST['email_file'], $_POST['subject'], EmailConfig::FROMADDRESS, $users, null);
+                    $failedAddresses = Email::sendEmails($_POST['email_file'], $_POST['subject'], EmailConfig::FROM_ADDRESS, $users, null);
                     
                     //Check if some emails failed
                     if (empty($failedAddresses)) {

@@ -58,7 +58,7 @@ abstract class AddUserController implements IController {
             $user->email = $_POST['email'];
             $user->firstName = ucwords($_POST['first_name']);
             $user->lastName = ucwords($_POST['last_name']);
-            $user->passwordHash = hash_pbkdf2("sha256", $_POST['password'], $passwordSalt, SecurityConfig::NPASSWORDHASHITERATIONS);
+            $user->passwordHash = hash_pbkdf2("sha256", $_POST['password'], $passwordSalt, SecurityConfig::N_PASSWORD_HASH_ITERATIONS);
             $user->street = ucwords($_POST['street']);
             $user->houseNumber = $_POST['house_number'];
             $user->city = ucwords($_POST['city']);
@@ -75,7 +75,7 @@ abstract class AddUserController implements IController {
                 //Send welcome mail
                 try {
                     
-                    $failedEmails = Email::sendEmails('WelcomeNewMember.html', 'JH DE Stip - Welkom', EmailConfig::FROMADDRESS, [$user], null);
+                    $failedEmails = Email::sendEmails('WelcomeNewMember.html', 'JH DE Stip - Welkom', EmailConfig::FROM_ADDRESS, [$user], null);
                     //If failedEmails is not empty the mail was not sent
                     if (!empty($failedEmails)) {
                         $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan welkomstmail niet verzenden.';
@@ -91,7 +91,7 @@ abstract class AddUserController implements IController {
                 try {
                     $addedUser = UserDB::getFullUserById($userId);
                     $executingBrowserName = BrowserDB::getBrowserById($_SESSION['Stippers']['browser']->browserId)->name;
-                    $trans = new MoneyTransaction(null, $addedUser->userId, 0, AddOrRenewUserConfig::NEWORRENEWEDUSERBONUS, 0, 0, true, null, $executingBrowserName, null);
+                    $trans = new MoneyTransaction(null, $addedUser->userId, 0, AddOrRenewUserConfig::NEW_OR_RENEWED_USER_BONUS, 0, 0, true, null, $executingBrowserName, null);
                     MoneyTransactionDB::addTransaction($addedUser, $trans);
                 }
                 catch (Exception $ex) {

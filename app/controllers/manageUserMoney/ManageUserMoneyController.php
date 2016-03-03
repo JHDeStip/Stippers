@@ -80,7 +80,7 @@ abstract class ManageUserMoneyController implements IController {
                 else
                     $executingUser = null;
                 
-                $trans = new MoneyTransaction(null, $_SESSION['Stippers']['ManageUserMoney']['user']->userId, $_SESSION['Stippers']['ManageUserMoney']['user']->balance, $incrMoney, $decrMoney, MoneyTransactionConfig::DEFAULTDISCOUNTPERC, $fromPrize, null, $executingBrowserName, $executingUser);
+                $trans = new MoneyTransaction(null, $_SESSION['Stippers']['ManageUserMoney']['user']->userId, $_SESSION['Stippers']['ManageUserMoney']['user']->balance, $incrMoney, $decrMoney, MoneyTransactionConfig::DEFAULT_DISCOUNT_PERC, $fromPrize, null, $executingBrowserName, $executingUser);
                 
                 if ($trans->getBalAfter() < 0) {
                     $page->data['ErrorMessageWithDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];

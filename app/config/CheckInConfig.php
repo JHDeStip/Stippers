@@ -10,5 +10,5 @@
  */
 
 abstract class CheckInConfig {
-    const MINCHECKININTERVAL = 12;
+    const MIN_CHECK_IN_INTERVAL = 12;
 }

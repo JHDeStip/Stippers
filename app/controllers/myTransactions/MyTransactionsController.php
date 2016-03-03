@@ -30,7 +30,7 @@ abstract class MyTransactionsController implements IController {
         if (isset($_GET['amount']))
             $amount = $_GET['amount'];
         else
-            $amount = MoneyTransactionsViewConfig::DEFAULTAMOUNT;
+            $amount = MoneyTransactionsViewConfig::DEFAULT_AMOUNT;
         
         try {
             //Get user for his name

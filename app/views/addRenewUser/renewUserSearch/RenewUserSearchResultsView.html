@@ -9,7 +9,7 @@ for ($i=0; $i < count($this->data['RenewUserSearchResultsView']['users']); $i++)
     .'<td>'.htmlentities($this->data['RenewUserSearchResultsView']['users'][$i]['user']->lastName, ENT_QUOTES, 'utf-8').'</td>'
     .'<td>'.htmlentities($this->data['RenewUserSearchResultsView']['users'][$i]['user']->firstName, ENT_QUOTES, 'utf-8').'</td>'
     .'<td>'.htmlentities($this->data['RenewUserSearchResultsView']['users'][$i]['user']->email, ENT_QUOTES, 'utf-8').'</td>'
-    .'<td><a href="'.DomainConfig::DOMAINSUFFIX.'renewuser?user='.$this->data['RenewUserSearchResultsView']['users'][$i]['user']->userId.'">Hernieuwen</a></td>'
+    .'<td><a href="'.DomainConfig::DOMAIN_SUFFIX.'renewuser?user='.$this->data['RenewUserSearchResultsView']['users'][$i]['user']->userId.'">Hernieuwen</a></td>'
 .'</tr>';
 }
 

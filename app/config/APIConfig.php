@@ -10,5 +10,5 @@
  */
 
 abstract class APIConfig {
-    const VALID_KEYS = ['d4868777-8f43-4d85-84f9-8a42bb7913ac'];
+    const VALID_KEYS = ['exampleAPIKey'];
 }

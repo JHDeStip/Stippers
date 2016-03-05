@@ -47,24 +47,20 @@ abstract class CashRegisterController implements IController {
         if (isset($_POST['to_enter_transaction_view'])) {
             $errMsgs = CashRegisterEnterCardViewValidator::validate($_POST);
             
-            if (empty($errMsgs)) {
+            if (empty($errMsgs)) {            
                 try {
                     $_SESSION['Stippers']['CashRegister']['user'] = UserDB::getFullUserByCardNumber($_POST['card_number']);
-                    CashRegisterController::buildEnterTransactionView($page, false);
-                }
-                catch (UserDBException $ex) {
-                    if ($ex->getCode() == UserDBException::NOUSERFORCARDNUMER) {
+                    
+                    if (!$_SESSION['Stippers']['CashRegister']['user']) {
                         CashRegisterController::buildEnterCardView($page, true);
                         $page->data['CashRegisterEnterCardView']['errMsgs']['global'] = '<h2 class="error_message" id="enter_card_form_error_message">Dit kaartnummer is niet gekoppeld aan een gebruiker.</h2>';
                     }
-                    else {
-                        CashRegisterController::buildEnterCardView($page, true);
-                        $page->data['CashRegisterEnterCardView']['errMsgs']['global'] = '<h2 class="error_message" id="enter_card_form_error_message">Kan gebruiker niet ophalen, probeer opnieuw.</h2>';
-                    }
+                    else
+                        CashRegisterController::buildEnterTransactionView($page, false);
                 }
                 catch (Exception $ex) {
                     CashRegisterController::buildEnterCardView($page, true);
-                        $page->data['CashRegisterEnterCardView']['errMsgs']['global'] = '<h2 class="error_message" id="enter_card_form_error_message">Kan gebruiker niet ophalen, probeer opnieuw.</h2>';
+                    $page->data['CashRegisterEnterCardView']['errMsgs']['global'] = '<h2 class="error_message" id="enter_card_form_error_message">Kan gebruiker niet ophalen, probeer opnieuw.</h2>';
                 }
             }
             else {

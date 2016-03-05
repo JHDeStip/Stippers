@@ -131,7 +131,7 @@ abstract class CheckInController implements IAPIController {
                             $extras['common']['winnerFirstName'] = $user->firstName;
                             $extras['common']['winnerLastName'] = $user->lastName;
                             
-                            $failedAddresses = Email::sendEmails('WeeklyWinnerNotification', 'Winnaar van de week', EmailConfig::FROM_ADDRESS, array_column($searchUsers, 'user'), $extras);
+                            $failedAddresses = Email::sendEmails('WeeklyWinnerNotification.html', 'Winnaar van de week', EmailConfig::FROM_ADDRESS, array_column($searchUsers, 'user'), $extras);
                         
                             if (!empty($failedAddresses)) {
                                 $response->errorCode = APICheckInResponse::CANNOT_SEND_WINNER_NOTIFICATIONS;

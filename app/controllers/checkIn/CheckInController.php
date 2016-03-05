@@ -119,7 +119,7 @@ abstract class CheckInController implements IController {
                         $extras['common']['winnerFirstName'] = $user->firstName;
                         $extras['common']['winnerLastName'] = $user->lastName;
                         
-                        $failedAddresses = Email::sendEmails('WeeklyWinnerNotification', 'Winnaar van de week', EmailConfig::FROM_ADDRESS, array_column($searchUsers, 'user'), $extras);
+                        $failedAddresses = Email::sendEmails('WeeklyWinnerNotification.html', 'Winnaar van de week', EmailConfig::FROM_ADDRESS, array_column($searchUsers, 'user'), $extras);
                         
                         if (!empty($failedAddresses)) {
                             $page->data['ErrorMessageWithDescriptionNoLinkView']['errorTitle'] = 'Kan e-mail niet versturen.';

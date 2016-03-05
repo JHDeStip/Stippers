@@ -11,6 +11,9 @@
 
 require_once "IMiddleware.php";
 
+require_once __DIR__."/../config/DomainConfig.php";
+require_once __DIR__."/../config/APIConfig.php";
+
 require_once __DIR__."/../controllers/authorization/LoginController.php";
 require_once __DIR__."/../controllers/authorization/DBErrorController.php";
 require_once __DIR__."/../controllers/authorization/ForcedLogoutController.php";
@@ -104,6 +107,7 @@ abstract class Authorization implements IMiddleware {
         $addRenewUserBrowser = false;
         $checkInBrowser = false;
         $cashRegisterBrowser = false;
+        $apiKey = false;
 
         //If permissions for the requested page are defined we override the
         //defaults with these.
@@ -130,11 +134,14 @@ abstract class Authorization implements IMiddleware {
                 $checkInBrowser = $permissions['CHECKINBROWSER'];
             if (isset($permissions['CASHREGISTERBROWSER']))
                 $cashRegisterBrowser = $permissions['CASHREGISTERBROWSER'];
+            if (isset($permissions['APIKEY']))
+                $apiKey = $permissions['APIKEY'];
         }
         
         //Possible states
         $canDisplay = false;
         $hasToLogIn = false;
+        $needsApiKey = false;
         
         if ($everyone)
             $canDisplay = true;
@@ -172,8 +179,21 @@ abstract class Authorization implements IMiddleware {
             }
         }
         
+        //If requests with a valid api key can view the page we check if a valid key is given.
+        if (!$canDisplay && substr_compare($requestData['requestedPage'], DomainConfig::API_PATH, 0, strlen(DomainConfig::API_PATH)) == 0 && $apiKey) {
+            //Check if a key is given and it's in the list of valid keys
+            if (isset($_GET['key']) && in_array($_GET['key'], APIConfig::VALID_KEYS))
+                $canDisplay = true;
+            else
+                $needsApiKey = true;
+        }
+        
         if (!$canDisplay) {
-            if ($hasToLogIn) {
+            if ($needsApiKey) {
+                header('HTTP/1.1 403 Forbidden');
+                return false;
+            }
+            elseif ($hasToLogIn) {
                 LoginController::get();
                 return false;
             }

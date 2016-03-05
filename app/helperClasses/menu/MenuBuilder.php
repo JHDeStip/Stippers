@@ -17,12 +17,14 @@ abstract class MenuBuilder {
         $page->data['MenuBarView']['showBrowserManagementLink'] = false;
         $page->data['MenuBarView']['showMailManagementLink'] = false;
         $page->data['MenuBarView']['showMeatWheelLink'] = false;
+        $page->data['MenuBarView']['showChatLink'] = false;
         
         if (isset($_SESSION['Stippers']['user'])) {
             $page->data['MenuBarView']['showLogoutLink'] = true;
             $page->data['MenuBarView']['showProfileLink'] = true;
             $page->data['MenuBarView']['showRandomAndFunLink'] = true;
             $page->data['MenuBarView']['showMeatWheelLink'] = true;
+            $page->data['MenuBarView']['showChatLink'] = true;
             if ($_SESSION['Stippers']['user']->isAdmin || $_SESSION['Stippers']['user']->isUserManager || $_SESSION['Stippers']['user']->isBrowserManager)
                 $page->data['MenuBarView']['showManagementLink'] = true;
             

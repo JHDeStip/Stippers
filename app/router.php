@@ -148,6 +148,10 @@ switch ($requestData['requestedPage']) {
         require_once('controllers/authorization/LoginController.php');
         $controller = 'LoginController';
         break;
+    case 'api/checkin':
+        require_once('APIControllers/checkIn/CheckInController.php');
+        $controller = 'CheckInController';
+        break;
     default:
         $pageNotFound = true;
         require_once('controllers/pageNotFound/PageNotFoundController.php');

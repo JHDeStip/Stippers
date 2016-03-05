@@ -26,6 +26,7 @@ abstract class CheckInDB {
      */
     public static function checkIn($userId){
         $locked = false;
+        
         try {
             $conn = Database::getConnection();
 /*
@@ -48,7 +49,8 @@ abstract class CheckInDB {
                     if (!$stmt->fetch())
                         throw new CheckInDBException('Unknown error during statement execution while counting too soon check-ins.', CheckInDBException::UNKNOWNERROR);
                     else if($nCheckIns > 0)
-                        throw new CheckInDBException('This user was checked in less than CheckInConfig::MIN_CHECK_IN_INTERVAL hours ago.', CheckInDBException::ALREADYCHECKEDIN);
+                        //Return false because the user is already checked in
+                        return false;
                     else {
                         $stmt->close();
                         $commString = 'INSERT INTO stippers_check_ins (user) VALUES (?)';
@@ -62,6 +64,9 @@ abstract class CheckInDB {
                         }
                         else
                             throw new CheckInDBException('Cannot prepare statement.', CheckInDBException::CANNOTPREPARESTMT);
+                        
+                        //Return true because the check in was successful
+                        return true;
                     }
                 }
             }

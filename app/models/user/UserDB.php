@@ -710,7 +710,7 @@ abstract class UserDB {
                         return $user;
                     }
                     else
-                        throw new UserDBException('No user was found for this card number and year.', UserDBException::NOUSERFORCARDNUMER);
+                        return null;
                 }
             }
             else
@@ -777,7 +777,7 @@ abstract class UserDB {
                         return $user;
                     }
                     else
-                        throw new UserDBException('No user was found for this card number and year.', UserDBException::NOUSERFORCARDNUMER);
+                        return null;
                 }
             }
             else

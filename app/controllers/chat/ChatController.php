@@ -26,9 +26,9 @@ abstract class ChatController implements IController {
         
         ChatController::buildChatView($page, false);
         
-        $page->addView('Chat/ChatView');
+        $page->addView('chat/ChatView');
         $page->addExtraJsFile('views/chat/ChatViewMessageListRefresher.js');
-        $page->addExtraJsFile('views/chat/chatViewOnLoadHandler.js');
+        $page->addExtraJsFile('views/chat/ChatViewOnLoadHandler.js');
         
         $page->showWithMenu();
     } 
@@ -37,9 +37,9 @@ abstract class ChatController implements IController {
         $page = new Page();
         $page->data['title'] = 'Chat';
         
-        $page->addView('Chat/ChatView');
+        $page->addView('chat/ChatView');
         $page->addExtraJsFile('views/chat/ChatViewMessageListRefresher.js');
-        $page->addExtraJsFile('views/chat/chatViewOnLoadHandler.js');
+        $page->addExtraJsFile('views/chat/ChatViewOnLoadHandler.js');
         
         $errMsgs = ChatViewValidator::validate($_POST);
         if (empty($errMsgs)) {

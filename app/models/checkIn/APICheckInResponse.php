@@ -19,9 +19,9 @@ class APICheckInResponse {
     const CANNOT_CHECK_WEEKLY_WINNER = 6;
     const CANNOT_SEND_WINNER_NOTIFICATIONS = 7;
     
-    public $checkInSuccessful;
+    public $checkInSuccessful = false;
     public $errorCode = APICheckInResponse::OK;
-    public $isWeeklyWinner;
+    public $isWeeklyWinner = false;
     public $userFirstName;
     public $userLastName;
 }

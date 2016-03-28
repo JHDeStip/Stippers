@@ -489,7 +489,7 @@ abstract class UserDB {
             $likeStringPhone = (isset($search['phone']) ? '%'.$search['phone'].'%' : '%');
             $params['phone'] = &$likeStringPhone;
             $likeStringDateOfBirth = (isset($search['dateOfBirth']) ? '%'.$search['dateOfBirth'].'%' : '%');
-            $params['dateofBirth'] = &$likeStringDateOfBirth;
+            $params['dateOfBirth'] = &$likeStringDateOfBirth;
             $likeStringStreet = (isset($search['street']) ? '%'.$search['street'].'%' : '%');
             $params['street'] = &$likeStringStreet;
             $likeStringHouseNumber = (isset($search['houseNumber']) ? '%'.$search['houseNumber'].'%' : '%');
@@ -574,7 +574,7 @@ abstract class UserDB {
                             $searchUsers[$i]['user']->balance = $row['balance'];
                         if (isset($select['phone']) && $select['phone'])
                             $searchUsers[$i]['user']->phone = $row['phone'];
-                        if (isset($select['dateofBrith']) && $select['dateOfBirth'])
+                        if (isset($select['dateOfBirth']) && $select['dateOfBirth'])
                             $searchUsers[$i]['user']->dateOfBirth = $row['date_of_birth'];
                         if (isset($select['street']) && $select['street'])
                             $searchUsers[$i]['user']->street = $row['street'];

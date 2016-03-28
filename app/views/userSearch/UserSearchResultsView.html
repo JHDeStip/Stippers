@@ -39,7 +39,7 @@ for ($i=0; $i < count($this->data['UserSearchResultsView']['users']); $i++) {
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->country)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->country, ENT_QUOTES, 'utf-8').'</td>';
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->email)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->email, ENT_QUOTES, 'utf-8').'</td>';
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->phone)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->phone, ENT_QUOTES, 'utf-8').'</td>';
-if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->dateOfBirth)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->dateOfBirth, ENT_QUOTES, 'utf-8').'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->dateOfBirth)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->dateOfBirth, ENT_QUOTES, 'utf-8').'</td>';
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->balance)) echo '<td>'.htmlentities(number_format($this->data['UserSearchResultsView']['users'][$i]['user']->balance/100, 2, ',', '.'), ENT_QUOTES, 'utf-8').'</td>';
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->creationTime)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->creationTime, ENT_QUOTES, 'utf-8').'</td>';
     if (isset($this->data['UserSearchResultsView']['users'][$i]['nCheckIns'])) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['nCheckIns'], ENT_QUOTES, 'utf-8').'</td>';

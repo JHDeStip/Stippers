@@ -47,8 +47,11 @@ abstract class CheckInController implements IAPIController {
             $response = new APICheckInResponse();
             
             //Check if the card number is valid
-            if (!CheckInController::validateCardNumber($checkInRequest->cardNumber))
+            if (!CheckInController::validateCardNumber($checkInRequest->cardNumber)) {
                 $response->errorCode = APICheckInResponse::MALFORMED_CARDNUMBER;
+                echo json_encode($response);
+                exit();
+            }
             else {
                 $user = null;
                 
@@ -61,7 +64,6 @@ abstract class CheckInController implements IAPIController {
                     $user = UserDB::getBasicUserByCardNumber($checkInRequest->cardNumber);
                 }
                 catch (Exception $ex) {
-                    $response->checkInSuccessful = false;
                     $response->errorCode = APICheckInResponse::CANNOT_GET_USER_DATA;
                     echo json_encode($response);
                     exit();
@@ -69,7 +71,6 @@ abstract class CheckInController implements IAPIController {
                 
                 if (!$user) {
                     //There's no user for this card
-                    $response->checkInSuccessful = false;
                     $response->errorCode = APICheckInResponse::NO_USER_FOR_CARD_NUMBER;
                     echo json_encode($response);
                     exit();
@@ -85,7 +86,6 @@ abstract class CheckInController implements IAPIController {
                     }
                     catch (Exception $ex) {
                         //Check-in failed (something went wrong or check-in isn't valid)
-                        $response->checkInSuccessful = false;
                         $response->errorCode = APICheckInResponse::CANNOT_CHECK_IN;
                         echo json_encode($response);
                         exit();
@@ -94,7 +94,6 @@ abstract class CheckInController implements IAPIController {
                 
                 if (!$checkInOk) {
                     //The user has already checked in
-                    $response->checkInSuccessful = false;
                     $response->errorCode = APICheckInResponse::ALREADY_CHECKED_IN;
                     echo json_encode($response);
                     exit();
@@ -135,9 +134,10 @@ abstract class CheckInController implements IAPIController {
                         
                             if (!empty($failedAddresses)) {
                                 $response->errorCode = APICheckInResponse::CANNOT_SEND_WINNER_NOTIFICATIONS;
-                                echo json_encode($response);
-                                exit();
                             }
+                            
+                            echo json_encode($response);
+                            exit();
                         }
                         catch (Exception $ex) {
                             $response->errorCode = APICheckInResponse::CANNOT_SEND_WINNER_NOTIFICATIONS;

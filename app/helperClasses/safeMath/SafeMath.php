@@ -39,7 +39,11 @@ abstract class SafeMath {
         //Return given value times 100
         if ($nParts == 1)
             return $parts[0] * 100;
-        else
-            return $parts[0] * 100 + $parts[1];     
+        else {
+            $euroPart = $parts[0] * 100;
+            //If the cents part is less than 2 characters long it must be multiplied by 10 (0.5 is 50 cents, not 5 cents).
+            $centsPart = strlen($parts[1]) < 2 ? $parts[1] * 10 : $parts[1];
+            return $euroPart + $centsPart;
+        }
     }
 }

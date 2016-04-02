@@ -9,10 +9,12 @@ body  {
 	background-repeat: repeat;
 	font-weight: 300;
 }
+
 ::selection {
 	color: #fff;
 	background-color: #e73029;
 }
+
 /*CONTAINERS*/
 .container{
 	margin-left: auto;
@@ -116,7 +118,7 @@ img {
 }
 /*NAVIGATION*/
 nav {
-	font-family: Microsoft Tai Le, arial;
+	font-family: "Microsoft Tai Le", arial;
 	font-size: 18px;
 	text-align: center;
 	font-weight: 300;
@@ -140,9 +142,6 @@ nav a:active{
 	text-align: center;
 	margin-left: auto;
 	margin-right: auto;
-	-moz-transition: background-color 0.25s;
- 	-webkit-transition: background-color 0.25s;
- 	-o-transition: background-color 0.25s;
  	transition: background-color 0.25s;
 }
 nav a:hover  {
@@ -204,7 +203,7 @@ nav a:hover  {
 .subnav a:active{
 	text-decoration: none;
 	color: black !important;
-	font-family: Microsoft Tai Le;
+	font-family: "Microsoft Tai Le";
 }
 .subnav a:hover{
 	color:#e73029 !important;
@@ -279,7 +278,7 @@ nav a:hover  {
 	.subnav a:active{
 		text-decoration: none;
 		color: white !important;
-		font-family: Microsoft Tai Le;
+		font-family: "Microsoft Tai Le";
 	}
 	.subnav a:hover{
 		color: black !important;
@@ -394,14 +393,20 @@ input[type=text] {
 input[type=text]#new_message {
     width: 750px;
 }
-input[type=text]:focus {border-color:#333; }
+input[type=text]:focus {
+    border-color:#333;
+}
 
-input[type=submit] {margin-left: 5px; padding:5px 15px; color: white;background:#e73029; border:0 none;
-cursor:pointer;
-
--webkit-border-radius: 5px;
-border-radius: 5px; 
-margin-right: 20px;}
+input[type=submit] {
+    margin-left: 5px;
+    padding:5px 15px;
+    color: white;
+    background:#e73029;
+    border:0 none;
+    cursor:pointer;
+    border-radius: 5px; 
+    margin-right: 20px;
+}
 
 /*error*/
 .form_label_error{
@@ -435,10 +440,19 @@ textarea {
     height: 300px;
     resize: none;
 }
-.left_column{
+.left_column {
     float: left;
 }
-.right_column{
+.right_column {
     display: inline-block;
     margin-left: 50px;
+}
+/* Userd for H2 style in table headers, H2 is not allowed inside table headers. display: block is removed. */
+.page_subtitle {
+    font-size: 1.5em;
+    margin-top: 0.83em;
+    margin-bottom: 0.83em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
 }

@@ -104,6 +104,7 @@ Because Stippers is written in plain PHP with a little bit of JavaScript you don
 * You should now be able to login with the admin account.
 * From the admin account set up a browser that can be used to add other users, act as cash register etc.
 * When new users are added you can give additional permissions to other staff members of your club.
+* It's recommended to make frequent database backups, especially if you're using the feature for members to have money on their account. You don't want your club's or members' money to disappear, do you?
 * Happy Stipping!
 
 ## Sidenotes

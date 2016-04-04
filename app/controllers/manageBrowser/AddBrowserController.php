@@ -17,7 +17,7 @@ require_once __DIR__.'/../../models/browser/Browser.php';
 require_once __DIR__.'/../../models/browser/BrowserDB.php';
 require_once __DIR__.'/../../models/browser/BrowserDBException.php';
 
-require_once __DIR__.'/../../views/manageBrowser/AddEditBrowserTopViewValidator.php';
+require_once __DIR__.'/../../views/manageBrowser/AddEditBrowserFormTopViewValidator.php';
 
 abstract class AddBrowserController implements IController {
     
@@ -98,7 +98,8 @@ abstract class AddBrowserController implements IController {
         }
         
         $page->data['AddEditBrowserTopView']['errMsgs'] = AddEditBrowserTopViewValidator::initErrMsgs();
-        $page->addView('manageBrowser/AddEditBrowserTopView');
-        $page->addView('manageBrowser/AddBrowserBottomView');
+        $page->addView('manageBrowser/AddBrowserTitleView');
+        $page->addView('manageBrowser/AddEditBrowserFormTopView');
+        $page->addView('manageBrowser/AddBrowserFormBottomView');
     }
 }

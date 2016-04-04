@@ -2,7 +2,7 @@
 <form action="<?php echo htmlentities($this->data['RenewUserSearchView']['renew_user_search_formAction'], ENT_QUOTES, 'utf-8'); ?>" id="user_search_form" method="post">
         <h2 class="page_subtitle">Zoeken op</h2>
         <label class="form_label" for="first_name">Voornaam:</label>
-        <input class="textbox" type="text" id="first_name" name="first_name" maxlength="30" value="<?php echo htmlentities($this->data['RenewUserSearchView']['firstName'], ENT_QUOTES, 'utf-8'); ?>"><?php echo $this->data['RenewUserSearchView']['errMsgs']['firstName']; ?><div class="clearfix"></div>
+        <input class="textbox" type="text" id="first_name" name="first_name" maxlength="30" value="<?php echo htmlentities($this->data['RenewUserSearchView']['firstName'], ENT_QUOTES, 'utf-8'); ?>" autofocus><?php echo $this->data['RenewUserSearchView']['errMsgs']['firstName']; ?><div class="clearfix"></div>
         <label class="form_label" for="last_name">Achternaam:</label>
         <input class="textbox" type="text" id="last_name" name="last_name" maxlength="30" value="<?php echo htmlentities($this->data['RenewUserSearchView']['lastName'], ENT_QUOTES, 'utf-8'); ?>"><?php echo $this->data['RenewUserSearchView']['errMsgs']['lastName']; ?><div class="clearfix"></div>
         <label class="form_label" for="email">E-mail:</label>

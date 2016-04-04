@@ -3,7 +3,7 @@
 <table>
     <tr><th class="page_subtitle">Zoeken op</th><th class="page_subtitle">Weergeven in resultaten</th></tr>
     <tr>
-        <td><label class="form_label" for="first_name">Voornaam:</label><input class="textbox" type="text" id="first_name" name="first_name" maxlength="30" value="<?php echo htmlentities($this->data['UserSearchTopView']['firstName'], ENT_QUOTES, 'utf-8'); ?>"></td>
+        <td><label class="form_label" for="first_name">Voornaam:</label><input class="textbox" type="text" id="first_name" name="first_name" maxlength="30" value="<?php echo htmlentities($this->data['UserSearchTopView']['firstName'], ENT_QUOTES, 'utf-8'); ?>" autofocus></td>
         <td><input type="checkbox" class="checkbox" id="show_first_name" name="show_first_name" <?php echo $this->data['UserSearchTopView']['showFirstNameChecked']; ?>></td>
     </tr>
     <tr>

@@ -6,7 +6,7 @@ last_name VARCHAR(30) NOT NULL,
 password_hash CHAR(64) NOT NULL,
 password_salt CHAR(36) NOT NULL,
 balance DECIMAL(5) NOT NULL DEFAULT 0,
-phone VARCHAR(14) NOT NULL DEFAULT "",
+phone VARCHAR(14) NOT NULL DEFAULT '',
 date_of_birth DATE NOT NULL,
 street VARCHAR(30) NOT NULL,
 house_number VARCHAR(4) NOT NULL,
@@ -28,24 +28,10 @@ CREATE TABLE stippers_user_card_year (
 user BIGINT UNSIGNED,
 card INT UNSIGNED NOT NULL,
 membership_year YEAR(4),
-CONSTRAINT stippers_user_card_year2_user_fk FOREIGN KEY (user) REFERENCES stippers_users(user_id) ON DELETE CASCADE,
-CONSTRAINT stippers_user_card_year2_card_max_ck CHECK (card < 99999999),
-CONSTRAINT stippers_user_card_year2_pk PRIMARY KEY (user, membership_year),
-CONSTRAINT stippers_user_card_year2_card_year_uq UNIQUE (card, membership_year)
-)
-CHARACTER SET UTF8
-ENGINE = InnoDB;
-
-CREATE TABLE stippers_user_year_gadgets (
-user BIGINT UNSIGNED,
-membership_year YEAR(4),
-sweater BIT(1) NOT NULL DEFAULT 0,
-sweater_size TINYINT,
-tshirt BIT(1) NOT NULL DEFAULT 0,
-tshirt_size TINYINT,
-bartender_info BIT(1) NOT NULL DEFAULT 0,
-CONSTRAINT stippers_user_year_gadgets_fk FOREIGN KEY (user) REFERENCES stippers_users(user_id) ON DELETE CASCADE,
-CONSTRAINT stippers_user_year_pk PRIMARY KEY (user, membership_year)
+CONSTRAINT stippers_user_card_year_user_fk FOREIGN KEY (user) REFERENCES stippers_users(user_id) ON DELETE CASCADE,
+CONSTRAINT stippers_user_card_year_card_max_ck CHECK (card < 99999999),
+CONSTRAINT stippers_user_card_year_pk PRIMARY KEY (user, membership_year),
+CONSTRAINT stippers_user_card_year_card_year_uq UNIQUE (card, membership_year)
 )
 CHARACTER SET UTF8
 ENGINE = InnoDB;
@@ -89,6 +75,7 @@ CONSTRAINT money_transactions_executing_user_fk FOREIGN KEY (executing_user) REF
 CHARACTER SET UTF8
 ENGINE = InnoDB;
 
+/* This is for a future feature
 CREATE TABLE stippers_hints (
 hint_number BIGINT UNSIGNED PRIMARY KEY,
 hint_text TEXT NOT NULL,
@@ -105,13 +92,14 @@ filename CHAR(40) NOT NULL
 )
 CHARACTER SET UTF8
 ENGINE InnoDB;
+*/
 
 CREATE TABLE stippers_chat_messages (
 message_id SERIAL,
-user BIGINT UNSIGNED NOT NULL,
+user BIGINT UNSIGNED,
 text VARCHAR(150) NOT NULL,
 message_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-CONSTRAINT chat_messages_user_f FOREIGN KEY (user) REFERENCES stippers_users(user_id)
+CONSTRAINT chat_messages_user_f FOREIGN KEY (user) REFERENCES stippers_users(user_id) ON DELETE SET NULL
 )
 CHARACTER SET UTF8
 ENGINE InnoDB;
@@ -158,6 +146,5 @@ END;;
 DELIMITER ;
 
 CALL stippers_create_sequence('stippers_users_seq');
-CALL stippers_create_sequence('stippers_hints_seq');
-CALL stippers_create_sequence('stippers_hint_images_seq');
-CALL stippers_create_sequence('stippers_weekly_winner_seq');
+/* For future feature CALL stippers_create_sequence('stippers_hints_seq');
+CALL stippers_create_sequence('stippers_hint_images_seq'); */

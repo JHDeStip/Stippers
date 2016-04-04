@@ -13,6 +13,5 @@ function cashRegisterEnterCardFormLoadBarcodeScanner() {
         submitButton = document.getElementById('enter_card_form_submit');
         textBox = cardNumberInput;
         cardNumberInput.addEventListener('input', barcodeScannerInputChanged);
-        cardNumberInput.focus();
     }
 };

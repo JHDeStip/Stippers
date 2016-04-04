@@ -10,5 +10,5 @@
  */
 
 abstract class APIConfig {
-    const VALID_KEYS = ['exampleAPIKey'];
+    const VALID_KEYS = ['exampleAPIKey']; // Array of valid API keys.
 }

@@ -35,6 +35,8 @@ Although there is currently not much information about the check-ins available t
 
 The admin can not check-in because he is never a member.
 
+Note that users are not automatically checked in when they are created or renewed, this must be done explicitly.
+
 ### Chat
 There is a chat room where members can talk to each other. This is one shared room for all members, sending private messages is currently not possible.
 

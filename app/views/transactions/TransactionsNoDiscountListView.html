@@ -1,0 +1,9 @@
+<table>
+    <tr><th></th><th>Beginsaldo</th><th>Toegevoegd</th><th>Afgenomen</th><th>Eindsaldo</th><th>Prijzengeld</th><th>Tijdstip</th></tr>
+    <?php
+        $nTransactions = count($this->data['TransactionsNoDiscountListView']['transactions']);
+        for ($i=0; $i<$nTransactions; $i++) {
+            echo '<tr><td>'.($this->data['TransactionsNoDiscountListView']['totalAmount'] - $i).'</td><td>&euro;'.number_format($this->data['TransactionsNoDiscountListView']['transactions'][$i]->getBalBefore()/100, 2, ',', '.').'</td><td class="money_green">&euro;'.number_format($this->data['TransactionsNoDiscountListView']['transactions'][$i]->getIncrMoney()/100, 2, ',', '.').'</td><td class="money_red">&euro;'.number_format($this->data['TransactionsNoDiscountListView']['transactions'][$i]->getDecrMoney()/100, 2, ',', '.').'</td><td>&euro;'.number_format($this->data['TransactionsNoDiscountListView']['transactions'][$i]->getBalAfter()/100, 2, ',', '.').'</td><td><input type="checkbox" '.($this->data['TransactionsNoDiscountListView']['transactions'][$i]->isFromPrize() ? "checked" : "").' onclick="return false"/></td><td>'.$this->data['TransactionsNoDiscountListView']['transactions'][$i]->getTime().'</td></tr>';
+        }
+    ?>
+</table>

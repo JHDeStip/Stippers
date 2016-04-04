@@ -1,0 +1,17 @@
+<table>
+<tr>
+    <th></th><th>Achternaam</th><th>Voornaam</th><th>E-mail</th><th></th>
+</tr>
+<?php
+
+for ($i=0; $i < count($this->data['RenewUserSearchResultsView']['users']); $i++) {
+    echo '<tr><td>'.($i+1).'</td>'
+    .'<td>'.htmlentities($this->data['RenewUserSearchResultsView']['users'][$i]['user']->lastName, ENT_QUOTES, 'utf-8').'</td>'
+    .'<td>'.htmlentities($this->data['RenewUserSearchResultsView']['users'][$i]['user']->firstName, ENT_QUOTES, 'utf-8').'</td>'
+    .'<td>'.htmlentities($this->data['RenewUserSearchResultsView']['users'][$i]['user']->email, ENT_QUOTES, 'utf-8').'</td>'
+    .'<td><a href="'.DomainConfig::DOMAIN_SUFFIX.'renewuser?user='.$this->data['RenewUserSearchResultsView']['users'][$i]['user']->userId.'">Hernieuwen</a></td>'
+.'</tr>';
+}
+
+?>
+</table>

@@ -1,0 +1,5 @@
+<form action="<?php echo htmlentities($this->data['UserSearchResultsTopMiddleView']['user_search_results_formAction'], ENT_QUOTES, 'utf-8'); ?>" id="user_search_results_form" method="post" onsubmit="return validateUserSearchResultsForm(this);">
+<table>
+<tr>
+    <th></th><?php echo ($this->data['UserSearchResultsTopMiddleView']['showFirstName'] ? '<th>Voornaam</th>') ?>
+</tr>

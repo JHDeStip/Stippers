@@ -1,0 +1,16 @@
+<h2 class="info_message">Beschikbare e-mails</h2>
+<table>
+    <tr>
+        <th></th>
+        <th>Bestandsnaam</th>
+        <th></th>
+    </tr>
+    <?php
+    for ($i = 0; $i < count($this->data['ManageEmailEmailListView']['fileNames']); $i++) {
+          echo '<tr><td>'.($i+1).'</td>'
+            .'<td>'.htmlentities($this->data['ManageEmailEmailListView']['fileNames'][$i], ENT_QUOTES, 'utf-8').'</td>'
+            .'<td><a href="editemail?filename='.urlencode(htmlentities($this->data['ManageEmailEmailListView']['fileNames'][$i], ENT_QUOTES, 'utf-8')).'">Bewerken</a></td>'
+            .'</tr>';
+    }
+    ?>
+</table>

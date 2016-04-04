@@ -1,0 +1,44 @@
+<tr>
+    <td>
+        <label class="form_label" for="is_admin">Administrator:</label>
+        <select name="is_admin" id="is_admin">
+            <option value="" <?php echo $this->data['UserSearchAdminView']['isAdminSelected']['']; ?>>Alles</option>
+            <option value="0" <?php echo $this->data['UserSearchAdminView']['isAdminSelected']['0']; ?>>Nee</option>
+            <option value="1" <?php echo $this->data['UserSearchAdminView']['isAdminSelected']['1']; ?>>Ja</option>
+        </select>
+    </td>
+    <td><input type="checkbox" class="checkbox" id="show_is_admin" name="show_is_admin" <?php echo $this->data['UserSearchAdminView']['showIsAdminChecked']; ?>></td>
+</tr>
+<tr>
+    <td>
+        <label class="form_label" for="is_user_manager">Gebruikerbeheerder:</label>
+        <select name="is_user_manager" id="is_user_manager">
+            <option value="" <?php echo $this->data['UserSearchAdminView']['isUserManagerSelected']['']; ?>>Alles</option>
+            <option value="0" <?php echo $this->data['UserSearchAdminView']['isUserManagerSelected']['0']; ?>>Nee</option>
+            <option value="1" <?php echo $this->data['UserSearchAdminView']['isUserManagerSelected']['1']; ?>>Ja</option>
+        </select>
+    </td>
+    <td><input type="checkbox" class="checkbox" id="show_is_user_manager" name="show_is_user_manager" <?php echo $this->data['UserSearchAdminView']['showIsUserManagerChecked']; ?>></td>
+</tr>
+<tr>
+    <td>
+        <label class="form_label" for="is_browser_manager">Browserbeheerder:</label>
+        <select name="is_browser_manager" id="is_browser_manager">
+            <option value="" <?php echo $this->data['UserSearchAdminView']['isBrowserManagerSelected']['']; ?>>Alles</option>
+            <option value="0" <?php echo $this->data['UserSearchAdminView']['isBrowserManagerSelected']['0']; ?>>Nee</option>
+            <option value="1" <?php echo $this->data['UserSearchAdminView']['isBrowserManagerSelected']['1']; ?>>Ja</option>
+        </select>
+    </td>
+    <td><input type="checkbox" class="checkbox" id="show_is_browser_manager" name="show_is_browser_manager" <?php echo $this->data['UserSearchAdminView']['showIsBrowserManagerChecked']; ?>></td>
+</tr>
+<tr>
+    <td>
+        <label class="form_label" for="is_money_manager">Geldbeheerder:</label>
+        <select name="is_money_manager" id="is_money_manager">
+            <option value="" <?php echo $this->data['UserSearchAdminView']['isMoneyManagerSelected']['']; ?>>Alles</option>
+            <option value="0" <?php echo $this->data['UserSearchAdminView']['isMoneyManagerSelected']['0']; ?>>Nee</option>
+            <option value="1" <?php echo $this->data['UserSearchAdminView']['isMoneyManagerSelected']['1']; ?>>Ja</option>
+        </select>
+    </td>
+    <td><input type="checkbox" class="checkbox" id="show_is_money_manager" name="show_is_money_manager" <?php echo $this->data['UserSearchAdminView']['showIsMoneyManagerChecked']; ?>></td>
+</tr>

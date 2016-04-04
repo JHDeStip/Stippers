@@ -1,0 +1,23 @@
+<table>
+    <tr>
+        <th></th>
+        <th>Naam</th>
+        <th>UUID</th>
+        <th>Mag gebruikers aanmaken</th>
+        <th>Mag inchecken</th>
+        <th>Is kassa</th>
+        <th></th>
+    </tr>
+    <?php
+    for ($i = 0; $i < count($this->data['ManageBrowserBrowserListView']['browsers']); $i++) {
+          echo '<tr><td>'.($i+1).'</td>'
+            .'<td>'.htmlentities($this->data['ManageBrowserBrowserListView']['browsers'][$i]->name, ENT_QUOTES, 'utf-8').'</td>'
+            .'<td>'.htmlentities($this->data['ManageBrowserBrowserListView']['browsers'][$i]->uuid, ENT_QUOTES, 'utf-8').'</td>'
+            .'<td><input type="checkbox" name="can_add_renew_users" '.($this->data['ManageBrowserBrowserListView']['browsers'][$i]->canAddRenewUsers ? 'checked' : '').' onclick="return false"></td>'
+            .'<td><input type="checkbox" name="can_check_in" '.($this->data['ManageBrowserBrowserListView']['browsers'][$i]->canCheckIn ? 'checked' : '').' onclick="return false"></td>'
+            .'<td><input type="checkbox" name="is_cash_register" '.($this->data['ManageBrowserBrowserListView']['browsers'][$i]->isCashRegister ? 'checked' : '').' onclick="return false"></td>'
+            .'<td><a href="'.DomainConfig::DOMAIN_SUFFIX.'editbrowser?browser='.$this->data['ManageBrowserBrowserListView']['browsers'][$i]->browserId.'">Bewerken</a></td>'
+            .'</tr>';
+    }
+    ?>
+<table>

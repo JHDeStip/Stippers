@@ -1,0 +1,57 @@
+<table>
+<tr>
+    <th></th>
+<?php
+if (isset($this->data['UserSearchResultsView']['users'][0]['user']->lastName)) echo '<th>Achternaam</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['user']->firstName)) echo '<th>Voornaam</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['membershipYear'])) echo '<th>Lidjaar</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['cardNumber'])) echo '<th>Kaartnummer</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['user']->street)) echo '<th>Straat</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['user']->houseNumber)) echo '<th>Huisnummer</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['user']->city)) echo '<th>Gemeente</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['user']->postalCode)) echo '<th>Postcode</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['user']->country)) echo '<th>Land</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['user']->email)) echo '<th>E-mail</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['user']->phone)) echo '<th>Telefoonnummer</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['user']->dateOfBirth)) echo '<th>Geboortedatum</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['user']->balance)) echo '<th>Saldo</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['user']->creationTime)) echo '<th>Registratietijd</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['nCheckIns'])) echo '<th>Aantal check-ins</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['user']->isAdmin)) echo '<th>Administrator</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['user']->isUserManager)) echo '<th>Gebruikersbeheerder</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['user']->isBrowserManager)) echo '<th>Browserbeheerder</th>';
+if (isset($this->data['UserSearchResultsView']['users'][0]['user']->isMoneyManager)) echo '<th>Geldbeheerder</th>';
+?>
+    <th></th>
+</tr>
+<?php
+
+for ($i=0; $i < count($this->data['UserSearchResultsView']['users']); $i++) {
+    echo '<tr><td>'.($i+1).'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->lastName)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->lastName, ENT_QUOTES, 'utf-8').'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->firstName)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->firstName, ENT_QUOTES, 'utf-8').'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['membershipYear'])) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['membershipYear'], ENT_QUOTES, 'utf-8').'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['cardNumber'])) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['cardNumber'], ENT_QUOTES, 'utf-8').'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->street)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->street, ENT_QUOTES, 'utf-8').'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->houseNumber)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->houseNumber, ENT_QUOTES, 'utf-8').'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->city)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->city, ENT_QUOTES, 'utf-8').'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->postalCode)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->postalCode, ENT_QUOTES, 'utf-8').'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->country)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->country, ENT_QUOTES, 'utf-8').'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->email)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->email, ENT_QUOTES, 'utf-8').'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->phone)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->phone, ENT_QUOTES, 'utf-8').'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->dateOfBirth)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->dateOfBirth, ENT_QUOTES, 'utf-8').'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->balance)) echo '<td>'.htmlentities(number_format($this->data['UserSearchResultsView']['users'][$i]['user']->balance/100, 2, ',', '.'), ENT_QUOTES, 'utf-8').'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->creationTime)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->creationTime, ENT_QUOTES, 'utf-8').'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['nCheckIns'])) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['nCheckIns'], ENT_QUOTES, 'utf-8').'</td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->isAdmin)) echo '<td><input type="checkbox" onclick="return false;" '.($this->data['UserSearchResultsView']['users'][$i]['user']->isAdmin ? 'checked' : '').'></td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->isUserManager)) echo '<td><input type="checkbox" onclick="return false;" '.($this->data['UserSearchResultsView']['users'][$i]['user']->isUserManager ? 'checked' : '').'></td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->isBrowserManager)) echo '<td><input type="checkbox" onclick="return false;" '.($this->data['UserSearchResultsView']['users'][$i]['user']->isBrowserManager ? 'checked' : '').'></td>';
+    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->isMoneyManager)) echo '<td><input type="checkbox" onclick="return false;" '.($this->data['UserSearchResultsView']['users'][$i]['user']->isMoneyManager ? 'checked' : '').'></td>';
+    echo '<td><a href="'.DomainConfig::DOMAIN_SUFFIX.'edituser?user='.$this->data['UserSearchResultsView']['users'][$i]['user']->userId.'">Bewerken</a></td>';
+echo '</tr>';
+}
+
+?>
+</table>
+<a href="sendemailtousers">E-mail verzenden naar resultaten</a><br>
+<a href="downloadsearchresults">Zoekresultaten downloaden</a>

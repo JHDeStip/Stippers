@@ -1,0 +1,7 @@
+<h2 class="info_message">E-mail uploaden</h2>
+<?php echo $this->data['EmailUploadView']['errMsgs']['global']; ?>
+<form action="<?php echo htmlentities($this->data['EmailUploadView']['email_upload_formAction'], ENT_QUOTES, 'utf-8'); ?>" id="email_upload_form" method="post" enctype="multipart/form-data" onsubmit="return validateEmailUploadForm(this);">
+    <input type="hidden" name="MAX_FILE_SIZE" value="1048576" >
+    <input class="submit_button" type="file" name="email_file" id="email_file"><div class="clearfix"></div>
+    <input class="submit_button" type="submit" name="upload_email" value="Upload" onclick="buttonClicked = SUBMIT_BUTTON;">
+</form>

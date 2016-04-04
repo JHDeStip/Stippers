@@ -1,0 +1,7 @@
+<h1 class="page_title">Kassa</h1>
+<h2 class="page_subtitle">Kaartnummer ingeven</h2>
+<?php echo $this->data['CashRegisterEnterCardView']['errMsgs']['global']; ?>
+<form action="<?php echo htmlentities($this->data['CashRegisterEnterCardView']['enter_card_formAction'], ENT_QUOTES, 'utf-8'); ?>" method="post" id="enter_card_form" onsubmit="return validateEnterCardForm(this);">
+        <label class="form_label" for="card_number">Kaartnummer:</label><input class="textbox" type="text" maxlength="8" id="card_number" name="card_number" autocomplete="off" autofocus><?php echo $this->data['CashRegisterEnterCardView']['errMsgs']['cardNumber']; ?><div class="clearfix"></div>
+        <input class="submit_button" type="submit" name="to_enter_transaction_view" value="Naar transactieformulier" id="enter_card_form_submit" onclick="buttonClicked = SUBMIT_BUTTON;">
+</form>

@@ -1,0 +1,53 @@
+<h2 class="menu"><img src="img/li_item.png" alt="menu" /></h2>
+<nav>
+    <ul class="nav">
+    <li><a class="top_level_menu_item" href="home" title="Home">Home</a></li>
+    <?php
+        if ($this->data['MenuBarView']['showProfileLink'])
+            echo '<li><a class="top_level_menu_item" href="profile" title="Profiel">Profiel</a></li>';
+        if ($this->data['MenuBarView']['showManagementLink'])
+            echo '<li><a class="top_level_menu_item" href="#" title="Beheer">Beheer</a></li>';
+        if ($this->data['MenuBarView']['showAddRenewUsersLink'])
+            echo '<li><a class="top_level_menu_item" href="addorrenewuser" title="Lid toevoegen">Lid toevoegen</a></li>';
+        if ($this->data['MenuBarView']['showCheckInLink'])
+            echo '<li><a class="top_level_menu_item" href="checkin" title="Inchecken">Inchecken</a></li>';
+        if ($this->data['MenuBarView']['showCashRegisterLink'])
+            echo '<li><a class="top_level_menu_item" href="cashregister" title="Kassa">Kassa</a></li>';
+        if ($this->data['MenuBarView']['showRandomAndFunLink'])
+            echo '<li><a class="top_level_menu_item" href="#" title="Plezier_en_vertier">Plezier en vertier</a></li>';
+        if ($this->data['MenuBarView']['showLogoutLink'])
+            echo '<li><a class="top_level_menu_item" href="logout" title="Afmelden">Afmelden</a></li>';
+        if ($this->data['MenuBarView']['showLoginLink'])
+            echo '<li><a class="top_level_menu_item" href="login" title="Aanmelden">Aanmelden</a></li>';
+    ?>
+    </ul>
+</nav><div class="clearfix"></div>
+<div id="subnav_full_color">
+    <?php
+        if ($this->data['MenuBarView']['showManagementLink']) {
+            echo '<div class="container_nav_info"><div class="subnav" id="Beheer"><ul>';
+
+            if ($this->data['MenuBarView']['showUserManagementLink'])
+                echo '<li><a class="second_level_menu_item" href="manageuser">Gebruikers beheren</a></li>';
+            if ($this->data['MenuBarView']['showWeeklyWinnerLink'])
+                echo '<li><a class="second_level_menu_item" href="weeklywinner">Winnaar van de week</a></li>';
+            if ($this->data['MenuBarView']['showMailManagementLink'])
+                echo '<li><a class="second_level_menu_item" href="manageemail">E-mails beheren</a></li>';
+            if ($this->data['MenuBarView']['showBrowserManagementLink'])
+                echo '<li><a class="second_level_menu_item" href="managebrowser">Browsers beheren</a></li>';
+            
+
+            echo '</ul></div></div>';
+        }
+        if ($this->data['MenuBarView']['showRandomAndFunLink']) {
+            echo '<div class="container_nav_info"><div class="subnav" id="Plezier_en_vertier"><ul>';
+
+            if ($this->data['MenuBarView']['showMeatWheelLink'])
+                echo '<li><a class="second_level_menu_item" href="meatwheel">Het vleeswiel</a></li>';
+            if ($this->data['MenuBarView']['showChatLink'])
+                echo '<li><a class="second_level_menu_item" href="chat">Chat</a></li>';
+            
+            echo '</ul></div></div>';
+        }
+    ?>
+</div><div class="clearfix"></div>

@@ -1,0 +1,63 @@
+<h1 class="page_title">Leden zoeken</h1>
+<form action="<?php echo htmlentities($this->data['UserSearchTopView']['user_search_formAction'], ENT_QUOTES, 'utf-8'); ?>" id="user_search_form" method="post" onsubmit="return validateUserSearchForm(this);">
+<table>
+    <tr><th class="page_subtitle">Zoeken op</th><th class="page_subtitle">Weergeven in resultaten</th></tr>
+    <tr>
+        <td><label class="form_label" for="first_name">Voornaam:</label><input class="textbox" type="text" id="first_name" name="first_name" maxlength="30" value="<?php echo htmlentities($this->data['UserSearchTopView']['firstName'], ENT_QUOTES, 'utf-8'); ?>" autofocus></td>
+        <td><input type="checkbox" class="checkbox" id="show_first_name" name="show_first_name" <?php echo $this->data['UserSearchTopView']['showFirstNameChecked']; ?>></td>
+    </tr>
+    <tr>
+        <td><label class="form_label" for="last_name">Achternaam:</label><input class="textbox" type="text" id="last_name" name="last_name" maxlength="30" value="<?php echo htmlentities($this->data['UserSearchTopView']['lastName'], ENT_QUOTES, 'utf-8'); ?>"></td>
+        <td><input type="checkbox" class="checkbox" id="show_last_name" name="show_last_name" <?php echo $this->data['UserSearchTopView']['showLastNameChecked']; ?>></td>
+    </tr>
+    <tr>
+        <td><label class="form_label" for="email">E-mail:</label><input class="textbox" type="text" id="email" name="email" maxlength="50" value="<?php echo htmlentities($this->data['UserSearchTopView']['email'], ENT_QUOTES, 'utf-8'); ?>"></td>
+        <td><input type="checkbox" class="checkbox" id="show_email" name="show_email" <?php echo $this->data['UserSearchTopView']['showEmailChecked']; ?>></td>
+    </tr>
+    <tr>
+        <td><label class="form_label" for="balance">Saldo:</label><input class="textbox" type="text" id="balance" name="balance" maxlength="6" value="<?php echo htmlentities($this->data['UserSearchTopView']['balance'], ENT_QUOTES, 'utf-8'); ?>"></td>
+        <td><input type="checkbox" class="checkbox" id="show_balance" name="show_balance" <?php echo $this->data['UserSearchTopView']['showBalanceChecked']; ?>></td>
+    </tr>
+    <tr>
+        <td><label class="form_label" for="phone">Telefoonnummer:</label><input class="textbox" type="text" id="phone" name="phone" maxlength="14" value="<?php echo htmlentities($this->data['UserSearchTopView']['phone'], ENT_QUOTES, 'utf-8'); ?>"></td>
+        <td><input type="checkbox" class="checkbox" id="show_phone" name="show_phone" <?php echo $this->data['UserSearchTopView']['showPhoneChecked']; ?>></td>
+    </tr>
+    <tr>
+        <td><label class="form_label" for="date_of_birth">Geboortedatum:</label><input class="textbox" type="text" id="date_of_birth" name="date_of_birth" maxlength="10" value="<?php echo htmlentities($this->data['UserSearchTopView']['dateOfBirth'], ENT_QUOTES, 'utf-8'); ?>"></td>
+        <td><input type="checkbox" class="checkbox" id="show_date_of_birth" name="show_date_of_birth" <?php echo $this->data['UserSearchTopView']['showDateOfBirthChecked']; ?>></td>
+    </tr>
+    <tr>
+        <td><label class="form_label" for="street">Straat:</label><input class="textbox" type="text" id="street" name="street" maxlength="30" value="<?php echo htmlentities($this->data['UserSearchTopView']['street'], ENT_QUOTES, 'utf-8'); ?>"></td>
+        <td><input type="checkbox" class="checkbox" id="show_street" name="show_street" <?php echo $this->data['UserSearchTopView']['showStreetChecked']; ?>></td>
+    </tr>
+    <tr>
+        <td><label class="form_label" for="house_number">Huisnummer:</label><input class="textbox" type="text" id="house_number" name="house_number" maxlength="4" value="<?php echo htmlentities($this->data['UserSearchTopView']['houseNumber'], ENT_QUOTES, 'utf-8'); ?>"></td>
+        <td><input type="checkbox" class="checkbox" id="show_house_number" name="show_house_number" <?php echo $this->data['UserSearchTopView']['showHouseNumberChecked']; ?>></td>
+    </tr>
+    <tr>
+        <td><label class="form_label" for="city">Gemeente:</label><input class="textbox" type="text" id="city" name="city" maxlength="30" value="<?php echo htmlentities($this->data['UserSearchTopView']['city'], ENT_QUOTES, 'utf-8'); ?>"></td>
+        <td><input type="checkbox" class="checkbox" id="show_city" name="show_city" <?php echo $this->data['UserSearchTopView']['showCityChecked']; ?>></td>
+    </tr>
+    <tr>
+        <td><label class="form_label" for="postal_code">Postcode:</label><input class="textbox" type="text" id="postal_code" name="postal_code" maxlength="6" value="<?php echo htmlentities($this->data['UserSearchTopView']['postalCode'], ENT_QUOTES, 'utf-8'); ?>"></td>
+        <td><input type="checkbox" class="checkbox" id="show_postal_code" name="show_postal_code" <?php echo $this->data['UserSearchTopView']['showPostalCodeChecked']; ?>></td>
+    </tr>
+    <tr>
+        <td><label class="form_label" for="country">Land:</label><input class="textbox" type="text" id="country" name="country" maxlength="30" value="<?php echo htmlentities($this->data['UserSearchTopView']['country'], ENT_QUOTES, 'utf-8'); ?>"></td>
+        <td><input type="checkbox" class="checkbox" id="show_country" name="show_country" <?php echo $this->data['UserSearchTopView']['showCountryChecked']; ?>></td>
+    </tr>
+    <tr>
+        <td><label class="form_label" for="membership_year">Lidjaar:</label><input class="textbox" type="text" id="membership_year" name="membership_year" maxlength="4" value="<?php echo htmlentities($this->data['UserSearchTopView']['membershipYear'], ENT_QUOTES, 'utf-8'); ?>"></td>
+        <td><input type="checkbox" class="checkbox" id="show_membership_year" name="show_membership_year" <?php echo $this->data['UserSearchTopView']['showMembershipYearChecked']; ?>></td>
+    </tr>
+    <tr>
+        <td><label class="form_label" for="card_number">Kaartnummer:</label><input class="textbox" type="text" id="card_number" name="card_number" maxlength="8" value="<?php echo htmlentities($this->data['UserSearchTopView']['cardNumber'], ENT_QUOTES, 'utf-8'); ?>"></td>
+        <td><input type="checkbox" class="checkbox" id="show_card_number" name="show_card_number" <?php echo $this->data['UserSearchTopView']['showCardNumberChecked']; ?>></td>
+    </tr>
+    <tr>
+        <td><label class="form_label">Registratietijd</label></td>
+        <td><input type="checkbox" class="checkbox" id="show_ccreation_time" name="show_creation_time" <?php echo $this->data['UserSearchTopView']['showCreationTimeChecked']; ?>></td>
+    </tr>
+    <tr>
+        <td><label class="form_label" for="n_check_ins_per_year">Check-ins per jaar</label></td><td><input type="checkbox" class="checkbox" id="n_check_ins_per_year" name="n_check_ins_per_year" <?php echo $this->data['UserSearchTopView']['nCheckInsPerYearChecked']; ?>></td>
+    </tr>

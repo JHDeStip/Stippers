@@ -1,0 +1,35 @@
+<h2 class="page_subtitle">Extra info</h2>
+<label class="form_label" for="constellation">Sterrenbeeld:</label>
+<input class="textbox" type="text" id="constellation" name="constellation" maxlength="30" value="<?php echo htmlentities($this->data['UserDataFormExtraInfoView']['constellation'], ENT_QUOTES, 'utf-8'); ?>"><?php echo $this->data['UserDataFormExtraInfoView']['errMsgs']['constellation']; ?><div class="clearfix"></div>
+
+<label class="form_label" for="favorite_color">Lievekingskleur:</label>
+<input class="textbox" type="text" id="favorite_color" name="favorite_color" maxlength="30" value="<?php echo htmlentities($this->data['UserDataFormExtraInfoView']['favoriteColor'], ENT_QUOTES, 'utf-8'); ?>"><?php echo $this->data['UserDataFormExtraInfoView']['errMsgs']['favoriteColor']; ?><div class="clearfix"></div>
+
+<label class="form_label" for="favorite_symbol">Lievekingssmbool:</label>
+<input class="textbox" type="text" id="favorite_symbol" name="favorite_symbol" maxlength="30" value="<?php echo htmlentities($this->data['UserDataFormExtraInfoView']['favoriteSymbol'], ENT_QUOTES, 'utf-8'); ?>"><?php echo $this->data['UserDataFormExtraInfoView']['errMsgs']['favoriteSymbol']; ?><div class="clearfix"></div>
+
+<label class="form_label" for="marital_status">Burgerlijke status:</label>
+<input class="textbox" type="text" id="marital_status" name="marital_status" maxlength="30" value="<?php echo htmlentities($this->data['UserDataFormExtraInfoView']['maritalStatus'], ENT_QUOTES, 'utf-8'); ?>"><?php echo $this->data['UserDataFormExtraInfoView']['errMsgs']['maritalStatus']; ?><div class="clearfix"></div>
+
+<input class="checkbox" type="checkbox" name="bartender_info" id="bartender_info" <?php echo $this->data['UserDataFormExtraInfoView']['bartenderInfoChecked']; ?>><label class="form_label_checkbox" for="bartender_info">Ik wil informatie krijgen omtrent tappen en eventueel tapper worden.</label><div class="clearfix"></div>
+
+<input class="checkbox" type="checkbox" name="intact_info" id="intact_info" <?php echo $this->data['UserDataFormExtraInfoView']['intactInfoChecked']; ?>><label class="form_label_checkbox" for="intact_info">Ik wil informatie krijgen omtrent intact en eventueel 'intacter' worden.</label><div class="clearfix"></div>
+
+<input class="checkbox" type="checkbox" name="good_investment" id="good_investment" <?php echo $this->data['UserDataFormExtraInfoView']['goodInvestmentChecked']; ?>><label class="form_label_checkbox" for="good_investment">Ik vind de Stip-lidkaart een goede investering.</label><div class="clearfix"></div>
+<label class="form_label" for="good_investment_reason">Waarom wel/niet?</label>
+<textarea class="textbox" id="good_investment_reason" name="good_investment_reason" cols="200" rows="10" maxlength="1000"><?php echo htmlentities($this->data['UserDataFormExtraInfoView']['goodInvestmentReason'], ENT_QUOTES, 'utf-8'); ?></textarea><?php echo $this->data['UserDataFormExtraInfoView']['errMsgs']['goodInvestmentReason']; ?><div class="clearfix"></div>
+
+<label class="form_label" for="why_member">Waarom of door wie ben je lid geworden?</label>
+<textarea class="textbox" id="why_member" name="why_member" cols="200" rows="10" maxlength="1000"><?php echo htmlentities($this->data['UserDataFormExtraInfoView']['whyMember'], ENT_QUOTES, 'utf-8'); ?></textarea><?php echo $this->data['UserDataFormExtraInfoView']['errMsgs']['whyMember']; ?><div class="clearfix"></div>
+
+<label class="form_label" for="enough_advantages">Vind je dat er genoeg voordelen zijn aan onze Stip-lidkaart? Welke zijn overbodig? Welke ontbreken er?</label>
+<textarea class="textbox" id="enough_advantages" name="enough_advantages" cols="200" rows="10" maxlength="1000"><?php echo htmlentities($this->data['UserDataFormExtraInfoView']['enoughAdvantages'], ENT_QUOTES, 'utf-8'); ?></textarea><?php echo $this->data['UserDataFormExtraInfoView']['errMsgs']['enoughAdvantages']; ?><div class="clearfix"></div>
+
+<label class="form_label" for="which_gadgets">Welk stipgadget zou je graag hebben? Hoeveel zou dit dan mogen kosten?</label>
+<textarea class="textbox" id="which_gadgets" name="which_gadgets" cols="200" rows="10" maxlength="1000"><?php echo htmlentities($this->data['UserDataFormExtraInfoView']['whichGadgets'], ENT_QUOTES, 'utf-8'); ?></textarea><?php echo $this->data['UserDataFormExtraInfoView']['errMsgs']['whichGadgets']; ?><div class="clearfix"></div>
+
+<label class="form_label" for="what_activity">Welke ledenactiviteit zou je dit jaar willen?</label>
+<textarea class="textbox" id="what_activity" name="what_activity" cols="200" rows="10" maxlength="1000"><?php echo htmlentities($this->data['UserDataFormExtraInfoView']['whatActivity'], ENT_QUOTES, 'utf-8'); ?></textarea><?php echo $this->data['UserDataFormExtraInfoView']['errMsgs']['whatActivity']; ?><div class="clearfix"></div>
+
+<label class="form_label" for="what_activity">Welke ledenactiviteit zou je dit jaar willen?</label>
+<textarea class="textbox" id="what_activity" name="what_activity" cols="200" rows="10" maxlength="1000"><?php echo htmlentities($this->data['UserDataFormExtraInfoView']['whatActivity'], ENT_QUOTES, 'utf-8'); ?></textarea><?php echo $this->data['UserDataFormExtraInfoView']['errMsgs']['whatActivity']; ?><div class="clearfix"></div>

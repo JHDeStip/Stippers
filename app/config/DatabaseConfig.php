@@ -1,9 +1,9 @@
 <?php
 
 abstract class DatabaseConfig {
-    const HOST = "HOST";
-    const USER = "USER";
-    const PASSWORD = "PASSWORD";
-    const DATABASE = "DATABASE";
+    const HOST = 'localhost';
+    const USER = 'root';
+    const PASSWORD = '';
+    const DATABASE = 'stippers';
     const PORT = 3306;
 }

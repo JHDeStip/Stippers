@@ -3,7 +3,7 @@
 <?php echo $this->data['ChatView']['errMsgs']['global']; ?>
 
 <form action="<?php echo htmlentities($this->data['ChatView']['new_message_formAction'], ENT_QUOTES, 'utf-8'); ?>" method="post" id="new_message_form" onsubmit="return validateNewMessageForm(this);">
-    <input class="textbox" type="text" maxlength="150" id="new_message" name="new_message" value="<?php echo htmlentities($this->data['ChatView']['newMessage'], ENT_QUOTES, 'utf-8'); ?>">
+    <input class="textbox" type="text" maxlength="150" id="new_message" name="new_message" value="<?php echo htmlentities($this->data['ChatView']['newMessage'], ENT_QUOTES, 'utf-8'); ?>" autofocus>
     <input class="submit_button" type="submit" name="new_message_form_submit" value="Posten" id="new_message_form_submit" onclick="buttonClicked = SUBMIT_BUTTON;">
     <div class="clearfix"></div>
 </form>

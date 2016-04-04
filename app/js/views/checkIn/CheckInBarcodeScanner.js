@@ -13,6 +13,5 @@ function checkInFormLoadBarcodeScanner() {
         submitButton = document.getElementById('check_in_form_submit');
         textBox = cardNumberInput;
         cardNumberInput.addEventListener('input', barcodeScannerInputChanged);
-        cardNumberInput.focus();
     }
 };

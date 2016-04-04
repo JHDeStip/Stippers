@@ -17,7 +17,7 @@ require_once __DIR__.'/../../models/browser/Browser.php';
 require_once __DIR__.'/../../models/browser/BrowserDB.php';
 require_once __DIR__.'/../../models/browser/BrowserDBException.php';
 
-require_once __DIR__.'/../../views/manageBrowser/AddEditBrowserTopViewValidator.php';
+require_once __DIR__.'/../../views/manageBrowser/AddEditBrowserFormTopViewValidator.php';
 
 abstract class EditBrowserController implements IController {
     
@@ -162,8 +162,9 @@ abstract class EditBrowserController implements IController {
                 $page->data['AddEditBrowserTopView']['isCashRegisterChecked'] = '';
         }
     
-        $page->addView('manageBrowser/AddEditBrowserTopView');
-        $page->addView('manageBrowser/EditBrowserBottomView');
+        $page->addView('manageBrowser/EditBrowserTitleView');
+        $page->addView('manageBrowser/AddEditBrowserFormTopView');
+        $page->addView('manageBrowser/EditBrowserFormBottomView');
         $page->data['AddEditBrowserTopView']['errMsgs'] = AddEditBrowserTopViewValidator::initErrMsgs();
     }
 }

@@ -10,5 +10,5 @@
  */
 
 abstract class BalandeSummaryEmailSenderConfig {
-    const EMAIL_ADDRESSES = ['example@example.com'];
+    const EMAIL_ADDRESSES = ['example@example.com']; // Array of email addresses to send the money summary to.
 }

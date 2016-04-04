@@ -4,7 +4,7 @@
 <?php echo $this->data['ManageUserMoneyEnterTransactionView']['errMsgs']['global']; ?>
 <span class="money_big" >&euro;<?php echo $this->data['ManageUserMoneyEnterTransactionView']['currentBalance']/100; ?></span><br>
 <label class="money_big money_green" for="increase_money">+€</label>
-<input class="textbox money_big money_green" type="text" maxlength="6" id="increase_money" name="increase_money" autocomplete="off" value="<?php echo htmlentities($this->data['ManageUserMoneyEnterTransactionView']['increaseMoney'], ENT_QUOTES, 'utf-8'); ?>">
+<input class="textbox money_big money_green" type="text" maxlength="6" id="increase_money" name="increase_money" autocomplete="off" value="<?php echo htmlentities($this->data['ManageUserMoneyEnterTransactionView']['increaseMoney'], ENT_QUOTES, 'utf-8'); ?>" autofocus>
 <div class="clearfix"></div>
 <input type="checkbox" name="from_prize" <?php echo $this->data['ManageUserMoneyEnterTransactionView']['fromPrizeChecked']; ?>>
 <label for="from_prize">Prijzengeld</label>

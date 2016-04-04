@@ -18,10 +18,7 @@ var refreshInterval;
 /**
  * Method to load all eventhandlers and elements for the chat window to function correctly.
  */
-function chatViewLoadMessageListRefresher() {
-    //Set focus to input field
-    document.getElementById('new_message').focus();
-    
+function chatViewLoadMessageListRefresher() {    
     //Add eventandlers to stop/start refreshing on window blur/focus
     window.addEventListener('blur', onWindowBlur);
     window.addEventListener('focus', onWindowFocus);

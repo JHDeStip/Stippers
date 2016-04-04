@@ -10,5 +10,5 @@
  */
 
 abstract class AddOrRenewUserConfig {
-    const NEW_OR_RENEWED_USER_BONUS = 200;
+    const NEW_OR_RENEWED_USER_BONUS = 200; // The amount of money in cents a user receives when is becomes a member of this period.
 }

@@ -10,5 +10,6 @@
  */
 
 abstract class WeeklyWinnerConfig {
+    // Users can only be the weekly winner once every MIN_WINNING_INTERVAL times
     const MIN_WINNING_INTERVAL = 10;
 }

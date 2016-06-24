@@ -35,6 +35,9 @@
 <label class="form_label" for="phone">Telefoonnummer:</label>
 <input class="textbox" type="text" id="phone" name="phone" maxlength="14" value="<?php echo htmlentities($this->data['EditUserTopView']['phone'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>><?php echo $this->data['EditUserTopView']['errMsgs']['phone']; ?><div class="clearfix"></div>
     
+<label class="form_label" for="check_in_message">Boodschap bij check-in</label>
+<textarea id="check_in_message" name="check_in_message" maxlength="50" rows="4" <?php echo $this->data['EditUserTopView']['disabled']; ?>><?php echo htmlentities($this->data['EditUserTopView']['checkInMessage'], ENT_QUOTES, 'utf-8'); ?></textarea><?php echo $this->data['EditUserTopView']['errMsgs']['checkInMessage']; ?><div class="clearfix"></div>
+
 <label class="form_label" for="date_of_birth">Geboortedatum:*</label>
 <input class="textbox" type="text" id="date_of_birth" name="date_of_birth" maxlength="10" value="<?php echo htmlentities($this->data['EditUserTopView']['dateOfBirth'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>>
 <label class="form_label_example" for="date_of_birth"> Voorbeeld: 01/01/1995</label><?php echo $this->data['EditUserTopView']['errMsgs']['dateOfBirth']; ?><div class="clearfix"></div>

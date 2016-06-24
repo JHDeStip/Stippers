@@ -41,6 +41,9 @@ abstract class EditUserTopViewValidator implements IValidator {
         if (!preg_match('/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/', $data['date_of_birth']) || !checkdate((int)substr($data['date_of_birth'], 3, 2), (int)substr($data['date_of_birth'], 0,2), (int)substr($data['date_of_birth'], 6, 4)) || DateTime::createFromFormat("d/m/Y", $data['date_of_birth']) > new DateTime())
             $errMsgs['dateOfBirth'] = '<label class="form_label_error" for="form_label_example_date_of_birth" id="form_label_error_date_of_birth">Voer een geldige geboortedatum in.</label>';
 
+        if (strlen($data['check_in_message']) > DataValidationConfig::CHECK_IN_MESSAGE_MAX_LENGTH)
+            $errMsgs['checkInMessage'] = '<label class="form_label_error" for="check_in_message" id="form_label_error_country">Voer een geldige check-in boodschap in.</label>';
+
         return $errMsgs;
     }
     

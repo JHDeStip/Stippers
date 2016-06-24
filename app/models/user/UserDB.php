@@ -1091,7 +1091,7 @@ abstract class UserDB {
         try {
             $conn = Database::getConnection();
             $commString = 'UPDATE stippers_users SET email = ?, first_name = ?, last_name = ?, phone = ?, date_of_birth = STR_TO_DATE(?, "%d/%m/%Y"), street = ?, house_number = ?, city = ?, postal_code = ?, country = ?, check_in_message = ?, is_admin = ?, is_hint_manager = ?, is_user_manager = ?, is_browser_manager = ?, is_money_manager = ? ' .
-                'WHERE user_id = ? AND email = ? AND first_name = ? AND last_name = ? AND password_hash = ? AND balance = ? AND phone = ? AND date_of_birth = STR_TO_DATE(?, "%d/%m/%Y") AND street = ? AND house_number = ? AND city = ? AND postal_code = ? AND country = ? AND DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") = ? AND is_admin = ? AND is_hint_manager = ? AND is_user_manager = ? AND is_browser_manager = ? AND is_money_manager = ?';
+                'WHERE user_id = ? AND email = ? AND first_name = ? AND last_name = ? AND password_hash = ? AND balance = ? AND phone = ? AND date_of_birth = STR_TO_DATE(?, "%d/%m/%Y") AND street = ? AND house_number = ? AND city = ? AND postal_code = ? AND country = ? AND check_in_message = ? AND DATE_FORMAT(CONVERT_TZ(creation_time, @@global.time_zone, ?), "%d/%m/%Y %H:%i") = ? AND is_admin = ? AND is_hint_manager = ? AND is_user_manager = ? AND is_browser_manager = ? AND is_money_manager = ?';
             $stmt = $conn->prepare($commString);
             
             //Check if statement could be prepared

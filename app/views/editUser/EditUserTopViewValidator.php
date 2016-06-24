@@ -61,6 +61,7 @@ abstract class EditUserTopViewValidator implements IValidator {
         $errMsgs['city'] = '';
         $errMsgs['postalCode'] = '';
         $errMsgs['country'] = '';
+        $errMsgs['checkInMessage'] = '';
         
         return $errMsgs;
     }

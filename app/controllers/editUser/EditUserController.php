@@ -165,7 +165,7 @@ abstract class EditUserController implements IController {
     private static function buildEditUserTopView($page, $enabled, $saveMode) {
         $page->data['EditUserTopView']['edit_user_formAction'] = $_SERVER['REQUEST_URI'];
         
-        //If we're traying to save we read the data from post
+        //If we're trying to save we read the data from post
         if ($saveMode) {
             $page->data['EditUserTopView']['email'] = $_POST['email'];
             $page->data['EditUserTopView']['repeatEmail'] = $_POST['repeat_email'];

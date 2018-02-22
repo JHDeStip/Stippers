@@ -31,13 +31,13 @@ abstract class ManageUserController implements IController {
         //in session (no post is et) and repare the views.
         if (!isset($_SESSION['Stippers']['ManageUserSearch']['inputData'])) {
             ManageUserController::loadDataInSession();
-            ManageUserController::prepUserSearchViews($page);
+            ManageUserController::prepUserSearchViews($page, true);
         }
         else {
             //If we do have data in our session we prepare the pages,
             //verify the data and if it is valid we load the search results
             //in the page.
-            ManageUserController::prepUserSearchViews($page);
+            ManageUserController::prepUserSearchViews($page, false);
             $invalid = ManageUserController::validateUserSearchViewsData($page->data);
             if (!$invalid)
                 ManageUserController::loadSearchResults($page);
@@ -67,7 +67,7 @@ abstract class ManageUserController implements IController {
      * 
      * @param Page $page
      */
-    private static function prepUserSearchViews($page) {
+    private static function prepUserSearchViews($page, $isFirstShow) {
         ManageUserController::prepUserSearchTopViewData($page);
         $page->addView('userSearch/UserSearchTopView');
         if ($_SESSION['Stippers']['user']->isAdmin) {
@@ -101,12 +101,14 @@ abstract class ManageUserController implements IController {
         $page->data['UserSearchTopView']['membershipYear'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['membershipYear'];
         $page->data['UserSearchTopView']['cardNumber'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['cardNumber'];
         
-        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['firstName'])
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['firstName']
+            || $isFirstShow)
             $page->data['UserSearchTopView']['showFirstNameChecked'] = 'checked';
         else
             $page->data['UserSearchTopView']['showFirstNameChecked'] = '';
         
-        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['lastName'])
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['lastName']
+            || $isFirstShow)
             $page->data['UserSearchTopView']['showLastNameChecked'] = 'checked';
         else
             $page->data['UserSearchTopView']['showLastNameChecked'] = '';
@@ -125,7 +127,8 @@ abstract class ManageUserController implements IController {
         else
             $page->data['UserSearchTopView']['showPhoneChecked'] = '';
         
-        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['dateOfBirth'])
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['dateOfBirth']
+            || $isFirstShow)
             $page->data['UserSearchTopView']['showDateOfBirthChecked'] = 'checked';
         else
             $page->data['UserSearchTopView']['showDateOfBirthChecked'] = '';
@@ -160,7 +163,8 @@ abstract class ManageUserController implements IController {
         else
             $page->data['UserSearchTopView']['showMembershipYearChecked'] = '';
         
-        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['cardNumber'])
+        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['cardNumber']
+            || $isFirstShow)
             $page->data['UserSearchTopView']['showCardNumberChecked'] = 'checked';
         else
             $page->data['UserSearchTopView']['showCardNumberChecked'] = '';

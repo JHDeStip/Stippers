@@ -30,7 +30,7 @@ abstract class WeeklyWinnerPicker implements IRunnable {
             
             //Get list of user IDs that have not won the last N times
             if ($lastWinners)
-                $possibleWinners = array_diff($userIds, $lastWinners);
+                $possibleWinners = array_values(array_diff($userIds, $lastWinners));
             else
                 $possibleWinners = $userIds;
             

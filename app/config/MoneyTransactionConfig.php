@@ -10,6 +10,5 @@
  */
 
 abstract class MoneyTransactionConfig {
-    // The discout percentage for when members pay with their card.
     const DEFAULT_DISCOUNT_PERC = 0;
 }

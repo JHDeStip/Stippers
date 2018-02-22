@@ -15,5 +15,5 @@ abstract class GlobalConfig {
     const PHP_TIME_ZONE = 'Europe/Brussels';
     
     //User ID of the admin account
-    const ADMIN_ID = 0;
+    const ADMIN_ID = 1;
 }

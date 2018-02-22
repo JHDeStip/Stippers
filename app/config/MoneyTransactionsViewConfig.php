@@ -10,6 +10,5 @@
  */
 
 abstract class MoneyTransactionsViewConfig {
-    // Default amount of transactions to list in the overviews
     const DEFAULT_AMOUNT = 200;
 }

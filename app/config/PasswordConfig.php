@@ -10,6 +10,5 @@
  */
 
 abstract class PasswordConfig {
-    // The characters that may appear in passwords
     const PASSWORD_CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789(){}[]-_/\\"\'.,:;?!&$@';
 }

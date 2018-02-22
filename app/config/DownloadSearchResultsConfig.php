@@ -10,5 +10,5 @@
  */
 
 abstract class DownloadSearchResultsConfig {
-    const FILE_NAME = 'Zoekresultaten.csv'; // Default file name of the exported search results file.
+    const FILE_NAME = 'Zoekresultaten.csv';
 }

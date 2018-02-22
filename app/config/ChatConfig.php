@@ -10,5 +10,5 @@
  */
 
 abstract class ChatConfig {
-    const DEFAULT_AMOUNT = 100; // Default ammount of messages to show in the chat room.
+    const DEFAULT_AMOUNT = 100;
 }

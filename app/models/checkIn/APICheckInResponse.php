@@ -12,7 +12,7 @@
 class APICheckInResponse {
     const OK = 0;
     const ALREADY_CHECKED_IN = 1;
-    const MALFORMED_CARDNUMBER = 2;
+    const MALFORMED_CARD_NUMBER = 2;
     const NO_USER_FOR_CARD_NUMBER = 3;
     const CANNOT_GET_USER_DATA = 4;
     const CANNOT_CHECK_IN = 5;
@@ -20,7 +20,7 @@ class APICheckInResponse {
     const CANNOT_SEND_WINNER_NOTIFICATIONS = 7;
     
     public $checkInSuccessful = false;
-    public $errorCode = APICheckInResponse::OK;
+    public $resultCode = APICheckInResponse::OK;
     public $isWeeklyWinner = false;
     public $userFirstName;
     public $userLastName;

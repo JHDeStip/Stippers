@@ -38,11 +38,14 @@ abstract class WeeklyWinnerDB {
                 
                 $timezone = GlobalConfig::MYSQL_TIME_ZONE;
                 $stmt->bind_param('ssi', $timezone, $timezone, $userId);
-                if (!$stmt->execute())
-                    if ($stmt->errno == 1062)
+				if (!$stmt->execute()) {
+					if ($stmt->errno == 1062) {
                         throw new WeeklyWinnerDBException('There already is a winner this week.', WeeklyWinnerDBException::WEEKALREADYHASWINNER);
-                    else
+					}
+					else {
                         throw new WeeklyWinnerDBException('Unknown error during statement execution while adding weekly winner.', WeeklyWinnerDBException::UNKNOWNERROR);
+					}
+				}
             }
             else
                throw new WeeklyWinnerDBException('Cannot prepare statement.', WeeklyWinnerDBException::CANNOTPREPARESTMT);

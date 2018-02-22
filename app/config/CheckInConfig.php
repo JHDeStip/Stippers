@@ -10,5 +10,5 @@
  */
 
 abstract class CheckInConfig {
-    const MIN_CHECK_IN_INTERVAL = 12; // Minimum number of hours between check ins.
+    const MIN_CHECK_IN_INTERVAL = 12;
 }

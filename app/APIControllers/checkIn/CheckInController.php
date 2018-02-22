@@ -30,130 +30,133 @@ require_once __DIR__.'/../../models/checkIn/CheckInDB.php';
 require_once __DIR__.'/../../models/checkIn/CheckInDBException.php';
 
 abstract class CheckInController implements IAPIController {
-    
+	
     public static function get() {
-        header('HTTP/1.1 405 Method Not Allowed');
-    }
-    
-    public static function post() {
-        //Get the request body as json
-        $checkInRequest = json_decode(file_get_contents('php://input'));
-        
-        //Check if the json was valid and a card number is given
-        if (!$checkInRequest || !isset($checkInRequest->cardNumber))
-            header('HTTP/1.1 400 Bad Request');
-        else {
-            //Create response object
-            $response = new APICheckInResponse();
+        //Check if the card number is given
+        if (!isset($_GET['cardNumber']) || !(is_numeric($_GET['cardNumber']) && (int)$_GET['cardNumber'] == $_GET['cardNumber'])) {
+	    header('HTTP/1.1 400 Bad Request');
+	    exit();
+	}
             
-            //Check if the card number is valid
-            if (!CheckInController::validateCardNumber($checkInRequest->cardNumber)) {
-                $response->errorCode = APICheckInResponse::MALFORMED_CARDNUMBER;
+        //Create response object
+        $response = new APICheckInResponse();
+		
+		$cardNumber = (int)$_GET['cardNumber'];
+        
+        //Check if the card number is valid
+        if (!CheckInController::validateCardNumber($cardNumber)) {
+            $response->resultCode = APICheckInResponse::MALFORMED_CARD_NUMBER;
+            echo json_encode($response);
+            exit();
+        }
+        else {
+            $user = null;
+            
+            $checkInOk = false;
+            $weeklyWinnerOk = true;
+            
+            //Get user to check in
+            try {
+                //Get the user who's card number for this year was entered
+                $user = UserDB::getFullUserByCardNumber($cardNumber);
+            }
+            catch (Exception $ex) {
+                $response->resultCode = APICheckInResponse::CANNOT_GET_USER_DATA;
+                echo json_encode($response);
+                exit();
+            }
+            
+            if (!$user) {
+                //There's no user for this card
+                $response->resultCode = APICheckInResponse::NO_USER_FOR_CARD_NUMBER;
                 echo json_encode($response);
                 exit();
             }
             else {
-                $user = null;
+                //We have a user so get the names in the response
+                $response->userFirstName = $user->firstName;
+                $response->userLastName = $user->lastName;
+                $response->checkInMessage = $user->checkInMessage;
                 
-                $checkInOk = false;
-                $weeklyWinnerOk = true;
-                
-                //Get user to check in
+                //Check user in
                 try {
-                    //Get the user who's card number for this year was entered
-                    $user = UserDB::getFullUserByCardNumber($checkInRequest->cardNumber);
+                    $checkInOk = CheckInDB::checkIn($user->userId);
                 }
                 catch (Exception $ex) {
-                    $response->errorCode = APICheckInResponse::CANNOT_GET_USER_DATA;
+                    //Check-in failed (something went wrong or check-in isn't valid)
+                    $response->resultCode = APICheckInResponse::CANNOT_CHECK_IN;
                     echo json_encode($response);
                     exit();
                 }
-                
-                if (!$user) {
-                    //There's no user for this card
-                    $response->errorCode = APICheckInResponse::NO_USER_FOR_CARD_NUMBER;
-                    echo json_encode($response);
-                    exit();
-                }
-                else {
-                    //We have a user so get the names in the response
-                    $response->userFirstName = $user->firstName;
-                    $response->userLastName = $user->lastName;
-                    $response->checkInMessage = $user->checkInMessage;
-                    
-                    //Check user in
-                    try {
-                        $checkInOk = CheckInDB::checkIn($user->userId);
-                    }
-                    catch (Exception $ex) {
-                        //Check-in failed (something went wrong or check-in isn't valid)
-                        $response->errorCode = APICheckInResponse::CANNOT_CHECK_IN;
-                        echo json_encode($response);
-                        exit();
-                    }
-                }
-                
-                if (!$checkInOk) {
-                    //The user has already checked in
-                    $response->errorCode = APICheckInResponse::ALREADY_CHECKED_IN;
-                    echo json_encode($response);
-                    exit();
-                }
-                else {
-                    $response->checkInSuccessful = true;
-                    //Check in successful, check whether he is the winner of the week
-                    $isWinner = false;
-                
-                    try {
-                        //Check if this user is the winner of the week
-                        $weeklyWinnerData = WeeklyWinnerDB::getThisWeeksWinnerData();
-                        $isWinner = $weeklyWinnerData && $weeklyWinnerData->userId == $user->userId && !$weeklyWinnerData->hasCollectedPrize;
-                        //If he is the winner we set in the database that the user collected his prize
-                        if ($isWinner) {
-                            $newWeeklyWinnerData = new WeeklyWinnerData($weeklyWinnerData->startOfWeek, $weeklyWinnerData->userId, true);
-                            WeeklyWinnerDB::updateWeeklyWinnerData($weeklyWinnerData, $newWeeklyWinnerData);
-                        }
-                    }
-                    catch (Exception $ex) {
-                        $response->errorCode = APICheckInResponse::CANNOT_CHECK_WEEKLY_WINNER;
-                        echo json_encode($response);
-                        exit();
-                    }
-                
-                    $response->isWeeklyWinner = $isWinner;
-                    //If he is the winner send an email to all usermanagers
+            }
+            
+            if (!$checkInOk) {
+                //The user has already checked in
+                $response->resultCode = APICheckInResponse::ALREADY_CHECKED_IN;
+                echo json_encode($response);
+                exit();
+            }
+            else {
+                $response->checkInSuccessful = true;
+                //Check in successful, check whether he is the winner of the week
+                $isWinner = false;
+            
+                try {
+                    //Check if this user is the winner of the week
+                    $weeklyWinnerData = WeeklyWinnerDB::getThisWeeksWinnerData();
+                    $isWinner = $weeklyWinnerData && $weeklyWinnerData->userId == $user->userId && !$weeklyWinnerData->hasCollectedPrize;
+					
+                    //If he is the winner we set in the database that the user collected his prize
                     if ($isWinner) {
-                        try {
-                            $select = array('email' => true);
-                            $searchFilter = array('isUserManager' => true);
-                            $searchUsers = UserDB::getSearchUsers($select, $searchFilter, null);
-                            
-                            $extras['common']['winnerFirstName'] = $user->firstName;
-                            $extras['common']['winnerLastName'] = $user->lastName;
-                            
-                            $failedAddresses = Email::sendEmails('WeeklyWinnerNotification.html', 'Winnaar van de week', EmailConfig::FROM_ADDRESS, array_column($searchUsers, 'user'), $extras);
-                        
-                            if (!empty($failedAddresses)) {
-                                $response->errorCode = APICheckInResponse::CANNOT_SEND_WINNER_NOTIFICATIONS;
-                            }
-                            
-                            echo json_encode($response);
-                            exit();
-                        }
-                        catch (Exception $ex) {
-                            $response->errorCode = APICheckInResponse::CANNOT_SEND_WINNER_NOTIFICATIONS;
-                            echo json_encode($response);
-                            exit();
-                        }
+                        $newWeeklyWinnerData = new WeeklyWinnerData($weeklyWinnerData->startOfWeek, $weeklyWinnerData->userId, true);
+                        WeeklyWinnerDB::updateWeeklyWinnerData($weeklyWinnerData, $newWeeklyWinnerData);
                     }
-                    //If he is not the winner show the normal check in successful view
-                    else {
+                }
+                catch (Exception $ex) {
+                    $response->resultCode = APICheckInResponse::CANNOT_CHECK_WEEKLY_WINNER;
+                    echo json_encode($response);
+                    exit();
+                }
+            
+                $response->isWeeklyWinner = $isWinner;
+
+                //If he is the winner send an email to all usermanagers
+                if ($isWinner) {
+                    try {
+                        $select = array('email' => true);
+                        $searchFilter = array('isUserManager' => true);
+                        $searchUsers = UserDB::getSearchUsers($select, $searchFilter, null);
+                        
+                        $extras['common']['winnerFirstName'] = $user->firstName;
+                        $extras['common']['winnerLastName'] = $user->lastName;
+								
+				
+                        $failedAddresses = Email::sendEmails('WeeklyWinnerNotification.html', 'Winnaar van de week', EmailConfig::FROM_ADDRESS, array_column($searchUsers, 'user'), $extras);
+						
+                        if (!empty($failedAddresses)) {
+                            $response->resultCode = APICheckInResponse::CANNOT_SEND_WINNER_NOTIFICATIONS;
+                        }
+                        
                         echo json_encode($response);
                         exit();
                     }
+                    catch (Exception $ex) {
+                        $response->resultCode = APICheckInResponse::CANNOT_SEND_WINNER_NOTIFICATIONS;
+                        echo json_encode($response);
+                        exit();
+                    }
+                }
+                //If he is not the winner show the normal check in successful view
+                else {
+                    echo json_encode($response);
+                    exit();
                 }
             }
         }
+    }
+    
+    public static function post() {
+        header('HTTP/1.1 405 Method Not Allowed');
     }
     
     public static function put() {
@@ -165,6 +168,6 @@ abstract class CheckInController implements IAPIController {
     }
     
     private static function validateCardNumber($cardNumber) {
-        return preg_match('/^[0-9]{1,'.DataValidationConfig::CARD_NUMBER_MAX_LENGTH.'}$/', $cardNumber);
+        return $cardNumber > 0 && $cardNumber <= 99999999;
     }
 }

@@ -23,6 +23,7 @@ class User {
     public $city;
     public $postalCode;
     public $country;
+    public $checkInMessage;
     public $creationTime;
     public $isAdmin;
     public $isHintManager;

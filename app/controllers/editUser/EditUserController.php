@@ -165,7 +165,7 @@ abstract class EditUserController implements IController {
     private static function buildEditUserTopView($page, $enabled, $saveMode) {
         $page->data['EditUserTopView']['edit_user_formAction'] = $_SERVER['REQUEST_URI'];
         
-        //If we're traying to save we read the data from post
+        //If we're trying to save we read the data from post
         if ($saveMode) {
             $page->data['EditUserTopView']['email'] = $_POST['email'];
             $page->data['EditUserTopView']['repeatEmail'] = $_POST['repeat_email'];
@@ -178,6 +178,7 @@ abstract class EditUserController implements IController {
             $page->data['EditUserTopView']['country'] = $_POST['country'];
             $page->data['EditUserTopView']['phone'] = $_POST['phone'];
             $page->data['EditUserTopView']['dateOfBirth'] = $_POST['date_of_birth'];
+            $page->data['EditUserTopView']['checkInMessage'] = $_POST['check_in_message'];
         }
         //If we're not trying to save we are showing existing data
         //so we load it from the user object in session
@@ -193,6 +194,7 @@ abstract class EditUserController implements IController {
             $page->data['EditUserTopView']['country'] = $_SESSION['Stippers']['EditUser']['user']->country;
             $page->data['EditUserTopView']['phone'] = $_SESSION['Stippers']['EditUser']['user']->phone;
             $page->data['EditUserTopView']['dateOfBirth'] = $_SESSION['Stippers']['EditUser']['user']->dateOfBirth;
+            $page->data['EditUserTopView']['checkInMessage'] = $_SESSION['Stippers']['EditUser']['user']->checkInMessage;
         }
             
         if ($enabled)
@@ -289,6 +291,7 @@ abstract class EditUserController implements IController {
         $user->city = $_POST['city'];
         $user->postalCode = $_POST['postal_code'];
         $user->country = $_POST['country'];
+        $user->checkInMessage = $_POST['check_in_message'];
         $user->creationTime = $_SESSION['Stippers']['EditUser']['user']->creationTime;
         
         if ($_SESSION['Stippers']['user']->isAdmin) {

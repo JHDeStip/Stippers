@@ -24,4 +24,5 @@ class APICheckInResponse {
     public $isWeeklyWinner = false;
     public $userFirstName;
     public $userLastName;
+    public $checkInMessage;
 }

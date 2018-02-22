@@ -61,7 +61,7 @@ abstract class CheckInController implements IAPIController {
                 //Get user to check in
                 try {
                     //Get the user who's card number for this year was entered
-                    $user = UserDB::getBasicUserByCardNumber($checkInRequest->cardNumber);
+                    $user = UserDB::getFullUserByCardNumber($checkInRequest->cardNumber);
                 }
                 catch (Exception $ex) {
                     $response->errorCode = APICheckInResponse::CANNOT_GET_USER_DATA;
@@ -79,6 +79,7 @@ abstract class CheckInController implements IAPIController {
                     //We have a user so get the names in the response
                     $response->userFirstName = $user->firstName;
                     $response->userLastName = $user->lastName;
+                    $response->checkInMessage = $user->checkInMessage;
                     
                     //Check user in
                     try {
@@ -120,7 +121,7 @@ abstract class CheckInController implements IAPIController {
                     }
                 
                     $response->isWeeklyWinner = $isWinner;
-                    //If he is the winner, add the winner views and try to send an email to all usermanagers
+                    //If he is the winner send an email to all usermanagers
                     if ($isWinner) {
                         try {
                             $select = array('email' => true);

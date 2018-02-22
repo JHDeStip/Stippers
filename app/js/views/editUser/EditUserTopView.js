@@ -324,6 +324,7 @@ function enableControls(form) {
     form.country.disabled = false;
     form.phone.disabled = false;
     form.date_of_birth.disabled = false;
+    form.check_in_message.disabled = false;
 
     if (form.is_admin) {
         form.is_admin.disabled = false;
@@ -388,6 +389,7 @@ function disableControls(form) {
     form.country.disabled = true;
     form.phone.disabled = true;
     form.date_of_birth.disabled = true;
+    form.check_in_message.disabled = true;
 
     if (form.is_admin) {
         form.is_admin.disabled = true;

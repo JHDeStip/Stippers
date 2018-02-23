@@ -51,7 +51,7 @@ abstract class ManageUserController implements IController {
         
         $page = new Page();
         $page->data['title'] = 'Gebruikers beheren';
-        ManageUserController::prepUserSearchViews($page);
+        ManageUserController::prepUserSearchViews($page, false);
         
         //Validate data and if valid load results in page
         $invalid = ManageUserController::validateUserSearchViewsData($page->data);
@@ -68,7 +68,7 @@ abstract class ManageUserController implements IController {
      * @param Page $page
      */
     private static function prepUserSearchViews($page, $isFirstShow) {
-        ManageUserController::prepUserSearchTopViewData($page);
+        ManageUserController::prepUserSearchTopViewData($page, $isFirstShow);
         $page->addView('userSearch/UserSearchTopView');
         if ($_SESSION['Stippers']['user']->isAdmin) {
             ManageUserController::prepUserSearchAdminViewData($page);
@@ -84,7 +84,7 @@ abstract class ManageUserController implements IController {
      * 
      * @param Page $page
      */
-    private static function prepUserSearchTopViewData($page) {
+    private static function prepUserSearchTopViewData($page, $isFirstShow) {
         $page->data['UserSearchTopView']['user_search_formAction'] = $_SERVER['REQUEST_URI'];
         
         $page->data['UserSearchTopView']['firstName'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['firstName'];

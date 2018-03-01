@@ -12,6 +12,7 @@
 require_once __DIR__.'/../IRunnable.php';
 
 require_once __DIR__.'/../../config/GlobalConfig.php';
+require_once __DIR__.'/../../config/EmailConfig.php';
 require_once __DIR__.'/../../config/BalanceSummaryEmailSenderConfig.php';
 
 require_once __DIR__.'/../../helperClasses/email/Email.php';
@@ -94,7 +95,7 @@ abstract class BalanceSummaryEmailSender implements IRunnable {
             }
             
             //Send email
-            Email::sendEmails('MoneyOverview.html', 'Saldo lidkaarten '.$fromDateString.' - '.$toDateString, 'info@stip.be', $users, $emailExtras);
+            Email::sendEmails('MoneyOverview.html', 'Saldo lidkaarten '.$fromDateString.' - '.$toDateString, EmailConfig::FROM_ADDRESS, $users, $emailExtras);
         }
         catch (Exception $ex) {
             var_dump($ex);

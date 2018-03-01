@@ -9,7 +9,7 @@
  * Class to do database operations regarding check-ins.
  */
 
-require_once __DIR__.'/../../config/CheckInConfig.php';
+require_once __DIR__.'/../../config/GlobalConfig.php';
 require_once __DIR__.'/../../config/CheckInConfig.php';
 
 require_once __DIR__.'/../../helperClasses/database/Database.php';
@@ -171,6 +171,44 @@ abstract class CheckInDB {
         finally
         {
             if (isset($conn)){
+                $conn->kill($conn->thread_id);
+                $conn->close();
+            }
+        }
+    }
+
+    public static function getMostCheckedInNonUserManagerUserIdBetween($fromTimeStamp, $toTimeStamp) : ?int
+    {
+        try {
+            $conn = Database::getConnection();
+            $commString = 'SELECT user_id, COUNT(user_id) AS occurance FROM stippers_check_ins JOIN stippers_users ON stippers_check_ins.user = stippers_users.user_id WHERE NOT user_id = ? AND is_user_manager = 0 AND time >= FROM_UNIXTIME(?) AND time < FROM_UNIXTIME(?) GROUP BY user ORDER BY occurance DESC LIMIT 1';
+            $stmt = $conn->prepare($commString);
+            
+            //Check if statement could be prepared
+            if ($stmt) {
+                
+                $adminId = GlobalConfig::ADMIN_ID;
+                $stmt->bind_param('iii', $adminId, $fromTimeStamp, $toTimeStamp);
+                if (!$stmt->execute())
+                    throw new CheckInDBException('Unknown error during statement execution while getting most checked in user between 2 times.', CheckInDBException::UNKNOWNERROR);
+                else {
+                    $stmt->bind_result($userId, $occurance);
+                    
+                    if ($stmt->fetch()) {
+                        return $userId;
+                    }
+
+                    return null;
+                }
+            }
+            else
+                throw new CheckInDBException('Cannot prepare statement.', MoneyTransactionDBException::CANNOTPREPARESTMT);
+        }
+        catch (Exception $ex) {
+            throw $ex;
+        }
+        finally {
+            if (isset($conn)) {
                 $conn->kill($conn->thread_id);
                 $conn->close();
             }

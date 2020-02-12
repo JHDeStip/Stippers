@@ -88,7 +88,7 @@ abstract class BalanceSummaryEmailSender implements IRunnable {
             
             //Create fake users to send email to addresses
             $users = array();
-            foreach (BalandeSummaryEmailSenderConfig::EMAIL_ADDRESSES as $emailAddress) {
+            foreach (BalanceSummaryEmailSenderConfig::EMAIL_ADDRESSES as $emailAddress) {
                 $user = new User();
                 $user->email = $emailAddress;
                 array_push($users, $user);

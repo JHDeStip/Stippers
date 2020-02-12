@@ -24,7 +24,7 @@ abstract class DataValidationConfig {
     const MONEY_MAX_LENGTH = 6;
     const YEAR_MAX_LENGTH = 4;
     const CARD_NUMBER_MAX_LENGTH = 8;
-    const CHECK_IN_MESSAGE_MAX_LENGTH = 50;
+	const CHECK_IN_MESSAGE_MAX_LENGTH = 50;
     
     const EMAIL_SUBJECT_MAX_LENGTH = 50;
     const EMAIL_FILE_NAME_MAX_LENGTH = 255;

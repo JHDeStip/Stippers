@@ -10,12 +10,10 @@
  */
 
 abstract class EmailConfig {
-    // This is the directory where email files will be stored and retreived from
+    //This is the directory where email files will be stored and retreived from
     const EMAILFILESDIR = 'emailFiles';
     
-    // Max size of email files
     const MAX_FILE_SIZE = 1048576;
     
-    // The address that will appear as from address for the receivers
     const FROM_ADDRESS = 'example@example.com';
 }

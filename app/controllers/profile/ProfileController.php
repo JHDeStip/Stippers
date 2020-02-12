@@ -122,8 +122,6 @@ abstract class ProfileController implements IController {
             $page->data['ProfileTopView']['houseNumber'] = $_POST['house_number'];
             $page->data['ProfileTopView']['city'] = $_POST['city'];
             $page->data['ProfileTopView']['postalCode'] = $_POST['postal_code'];
-            $page->data['ProfileTopView']['country'] = $_POST['country'];
-            $page->data['ProfileTopView']['phone'] = $_POST['phone'];
             $page->data['ProfileTopView']['dateOfBirth'] = $_POST['date_of_birth'];
             $page->data['ProfileTopView']['balance'] = $_SESSION['Stippers']['Profile']['user']->balance/100;
         }
@@ -138,8 +136,6 @@ abstract class ProfileController implements IController {
             $page->data['ProfileTopView']['houseNumber'] = $_SESSION['Stippers']['Profile']['user']->houseNumber;
             $page->data['ProfileTopView']['city'] = $_SESSION['Stippers']['Profile']['user']->city;
             $page->data['ProfileTopView']['postalCode'] = $_SESSION['Stippers']['Profile']['user']->postalCode;
-            $page->data['ProfileTopView']['country'] = $_SESSION['Stippers']['Profile']['user']->country;
-            $page->data['ProfileTopView']['phone'] = $_SESSION['Stippers']['Profile']['user']->phone;
             $page->data['ProfileTopView']['dateOfBirth'] = $_SESSION['Stippers']['Profile']['user']->dateOfBirth;
             $page->data['ProfileTopView']['balance'] = $_SESSION['Stippers']['Profile']['user']->balance/100;
         }
@@ -184,13 +180,11 @@ abstract class ProfileController implements IController {
         $user->firstName = $_POST['first_name'];
         $user->lastName = $_POST['last_name'];
         $user->passwordHash = $_SESSION['Stippers']['Profile']['user']->passwordHash;
-        $user->phone = $_POST['phone'];
         $user->dateOfBirth = $_POST['date_of_birth'];
         $user->street = $_POST['street'];
         $user->houseNumber = $_POST['house_number'];
         $user->city = $_POST['city'];
         $user->postalCode = $_POST['postal_code'];
-        $user->country = $_POST['country'];
         $user->balance = $_SESSION['Stippers']['Profile']['user']->balance;
         $user->creationTime = $_SESSION['Stippers']['Profile']['user']->creationTime;
         $user->isAdmin = $_SESSION['Stippers']['Profile']['user']->isAdmin;

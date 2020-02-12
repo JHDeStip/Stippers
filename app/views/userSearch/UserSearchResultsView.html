@@ -10,9 +10,7 @@ if (isset($this->data['UserSearchResultsView']['users'][0]['user']->street)) ech
 if (isset($this->data['UserSearchResultsView']['users'][0]['user']->houseNumber)) echo '<th>Huisnummer</th>';
 if (isset($this->data['UserSearchResultsView']['users'][0]['user']->city)) echo '<th>Gemeente</th>';
 if (isset($this->data['UserSearchResultsView']['users'][0]['user']->postalCode)) echo '<th>Postcode</th>';
-if (isset($this->data['UserSearchResultsView']['users'][0]['user']->country)) echo '<th>Land</th>';
 if (isset($this->data['UserSearchResultsView']['users'][0]['user']->email)) echo '<th>E-mail</th>';
-if (isset($this->data['UserSearchResultsView']['users'][0]['user']->phone)) echo '<th>Telefoonnummer</th>';
 if (isset($this->data['UserSearchResultsView']['users'][0]['user']->dateOfBirth)) echo '<th>Geboortedatum</th>';
 if (isset($this->data['UserSearchResultsView']['users'][0]['user']->balance)) echo '<th>Saldo</th>';
 if (isset($this->data['UserSearchResultsView']['users'][0]['user']->creationTime)) echo '<th>Registratietijd</th>';
@@ -36,9 +34,7 @@ for ($i=0; $i < count($this->data['UserSearchResultsView']['users']); $i++) {
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->houseNumber)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->houseNumber, ENT_QUOTES, 'utf-8').'</td>';
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->city)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->city, ENT_QUOTES, 'utf-8').'</td>';
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->postalCode)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->postalCode, ENT_QUOTES, 'utf-8').'</td>';
-    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->country)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->country, ENT_QUOTES, 'utf-8').'</td>';
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->email)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->email, ENT_QUOTES, 'utf-8').'</td>';
-    if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->phone)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->phone, ENT_QUOTES, 'utf-8').'</td>';
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->dateOfBirth)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->dateOfBirth, ENT_QUOTES, 'utf-8').'</td>';
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->balance)) echo '<td>'.htmlentities(number_format($this->data['UserSearchResultsView']['users'][$i]['user']->balance/100, 2, ',', '.'), ENT_QUOTES, 'utf-8').'</td>';
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->creationTime)) echo '<td>'.htmlentities($this->data['UserSearchResultsView']['users'][$i]['user']->creationTime, ENT_QUOTES, 'utf-8').'</td>';

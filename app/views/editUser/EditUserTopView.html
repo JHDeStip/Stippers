@@ -28,12 +28,6 @@
     
 <label class="form_label" for="postal_code">Postcode:*</label>
 <input class="textbox" type="text" id="postal_code" name="postal_code" maxlength="6" value="<?php echo htmlentities($this->data['EditUserTopView']['postalCode'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>><?php echo $this->data['EditUserTopView']['errMsgs']['postalCode']; ?><div class="clearfix"></div>
-    
-<label class="form_label" for="country">Land:*</label>
-<input class="textbox" type="text" id="country" name="country" maxlength="30" value="<?php echo htmlentities($this->data['EditUserTopView']['country'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>><?php echo $this->data['EditUserTopView']['errMsgs']['country']; ?><div class="clearfix"></div>
-    
-<label class="form_label" for="phone">Telefoonnummer:</label>
-<input class="textbox" type="text" id="phone" name="phone" maxlength="14" value="<?php echo htmlentities($this->data['EditUserTopView']['phone'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>><?php echo $this->data['EditUserTopView']['errMsgs']['phone']; ?><div class="clearfix"></div>
 
 <label class="form_label" for="date_of_birth">Geboortedatum:*</label>
 <input class="textbox" type="text" id="date_of_birth" name="date_of_birth" maxlength="10" value="<?php echo htmlentities($this->data['EditUserTopView']['dateOfBirth'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['EditUserTopView']['disabled']; ?>>

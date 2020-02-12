@@ -91,13 +91,11 @@ abstract class ManageUserController implements IController {
         $page->data['UserSearchTopView']['lastName'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['lastName'];
         $page->data['UserSearchTopView']['email'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['email'];
         $page->data['UserSearchTopView']['balance'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['balance'];
-        $page->data['UserSearchTopView']['phone'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['phone'];
         $page->data['UserSearchTopView']['dateOfBirth'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['dateOfBirth'];
         $page->data['UserSearchTopView']['street'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['street'];
         $page->data['UserSearchTopView']['houseNumber'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['houseNumber'];
         $page->data['UserSearchTopView']['city'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['city'];
         $page->data['UserSearchTopView']['postalCode'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['postalCode'];
-        $page->data['UserSearchTopView']['country'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['country'];
         $page->data['UserSearchTopView']['membershipYear'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['membershipYear'];
         $page->data['UserSearchTopView']['cardNumber'] = $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['cardNumber'];
         
@@ -121,11 +119,6 @@ abstract class ManageUserController implements IController {
             $page->data['UserSearchTopView']['showBalanceChecked'] = 'checked';
         else
             $page->data['UserSearchTopView']['showBalanceChecked'] = '';
-        
-        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['phone'])
-            $page->data['UserSearchTopView']['showPhoneChecked'] = 'checked';
-        else
-            $page->data['UserSearchTopView']['showPhoneChecked'] = '';
         
         if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['dateOfBirth']
             || $isFirstShow)
@@ -152,12 +145,7 @@ abstract class ManageUserController implements IController {
             $page->data['UserSearchTopView']['showPostalCodeChecked'] = 'checked';
         else
             $page->data['UserSearchTopView']['showPostalCodeChecked'] = '';
-        
-        if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['country'])
-            $page->data['UserSearchTopView']['showCountryChecked'] = 'checked';
-        else
-            $page->data['UserSearchTopView']['showCountryChecked'] = '';
-        
+
         if ($_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['membershipYear'])
             $page->data['UserSearchTopView']['showMembershipYearChecked'] = 'checked';
         else
@@ -293,10 +281,6 @@ abstract class ManageUserController implements IController {
             $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['balance'] = $_POST['balance'];
         else
             $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['balance'] = '';
-        if (isset($_POST['phone']))
-            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['phone'] = $_POST['phone'];
-        else
-            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['phone'] = '';
         if (isset($_POST['date_of_birth']))
             $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['dateOfBirth'] = $_POST['date_of_birth'];
         else
@@ -317,10 +301,6 @@ abstract class ManageUserController implements IController {
             $_SESSION['Stippers']['ManageUserSearch']['inputData']['postalCode'] = $_POST['postalCode'];
         else
             $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['postalCode'] = '';
-        if (isset($_POST['country']))
-            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['country'] = $_POST['country'];
-        else
-            $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['country'] = '';
         if (isset($_POST['membership_year']))
             $_SESSION['Stippers']['ManageUserSearch']['inputData']['values']['membershipYear'] = $_POST['membership_year'];
         else {
@@ -358,13 +338,11 @@ abstract class ManageUserController implements IController {
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['lastName'] = isset($_POST['show_last_name']);
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['email'] = isset($_POST['show_email']);
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['balance'] = isset($_POST['show_balance']);
-        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['phone'] = isset($_POST['show_phone']);
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['dateOfBirth'] = isset($_POST['show_date_of_birth']);
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['street'] = isset($_POST['show_street']);
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['houseNumber'] = isset($_POST['show_house_number']);
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['city'] = isset($_POST['show_city']);
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['postalCode'] = isset($_POST['show_postal_code']);
-        $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['country'] = isset($_POST['show_country']);
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['membershipYear'] = isset($_POST['show_membership_year']);
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['cardNumber'] = isset($_POST['show_card_number']);
         $_SESSION['Stippers']['ManageUserSearch']['inputData']['show']['creationTime'] = isset($_POST['show_creation_time']);

@@ -87,8 +87,6 @@ abstract class RenewUserController implements IController {
                 $newUser->houseNumber = $_POST['house_number'];
                 $newUser->city = ucwords($_POST['city']);
                 $newUser->postalCode = $_POST['postal_code'];
-                $newUser->country = ucwords($_POST['country']);
-                $newUser->phone = $_POST['phone'];
                 $newUser->dateOfBirth = $_POST['date_of_birth'];
                 $newUser->balance = $_SESSION['Stippers']['RenewUser']['user']->balance;
                 $newUser->isAdmin = $_SESSION['Stippers']['RenewUser']['user']->isAdmin;
@@ -186,8 +184,6 @@ abstract class RenewUserController implements IController {
             $page->data['UserDataFormMiddleView']['houseNumber'] = $_POST['house_number'];
             $page->data['UserDataFormMiddleView']['city'] = $_POST['city'];
             $page->data['UserDataFormMiddleView']['postalCode'] = $_POST['postal_code'];
-            $page->data['UserDataFormMiddleView']['country'] = $_POST['country'];
-            $page->data['UserDataFormMiddleView']['phone'] = $_POST['phone'];
             $page->data['UserDataFormMiddleView']['dateOfBirth'] = $_POST['date_of_birth'];
         }
         else {
@@ -200,8 +196,6 @@ abstract class RenewUserController implements IController {
             $page->data['UserDataFormMiddleView']['houseNumber'] = $_SESSION['Stippers']['RenewUser']['user']->houseNumber;
             $page->data['UserDataFormMiddleView']['city'] = $_SESSION['Stippers']['RenewUser']['user']->city;
             $page->data['UserDataFormMiddleView']['postalCode'] = $_SESSION['Stippers']['RenewUser']['user']->postalCode;
-            $page->data['UserDataFormMiddleView']['country'] = $_SESSION['Stippers']['RenewUser']['user']->country;
-            $page->data['UserDataFormMiddleView']['phone'] = $_SESSION['Stippers']['RenewUser']['user']->phone;
             $page->data['UserDataFormMiddleView']['dateOfBirth'] = $_SESSION['Stippers']['RenewUser']['user']->dateOfBirth;
         }
         $page->data['UserDataFormTopView']['errMsgs'] = UserDataFormTopViewValidator::initErrMsgs();

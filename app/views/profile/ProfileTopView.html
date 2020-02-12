@@ -28,13 +28,7 @@
     
 <label class="form_label" for="postal_code">Postcode:*</label>
 <input class="textbox" type="text" id="postal_code" name="postal_code" maxlength="6" value="<?php echo htmlentities($this->data['ProfileTopView']['postalCode'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['ProfileTopView']['disabled']; ?>><?php echo $this->data['ProfileTopView']['errMsgs']['postalCode']; ?><div class="clearfix"></div>
-    
-<label class="form_label" for="country">Land:*</label>
-<input class="textbox" type="text" id="country" name="country" maxlength="30" value="<?php echo htmlentities($this->data['ProfileTopView']['country'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['ProfileTopView']['disabled']; ?>><?php echo $this->data['ProfileTopView']['errMsgs']['country']; ?><div class="clearfix"></div>
-    
-<label class="form_label" for="phone">Telefoonnummer:</label>
-<input class="textbox" type="text" id="phone" name="phone" maxlength="14" value="<?php echo htmlentities($this->data['ProfileTopView']['phone'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['ProfileTopView']['disabled']; ?>><?php echo $this->data['ProfileTopView']['errMsgs']['phone']; ?><div class="clearfix"></div>
-    
+
 <label class="form_label" for="date_of_birth">Geboortedatum:*</label>
 <input class="textbox" type="text" id="date_of_birth" name="date_of_birth" maxlength="10" value="<?php echo htmlentities($this->data['ProfileTopView']['dateOfBirth'], ENT_QUOTES, 'utf-8'); ?>" <?php echo $this->data['ProfileTopView']['disabled']; ?>>
 <label class="form_label_example" for="date_of_birth"> Voorbeeld: 01/01/1995</label><?php echo $this->data['ProfileTopView']['errMsgs']['dateOfBirth']; ?><div class="clearfix"></div>

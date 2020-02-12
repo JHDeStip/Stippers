@@ -219,54 +219,7 @@ function validateProfileForm(form) {
             element.parentNode.removeChild(element);
         }
     }
-    
-    inputElement = form.country;
-    if (inputElement.value === '') {
-        element = document.getElementById('form_label_error_country');
-        if (!element) {
-            errorMessage = document.createElement('label');
-            errorMessage.setAttribute('class', 'form_label_error');
-            errorMessage.setAttribute('for', 'country');
-            errorMessage.setAttribute('id', 'form_label_error_country');
-            errorMessage.appendChild(document.createTextNode('Voer een geldig land in.'));
-            inputElement.parentNode.insertBefore(errorMessage, inputElement.nextSibling);
-        }
-        else {
-            element.innerHTML = 'Voer een geldig land in.';
-        }
-        valid = false;
-    }
-    else {
-        element =  document.getElementById('form_label_error_country');
-        if (element) {
-            element.parentNode.removeChild(element);
-        }
-    }
-    
-    inputElement = form.phone;
-    if (inputElement.value !== '' && !(/^[0-9]{9,14}$/).exec(inputElement.value)) {
-        element = document.getElementById('form_label_error_phone');
-        if (!element) {
-            errorMessage = document.createElement('label');
-            errorMessage.setAttribute('class', 'form_label_error');
-            errorMessage.setAttribute('for', 'phone');
-            errorMessage.setAttribute('id', 'form_label_error_phone');
-            errorMessage.appendChild(document.createTextNode('Voer een geldig telefoonnummer in.'));
-            inputElement = document.getElementById('phone');
-            inputElement.parentNode.insertBefore(errorMessage, inputElement.nextSibling);
-        }
-        else {
-            element.innerHTML = 'Voer een geldig telefoonnummer in.';
-        }
-        valid = false;
-    }
-    else {
-        element =  document.getElementById('form_label_error_phone');
-        if (element) {
-            element.parentNode.removeChild(element);
-        }
-    }
-    
+
     inputElement = form.date_of_birth;
     if (!(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/).exec(inputElement.value)) {
         createDateOfBirthErrorMessage();
@@ -316,8 +269,6 @@ function enableControls(form) {
     form.house_number.disabled = false;
     form.city.disabled = false;
     form.postal_code.disabled = false;
-    form.country.disabled = false;
-    form.phone.disabled = false;
     form.date_of_birth.disabled = false;
 
     var element = document.getElementById('profile_form_edit');
@@ -353,8 +304,6 @@ function disableControls(form) {
     form.house_number.disabled = true;
     form.city.disabled = true;
     form.postal_code.disabled = true;
-    form.country.disabled = true;
-    form.phone.disabled = true;
     form.date_of_birth.disabled = true;
 
     var element;

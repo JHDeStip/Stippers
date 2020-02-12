@@ -16,13 +16,11 @@ class User {
     public $lastName;
     public $passwordHash;
     public $balance;
-    public $phone;
     public $dateOfBirth;
     public $street;
     public $houseNumber;
     public $city;
     public $postalCode;
-    public $country;
     public $checkInMessage;
     public $creationTime;
     public $isAdmin;

@@ -39,9 +39,7 @@ abstract class DownloadSearchResultsController implements IController {
                 if (isset($searchUsers[0]['user']->houseNumber)) $csvString .= ';Huisnummer';
                 if (isset($searchUsers[0]['user']->city)) $csvString .= ';Gemeente';
                 if (isset($searchUsers[0]['user']->postalCode)) $csvString .= ';Postcode';
-                if (isset($searchUsers[0]['user']->country)) $csvString .= ';Land';
                 if (isset($searchUsers[0]['user']->email)) $csvString .= ';E-mail';
-                if (isset($searchUsers[0]['user']->phone)) $csvString .= ';Telefoonnummer';
                 if (isset($searchUsers[0]['user']->dateOfBirth)) $csvString .= ';Geboortedatum';
                 if (isset($searchUsers[0]['user']->balance)) $csvString .= ';Saldo';
                 if (isset($searchUsers[0]['user']->creationTime)) $csvString .= ';Registratietijd';
@@ -62,9 +60,7 @@ abstract class DownloadSearchResultsController implements IController {
                     if (isset($searchUsers[$i]['user']->houseNumber)) $csvString .= ';'.$searchUsers[$i]['user']->houseNumber;
                     if (isset($searchUsers[$i]['user']->city)) $csvString .= ';'.$searchUsers[$i]['user']->city;
                     if (isset($searchUsers[$i]['user']->postalCode)) $csvString .= ';'.$searchUsers[$i]['user']->postalCode;
-                    if (isset($searchUsers[$i]['user']->country)) $csvString .= ';'.$searchUsers[$i]['user']->country;
                     if (isset($searchUsers[$i]['user']->email)) $csvString .= ';'.$searchUsers[$i]['user']->email;
-                    if (isset($searchUsers[$i]['user']->phone)) $csvString .= ';'.$searchUsers[$i]['user']->phone;
                     if (isset($searchUsers[$i]['user']->dateOfBirth)) $csvString .= ';'.$searchUsers[$i]['user']->dateOfBirth;
                     if (isset($searchUsers[$i]['user']->balance)) $csvString .= ';'.$searchUsers[$i]['user']->balance;
                     if (isset($searchUsers[$i]['user']->creationTime)) $csvString .= ';'.$searchUsers[$i]['user']->creationTime;

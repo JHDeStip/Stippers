@@ -63,8 +63,6 @@ abstract class AddUserController implements IController {
             $user->houseNumber = $_POST['house_number'];
             $user->city = ucwords($_POST['city']);
             $user->postalCode = $_POST['postal_code'];
-            $user->country = ucwords($_POST['country']);
-            $user->phone = $_POST['phone'];
             $user->dateOfBirth = $_POST['date_of_birth'];
             
             //Add the user
@@ -145,8 +143,6 @@ abstract class AddUserController implements IController {
             $page->data['UserDataFormMiddleView']['houseNumber'] = $_POST['house_number'];
             $page->data['UserDataFormMiddleView']['city'] = $_POST['city'];
             $page->data['UserDataFormMiddleView']['postalCode'] = $_POST['postal_code'];
-            $page->data['UserDataFormMiddleView']['country'] = $_POST['country'];
-            $page->data['UserDataFormMiddleView']['phone'] = $_POST['phone'];
             $page->data['UserDataFormMiddleView']['dateOfBirth'] = $_POST['date_of_birth'];
         }
         else {
@@ -162,8 +158,6 @@ abstract class AddUserController implements IController {
             $page->data['UserDataFormMiddleView']['houseNumber'] = '';
             $page->data['UserDataFormMiddleView']['city'] = '';
             $page->data['UserDataFormMiddleView']['postalCode'] = '';
-            $page->data['UserDataFormMiddleView']['country'] = '';
-            $page->data['UserDataFormMiddleView']['phone'] = '';
             $page->data['UserDataFormMiddleView']['dateOfBirth'] = '';
         }
         

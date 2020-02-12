@@ -29,9 +29,6 @@ abstract class UserSearchTopViewValidator implements IValidator {
         if (strlen($data['balance']) > DataValidationConfig::MONEY_MAX_LENGTH)
             $errMsgs['balance'] = '<label class="form_label_error" for="balance">Het saldo mag maximaal uit 6 karakters bestaan.</label>';
 
-        if (strlen($data['phone']) > DataValidationConfig::PHONE_MAX_LENGTH)
-            $errMsgs['phone'] = '<label class="form_label_error" for="phone">Het telefoonnummer mag maximaal uit 14 karakters bestaan.</label>';
-
         if (strlen($data['dateOfBirth']) > DataValidationConfig::DATE_MAX_LENGTH)
             $errMsgs['dateOfBirth'] = '<label class="form_label_error" for="date_of_birth">De geboortedatum mag maximaal uit 10 karakters bestaan.</label>';
 
@@ -45,13 +42,10 @@ abstract class UserSearchTopViewValidator implements IValidator {
             $errMsgs['city'] = '<label class="form_label_error" for="city">De gemeente mag maximaal uit 30 karakters bestaan.</label>';
 
         if (strlen($data['postalCode']) > DataValidationConfig::POSTAL_CODE_MAX_LENGTH)
-            $errMsgs['postalCode'] = '<label class="form_label_error" for="postalCode">De postcode mag maximaal uit 6 karakters bestaan.</label>';
-
-        if (strlen($data['country']) > DataValidationConfig::STRING_MAX_LENGTH)
-            $errMsgs['country'] = '<label class="form_label_error" for="country">Het land mag maximaal uit 30 karakters bestaan.</label>';
-
+            $errMsgs['postalCode'] = '<label class="form_label_error" for="postal_code">De postcode mag maximaal uit 6 karakters bestaan.</label>';
+            
         if (strlen($data['cardNumber']) > DataValidationConfig::CARD_NUMBER_MAX_LENGTH)
-            $errMsgs['cardNumber'] = '<label class="form_label_error" for="country">Het kaartnummer mag maximaal uit 8 karakters bestaan.</label>';
+            $errMsgs['cardNumber'] = '<label class="form_label_error" for="card_number">Het kaartnummer mag maximaal uit 8 karakters bestaan.</label>';
         
         if (strlen($data['membershipYear']) > DataValidationConfig::YEAR_MAX_LENGTH)
             $errMsgs['membershipYear'] = '<label class="form_label_error" for="membership_year">Het lidjaar mag maximaal uit 4 karakters bestaan.</label>';
@@ -64,13 +58,11 @@ abstract class UserSearchTopViewValidator implements IValidator {
         $errMsgs['lastName'] = '';
         $errMsgs['email'] = '';
         $errMsgs['balance'] = '';
-        $errMsgs['phone'] = '';
         $errMsgs['dateOfBirth'] = '';
         $errMsgs['street'] = '';
         $errMsgs['houseNumber'] = '';
         $errMsgs['city'] = '';
         $errMsgs['postalCode'] = '';
-        $errMsgs['country'] = '';
         $errMsgs['cardNumber'] = '';
         $errMsgs['membershipYear'] = '';
         

@@ -175,8 +175,6 @@ abstract class EditUserController implements IController {
             $page->data['EditUserTopView']['houseNumber'] = $_POST['house_number'];
             $page->data['EditUserTopView']['city'] = $_POST['city'];
             $page->data['EditUserTopView']['postalCode'] = $_POST['postal_code'];
-            $page->data['EditUserTopView']['country'] = $_POST['country'];
-            $page->data['EditUserTopView']['phone'] = $_POST['phone'];
             $page->data['EditUserTopView']['dateOfBirth'] = $_POST['date_of_birth'];
             $page->data['EditUserTopView']['checkInMessage'] = $_POST['check_in_message'];
         }
@@ -191,8 +189,6 @@ abstract class EditUserController implements IController {
             $page->data['EditUserTopView']['houseNumber'] = $_SESSION['Stippers']['EditUser']['user']->houseNumber;
             $page->data['EditUserTopView']['city'] = $_SESSION['Stippers']['EditUser']['user']->city;
             $page->data['EditUserTopView']['postalCode'] = $_SESSION['Stippers']['EditUser']['user']->postalCode;
-            $page->data['EditUserTopView']['country'] = $_SESSION['Stippers']['EditUser']['user']->country;
-            $page->data['EditUserTopView']['phone'] = $_SESSION['Stippers']['EditUser']['user']->phone;
             $page->data['EditUserTopView']['dateOfBirth'] = $_SESSION['Stippers']['EditUser']['user']->dateOfBirth;
             $page->data['EditUserTopView']['checkInMessage'] = $_SESSION['Stippers']['EditUser']['user']->checkInMessage;
         }
@@ -284,13 +280,11 @@ abstract class EditUserController implements IController {
         $user->lastName = $_POST['last_name'];
         $user->passwordHash = $_SESSION['Stippers']['EditUser']['user']->passwordHash;
         $user->balance = $_SESSION['Stippers']['EditUser']['user']->balance;
-        $user->phone = $_POST['phone'];
         $user->dateOfBirth = $_POST['date_of_birth'];
         $user->street = $_POST['street'];
         $user->houseNumber = $_POST['house_number'];
         $user->city = $_POST['city'];
         $user->postalCode = $_POST['postal_code'];
-        $user->country = $_POST['country'];
         $user->checkInMessage = $_POST['check_in_message'];
         $user->creationTime = $_SESSION['Stippers']['EditUser']['user']->creationTime;
         

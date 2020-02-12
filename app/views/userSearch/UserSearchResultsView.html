@@ -21,6 +21,7 @@ if (isset($this->data['UserSearchResultsView']['users'][0]['user']->isBrowserMan
 if (isset($this->data['UserSearchResultsView']['users'][0]['user']->isMoneyManager)) echo '<th>Geldbeheerder</th>';
 ?>
     <th></th>
+    <th></th>
 </tr>
 <?php
 
@@ -44,10 +45,11 @@ for ($i=0; $i < count($this->data['UserSearchResultsView']['users']); $i++) {
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->isBrowserManager)) echo '<td><input type="checkbox" onclick="return false;" '.($this->data['UserSearchResultsView']['users'][$i]['user']->isBrowserManager ? 'checked' : '').'></td>';
     if (isset($this->data['UserSearchResultsView']['users'][$i]['user']->isMoneyManager)) echo '<td><input type="checkbox" onclick="return false;" '.($this->data['UserSearchResultsView']['users'][$i]['user']->isMoneyManager ? 'checked' : '').'></td>';
     echo '<td><a href="'.DomainConfig::DOMAIN_SUFFIX.'edituser?user='.$this->data['UserSearchResultsView']['users'][$i]['user']->userId.'">Bewerken</a></td>';
+    echo '<td><a href="'.DomainConfig::DOMAIN_SUFFIX.'sendemailtousers?users='.$this->data['UserSearchResultsView']['users'][$i]['user']->userId.'">E-mail verzenden</a></td>';
 echo '</tr>';
 }
+echo '</table>';
 
+echo '<a href="'.DomainConfig::DOMAIN_SUFFIX.'sendemailtousers?users='.$this->data['UserSearchResultsView']['userIdsParameter'].'">E-mail verzenden naar resultaten</a><br>';
+echo '<a href="'.DomainConfig::DOMAIN_SUFFIX.'downloadsearchresults">Zoekresultaten downloaden</a>';
 ?>
-</table>
-<a href="sendemailtousers">E-mail verzenden naar resultaten</a><br>
-<a href="downloadsearchresults">Zoekresultaten downloaden</a>

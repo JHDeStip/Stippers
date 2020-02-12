@@ -199,6 +199,60 @@ abstract class UserDB {
         }
     }
 
+    public static function getBasicUsersById($userIds) {
+        try {
+            $conn = Database::getConnection();
+            $params = join(',', array_fill(0, count($userIds), '?'));
+            $commString = 'SELECT user_id, email, first_name, last_name, password_hash, is_admin, is_hint_manager, is_user_manager, is_browser_manager, is_money_manager ' .
+                "FROM stippers_users WHERE user_id IN ($params)";
+            $stmt = $conn->prepare($commString);
+            
+            //Check if statement could be prepared
+            if ($stmt) {
+                $types = str_repeat("i", count($userIds));
+                $stmt->bind_param($types, ...$userIds);
+    
+                if (!$stmt->execute())
+                    throw new UserDBException('Unknown error during statement execution while getting the users.', UserDBException::UNKNOWNERROR);
+                else {
+                    $result = $stmt->get_result();
+                    $users = array();
+                    $i = 0;
+                    
+                    while ($row = $result->fetch_assoc()) {
+                        $user = new User();
+                        $user->userId = $row['user_id'];
+                        $user->email = $row['email'];
+                        $user->firstName = $row['first_name'];
+                        $user->lastName = $row['last_name'];
+                        $user->passwordHash = $row['password_hash'];
+                        $user->isAdmin = $row['is_admin'];
+                        $user->isHintManager = $row['is_hint_manager'];
+                        $user->isUserManager = $row['is_user_manager'];
+                        $user->isBrowserManager = $row['is_browser_manager'];
+                        $user->isMoneyManager = $row['is_money_manager'];
+
+                        $users[$i] = $user;
+                        $i++;
+                    }
+                    
+                    return $users;
+                }
+            }
+            else
+                throw new UserDBException('Cannot prepare statement.', UserDBException::CANNOTPREPARESTMT);
+        }
+        catch (Exception $ex) {
+            throw $ex;
+        }
+        finally {
+            if (isset($conn)) {
+                $conn->kill($conn->thread_id);
+                $conn->close();
+            }
+        }
+    }
+
     /**
      * Gets a basic user by it's ID. A basic user is a user that has only
      * basic properties such as permissions set.

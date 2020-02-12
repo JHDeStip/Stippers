@@ -366,7 +366,13 @@ abstract class ManageUserController implements IController {
             if (count($users) == 0)
                 $page->addView('userSearch/UserSearchNoResultsView');
             else {
+                $userIds = array();
+                foreach ($users as $user)
+                    array_push($userIds, $user['user']->userId);
+                
+                $userIdsParameter = join(',', $userIds);
                 $page->data['UserSearchResultsView']['users'] = $users;
+                $page->data['UserSearchResultsView']['userIdsParameter'] = $userIdsParameter;
                 $page->addView('userSearch/UserSearchResultsView');
             }
         }

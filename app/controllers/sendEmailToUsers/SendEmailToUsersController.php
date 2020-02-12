@@ -30,11 +30,11 @@ abstract class SendEmailToUsersController implements IController {
     
     public static function get() {
         //If required data is not in session go to search page
-        if (!isset($_SESSION['Stippers']['ManageUserSearch']['inputData']['values']))
+        if (!isset($_GET['users']))
             header('Location: manageuser', TRUE, 303);
         else {
             $page = new Page();
-            $page->data['title'] = 'E-mail versturen naar gebruikers';
+            $page->data['title'] = 'E-mail versturen naar gebruiker(s)';
             $page->addView('sendEmailToUsers/SendEmailToUsersTitleView');
             
             SendEmailToUsersController::buildSendEmailToUsersFormView($page, false);
@@ -45,27 +45,26 @@ abstract class SendEmailToUsersController implements IController {
     
     public static function post() {
         //If required data is not in session go to search page
-        if (!isset($_SESSION['Stippers']['ManageUserSearch']['inputData']['values']))
+        if (!isset($_GET['users']))
             header('Location: manageuser', TRUE, 303);
         else {
             $page = new Page();
-            $page->data['title'] = 'E-mail versturen naar gebruikers';
+            $page->data['title'] = 'E-mail versturen naar gebruiker(s)';
             
             $errMsgs = SendEmailToUsersViewValidator::validate($_POST);
             
             if (empty($errMsgs)) {
                 try {
-                    //Get search users
-                    $select = ['email' => true, 'firstName' => true, 'lastName' => true];
-                    $users = array_column(UserDB::getSearchUsers($select, $_SESSION['Stippers']['ManageUserSearch']['inputData']['values'], null), 'user');
+                    //Get users
+                    $users = UserDB::getBasicUsersById(explode(',', $_GET['users']));
                     
                     //Send email
                     $failedAddresses = Email::sendEmails($_POST['email_file'], $_POST['subject'], EmailConfig::FROM_ADDRESS, $users, null);
-                    
+
                     //Check if some emails failed
                     if (empty($failedAddresses)) {
-                        $page->date['SuccessMessageNoDescriptionWithLinkView']['successTitle'] = 'E-mails succesvol verzonden';
-                        $page->date['SuccessMessageNoDescriptionWithLinkView']['redirectUrl'] = 'manageuser';
+                        $page->data['SuccessMessageNoDescriptionWithLinkView']['successTitle'] = 'E-mail(s) succesvol verzonden';
+                        $page->data['SuccessMessageNoDescriptionWithLinkView']['redirectUrl'] = 'manageuser';
                         $page->addView('success/SuccessMessageNoDescriptionWithLinkView');
                     }
                     else {
@@ -79,7 +78,7 @@ abstract class SendEmailToUsersController implements IController {
                     }
                 }
                 catch (UserDBException $ex) {
-                    $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan gebruikers niet ophalen';
+                    $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan gebruiker(s) niet ophalen';
                     $page->data['ErrorMessageNoDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
                     $page->addView('error/ErrorMessageNoDescriptionWithLinkView');
                 }
@@ -87,13 +86,13 @@ abstract class SendEmailToUsersController implements IController {
                     if ($ex->getCode() == EmailException::CANNOTREADEMAILFILE)
                         $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan e-mailbestand niet lezen';
                     else
-                        $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan e-mails niet verzenden';
+                        $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan e-mail(s) niet verzenden';
                     
                     $page->data['ErrorMessageNoDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
                     $page->addView('error/ErrorMessageNoDescriptionWithLinkView');
                 }
                 catch (Exception $ex) {
-                    $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan e-mails niet verzenden';
+                    $page->data['ErrorMessageNoDescriptionWithLinkView']['errorTitle'] = 'Kan e-mail(s) niet verzenden';
                     $page->data['ErrorMessageNoDescriptionWithLinkView']['tryAgainUrl'] = $_SERVER['REQUEST_URI'];
                     $page->addView('error/ErrorMessageNoDescriptionWithLinkView');
                 }

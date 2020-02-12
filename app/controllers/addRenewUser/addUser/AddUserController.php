@@ -86,18 +86,22 @@ abstract class AddUserController implements IController {
                 }
                 
                 //Add money to user's card
-                try {
-                    $addedUser = UserDB::getFullUserById($userId);
-                    $executingBrowserName = BrowserDB::getBrowserById($_SESSION['Stippers']['browser']->browserId)->name;
-                    $trans = new MoneyTransaction(null, $addedUser->userId, 0, AddOrRenewUserConfig::NEW_OR_RENEWED_USER_BONUS, 0, 0, true, null, $executingBrowserName, null);
-                    MoneyTransactionDB::addTransaction($addedUser, $trans);
-                }
-                catch (Exception $ex) {
-                    if (isset($page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle']))
-                        $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] .= ' Kan het saldo van het account niet verhogen, probeer dit handmatig te doen.';
-                    else
-                        $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan het saldo van het account niet verhogen, probeer dit handmatig te doen.';
-                    $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
+                $newOrRenewedUserBonus = AddOrRenewUserConfig::NEW_OR_RENEWED_USER_BONUS;
+                if ($newOrRenewedUserBonus > 0)
+                {
+                    try {
+                        $addedUser = UserDB::getFullUserById($userId);
+                        $executingBrowserName = BrowserDB::getBrowserById($_SESSION['Stippers']['browser']->browserId)->name;
+                        $trans = new MoneyTransaction(null, $addedUser->userId, 0, $newOrRenewedUserBonus, 0, 0, true, null, $executingBrowserName, null);
+                        MoneyTransactionDB::addTransaction($addedUser, $trans);
+                    }
+                    catch (Exception $ex) {
+                        if (isset($page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle']))
+                            $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] .= ' Kan het saldo van het account niet verhogen, probeer dit handmatig te doen.';
+                        else
+                            $page->data['ErrorMessageNoDescriptionNoLinkView']['errorTitle'] = 'Kan het saldo van het account niet verhogen, probeer dit handmatig te doen.';
+                        $page->addView('error/ErrorMessageNoDescriptionNoLinkView');
+                    }
                 }
             }
             catch (UserDBException $ex) {
